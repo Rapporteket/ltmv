@@ -25,6 +25,7 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' Som standard vert dei lagra i den globale omgjevnaden, og dei vil overskriva eventuelle
 #' eksisterande objekt med same namn.
 #'
+#' @export
 #' @examples
 #' \dontrun{
 #' # Les inn ferdigstilte oppføringar frå nyaste datadump
