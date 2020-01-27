@@ -20,10 +20,21 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #'
 #' @details
 #' Alle standard datafiler til registeret vert lesne inn, eventuelt validerte,
-#' og så lagra som R-objekt. Dei får namna `d_skjemanamn`, der `skjemanamn`
+#' filtrerte (sjå nedanfor) og så lagra som R-objekt. Dei får namna `d_skjemanamn`, der `skjemanamn`
 #' er namnet på det aktuelle skjemaet (for eksempel `d_basereg` for basisskjemaet).
 #' Som standard vert dei lagra i den globale omgjevnaden, og dei vil overskriva eventuelle
 #' eksisterande objekt med same namn.
+#'
+#' I AblaNor skal berre skjema som høyrer til forløp som har resultert i ein prosedyre
+#' (eventuelt ein avbroten ein) analyserast. I objekta nemnde er derfor oppføringar
+#' for andre forløp filtrerte vekk. Viss ein person for eksempel berre har eit basisskjema
+#' men ikkje (enno) eit prosedyreskjema, vil personen også vera filtrert vekk frå
+#' basisskjema-datsettet (og forløpsdatasettet og pasientlistedatasettet og andre datasett).
+#' Men dei ufiltrerte datasettet vert òg lagra, då med namn på forma `d_full_skjemanamn`,
+#' for eksempel `d_full_basereg` for basisdatasettet. Merk at desse «fullversjonane»
+#' vanlegvis *ikkje* skal' brukast til analysar. Men dei kan vera nyttige når ein skal
+#' sjå på ferdigstillingsstatistikk (gjerne i kombinasjon med `status =  NULL`).
+#'
 #'
 #' @export
 #' @examples
@@ -47,13 +58,31 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, status = 1,
       status = status, dato = dato, kodebok = kb,
       valider_kb = FALSE, valider_dd = valider
     )
-    objektnamn = paste0("d_", skjema)
+    objektnamn = paste0("d_full_", skjema)
     assign(objektnamn, d, envir = omgjevnad)
   }
 
   # fixme: Legg til validering
+
+  # Les inn fullstendige datasett (utan filtrering på forløp)
   les_og_lagra("basereg")
   les_og_lagra("pros")
   les_og_lagra("gkv")
   les_og_lagra("rand12")
+
+  # I AblaNor skal me berre sjå på forløp som har resultert
+  # i prosedyrar (inkl. avbrotne prosedyrar). Filtrerer derfor
+  # ut eventuelle andre forløp.
+  mceid_akt = omgjevnad$d_full_pros$mceid
+  filtrer_og_lagra = function(skjema) {
+    objektnamn_full = paste0("d_full_", skjema)
+    objektnamn_filtrert = paste0("d_", skjema)
+    d_full = get(objektnamn_full, envir = omgjevnad)
+    d_filtrert = dplyr::filter(d_full, mceid %in% !!mceid_akt)
+    assign(objektnamn_filtrert, d_filtrert, envir = omgjevnad)
+  }
+  filtrer_og_lagra("basereg")
+  filtrer_og_lagra("pros")
+  filtrer_og_lagra("gkv")
+  filtrer_og_lagra("rand12")
 }
