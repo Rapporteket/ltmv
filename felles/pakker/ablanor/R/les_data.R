@@ -4,14 +4,14 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' Les inn AblaNor-data
 #'
 #' @description
-#' Les inn AblaNor-data og lagra dei som objekt, eventuelt med automatisk validering.
+#' Les inn AblaNor-datadumpar og lagra dei som objekt, eventuelt med automatisk validering.
 #'
 #' @param mappe_dd Grunnmappe som datadumpar skal hentast frå. Må ha undermapper
-#'     med datonamn (format «ÅÅÅÅ-MM-DD»). Viss `NULL` (standard), vert standardmappa
+#'     med datonamn (format: `ÅÅÅÅ-MM-DD`). Viss `NULL` (standard), vert standardmappa
 #'     med PROD-data brukt.
-#' @param dato Datoen for den aktuelle datadumpen (tekst på formatet «ÅÅÅÅ-MM-DD»
+#' @param dato Datoen for den aktuelle datadumpen (anten tekst på formatet `ÅÅÅÅ-MM-DD`
 #'     eller eit [base::Date]-objekt). Vert brukt til å velja rett undermappe
-#'     til `grunnmappe`. Viss `NULL` (standard), vert nyaste dato brukt.
+#'     til `mappe_dd`. Viss `NULL` (standard), vert nyaste dato brukt.
 #' @param status Type oppføringar som skal lesast. Sjå [rapwhale::les_dd_oqr()]
 #'     for informasjon om moglege verdiar. Som standard vert berre ferdigstilte oppføringar lesne.
 #' @param valider Skal dataa validerast, dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
@@ -26,20 +26,19 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' eksisterande objekt med same namn.
 #'
 #' I AblaNor skal berre skjema som høyrer til forløp som har resultert i ein prosedyre
-#' (eventuelt ein avbroten ein) analyserast. I objekta nemnde er derfor oppføringar
+#' (eventuelt ein avbroten ein) analyserast. I objekta nemnde ovanfor er derfor oppføringar
 #' for andre forløp filtrerte vekk. Viss ein person for eksempel berre har eit basisskjema
 #' men ikkje (enno) eit prosedyreskjema, vil personen også vera filtrert vekk frå
-#' basisskjema-datsettet (og forløpsdatasettet og pasientlistedatasettet og andre datasett).
-#' Men dei ufiltrerte datasettet vert òg lagra, då med namn på forma `d_full_skjemanamn`,
+#' basisskjema-datsettet (og forløpsdatasettet, pasientdatasettet og andre datasett).
+#' Men dei *ufiltrerte* datasetta vert også lagra, då med namn på forma `d_full_skjemanamn`,
 #' for eksempel `d_full_basereg` for basisdatasettet. Merk at desse «fullversjonane»
-#' vanlegvis *ikkje* skal' brukast til analysar. Men dei kan vera nyttige når ein skal
-#' sjå på ferdigstillingsstatistikk (gjerne i kombinasjon med `status =  NULL`).
-#'
+#' vanlegvis *ikkje* skal brukast til analysar. Men dei kan vera nyttige når ein skal
+#' sjå på ferdigstillings&#173;statistikk (gjerne i kombinasjon med `status =  NULL`).
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Les inn ferdigstilte oppføringar frå nyaste datadump
+#' # Les inn ferdigstilte skjema (nyaste datadumpar)
 #' les_data_ablanor()
 #' }
 les_data_ablanor = function(mappe_dd = NULL, dato = NULL, status = 1,
