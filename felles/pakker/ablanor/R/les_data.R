@@ -40,7 +40,7 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, status = 1,
   # ID brukt i datadump-filnamn
   register_id = "AblaNor"
 
-  kb = rapwhale::les_kb_oqr(mappe_dd, reg_id = register_id, valider_kb = valider)
+  kb = rapwhale::les_kb_oqr(mappe_dd, reg_id = register_id, dato = dato, valider_kb = valider)
   les_og_lagra = function(skjema) {
     d = rapwhale::les_dd_oqr(mappe_dd,
       reg_id = register_id, skjema_id = skjema,
