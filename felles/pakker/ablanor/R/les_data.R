@@ -35,6 +35,8 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' vanlegvis *ikkje* skal brukast til analysar. Men dei kan vera nyttige når ein skal
 #' sjå på ferdigstillings&#173;statistikk (gjerne i kombinasjon med `status =  NULL`).
 #'
+#' I tillegg vert kodeboka for registeret lagra, med namnet `kb`.
+#'
 #' @export
 #' @examples
 #' \dontrun{
@@ -51,6 +53,7 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, status = 1,
   register_id = "AblaNor"
 
   kb = rapwhale::les_kb_oqr(mappe_dd, reg_id = register_id, dato = dato, valider_kb = valider)
+  assign("kb", kb, envir = omgjevnad)
   les_og_lagra = function(skjema) {
     d = rapwhale::les_dd_oqr(mappe_dd,
       reg_id = register_id, skjema_id = skjema,
