@@ -12,6 +12,9 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' @param dato Datoen for den aktuelle datadumpen (anten tekst på formatet `ÅÅÅÅ-MM-DD`
 #'     eller eit [base::Date]-objekt). Vert brukt til å velja rett undermappe
 #'     til `mappe_dd`. Viss `NULL` (standard), vert nyaste dato brukt.
+#' @param maksdato Dato for siste prosedyre som skal vera med i datauttrekket (same datoformat
+#'     som for `dato`). Prosedyreskjema og andre skjema som tilhøyrer seinare prosedyredatoar,
+#'     vert filtrerte ut. Viss `NULL` (standard), vert det ikkje noko filtrering på prosedyredato.
 #' @param status Type oppføringar som skal lesast. Sjå [rapwhale::les_dd_oqr()]
 #'     for informasjon om moglege verdiar. Som standard vert berre ferdigstilte oppføringar lesne.
 #' @param valider Skal dataa validerast, dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
@@ -30,10 +33,15 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' for andre forløp filtrerte vekk. Viss ein person for eksempel berre har eit basisskjema
 #' men ikkje (enno) eit prosedyreskjema, vil personen også vera filtrert vekk frå
 #' basisskjema-datsettet (og forløpsdatasettet, pasientdatasettet og andre datasett).
+#'
 #' Men dei *ufiltrerte* datasetta vert også lagra, då med namn på forma `d_full_skjemanamn`,
 #' for eksempel `d_full_basereg` for basisdatasettet. Merk at desse «fullversjonane»
 #' vanlegvis *ikkje* skal brukast til analysar. Men dei kan vera nyttige når ein skal
-#' sjå på ferdigstillings&#173;statistikk (gjerne i kombinasjon med `status =  NULL`).
+#' sjå på ferdigstillings&#173;statistikk (gjerne i kombinasjon med `status =  NULL`
+#' og eventuelt `maksdato = NULL`). Merk at også alle fullversjonane er filtrerte på `status`,
+#' men det er berre prosedyreskjemaet som er filtrert på `maksdato` (prosedyredato).
+#' Kort sagt er forskjellen mellom `d_*`- og `d_full_*`-objekta at førstnemnde
+#' berre inneheld skjema der det finst eit tilhøyrande prosedyreskjema.
 #'
 #' I tillegg vert kodeboka for registeret lagra, med namnet `kb`.
 #'
@@ -43,8 +51,8 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' # Les inn ferdigstilte skjema (nyaste datadumpar)
 #' les_data_ablanor()
 #' }
-les_data_ablanor = function(mappe_dd = NULL, dato = NULL, status = 1,
-                            valider = TRUE, omgjevnad = .GlobalEnv) {
+les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
+                            status = 1, valider = TRUE, omgjevnad = .GlobalEnv) {
   if (is.null(mappe_dd)) {
     mappe_dd = grunnmappe_ablanor
   }
@@ -60,6 +68,9 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, status = 1,
       status = status, dato = dato, kodebok = kb,
       valider_kb = FALSE, valider_dd = valider
     )
+    if (skjema == "pros" && !is.null(maksdato)) { # Andre skjema vert *indirekte' filtrerte på prosedyredato
+      d = dplyr::filter(d, dato_pros <= !!maksdato)
+    }
     objektnamn = paste0("d_full_", skjema)
     assign(objektnamn, d, envir = omgjevnad)
   }
