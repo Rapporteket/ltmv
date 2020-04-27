@@ -43,7 +43,10 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' Kort sagt er forskjellen mellom `d_*`- og `d_full_*`-objekta at førstnemnde
 #' berre inneheld skjema der det finst eit tilhøyrande prosedyreskjema.
 #'
-#' I tillegg vert kodeboka for registeret lagra, med namnet `kb`.
+#' I tillegg til alle standardskjemaa som er nemnde i kodeboka, vert datasett for
+#' `mce`- og `patientlist`-filene òg lagra. Den filtrete versjonen av `patientlist`
+#' inneheld berre pasientar som har minst eitt forløp i prosedyreskjemaet.
+#' Kodeboka for registeret vert òg lagra, med namnet `kb`.
 #'
 #' @export
 #' @examples
@@ -60,9 +63,44 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   # ID brukt i datadump-filnamn
   register_id = "AblaNor"
 
+  # Standard kodebok
   kb = rapwhale::les_kb_oqr(mappe_dd, reg_id = register_id, dato = dato, valider_kb = valider)
   assign("kb", kb, envir = omgjevnad)
-  les_og_lagra = function(skjema) {
+
+  # Heimesnikra kodebøker for registerspesifikke filer
+  # Fixme: Bør oppdaterast når me får ny datadumpinnlesar for OQR
+  #        (og kanskje endrast til å bruka les_csv_oqr()?)
+  kb_mce = tibble::tibble(
+    skjema_id = "mce",
+    variabel_id = tolower(c(
+      "MCEID", "CENTREID",
+      "MCETYPE", "PATIENT_ID", "STATUS", "MAIL_STATUS",
+      "TSCREATED", "CREATEDBY", "TSUPDATED",
+      "UPDATEDBY"
+    )),
+    variabeltype = c(
+      "numerisk", "tekst", # CENTREID kan vera "TEST001"
+      "numerisk", "numerisk", "numerisk", "numerisk",
+      "dato_kl", "tekst", "dato_kl", "dato_kl"
+    ),
+    verdi = NA_character_
+  )
+  kb_pas = tibble::tibble(
+    skjema_id = "patientlist",
+    variabel_id = tolower(c(
+      "ID", "REGISTERED_DATE", "BIRTH_DATE",
+      "GENDER", "DECEASED", "DECEASED_DATE",
+      "MUNICIPALITY_NUMBER", "MUNICIPALITY_NAME", "COUNTY"
+    )),
+    variabeltype = c(
+      "numerisk", "dato", "dato",
+      "numerisk", "numerisk", "dato",
+      "numerisk", "numerisk", "numerisk"
+    ),
+    verdi = NA_character_
+  )
+
+  les_og_lagra = function(skjema, status, kb) {
     d = rapwhale::les_dd_oqr(mappe_dd,
       reg_id = register_id, skjema_id = skjema,
       status = status, dato = dato, kodebok = kb,
@@ -78,10 +116,12 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   # fixme: Legg til validering
 
   # Les inn fullstendige datasett (utan filtrering på forløp)
-  les_og_lagra("basereg")
-  les_og_lagra("pros")
-  les_og_lagra("gkv")
-  les_og_lagra("rand12")
+  les_og_lagra("basereg", status = status, kb = kb)
+  les_og_lagra("pros", status = status, kb = kb)
+  les_og_lagra("gkv", status = status, kb = kb)
+  les_og_lagra("rand12", status = status, kb = kb)
+  les_og_lagra("mce", status = status, kb = kb_mce)
+  les_og_lagra("patientlist", status = NULL, kb = kb_pas) # Datafila mangler STATUS-kolonne, så inga filtrering på dette
 
   # I AblaNor skal me berre sjå på forløp som har resultert
   # i prosedyrar (inkl. avbrotne prosedyrar). Filtrerer derfor
@@ -98,4 +138,15 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   filtrer_og_lagra("pros")
   filtrer_og_lagra("gkv")
   filtrer_og_lagra("rand12")
+  filtrer_og_lagra("mce")
+  # Pasientlista har (naturleg nok) ikkje mceid, så der ser me berre
+  # på pasientane som òg har eit aktuelt *forløp* (dvs. eit forløp som
+  # finst i «d_mce», altså implisitt ein prosedyre som finst i «d_pros»).
+  assign("d_patientlist",
+    filter(
+      get("d_full_patientlist", envir = omgjevnad),
+      id %in% get("d_mce", envir = omgjevnad)$patient_id
+    ),
+    envir = omgjevnad
+  )
 }
