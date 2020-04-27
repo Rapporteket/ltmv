@@ -117,10 +117,8 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   # fixme: Legg til validering
 
   # Les inn fullstendige datasett (utan filtrering på forløp)
-  les_og_lagra("basereg", status = status, kb = kb)
-  les_og_lagra("pros", status = status, kb = kb)
-  les_og_lagra("gkv", status = status, kb = kb)
-  les_og_lagra("rand12", status = status, kb = kb)
+  kb_skjema = setdiff(kb$skjema_id, "patient") # Manglar datafil for pasienttabellen
+  purrr::walk(kb_skjema, les_og_lagra, status = status, kb = kb)
   les_og_lagra("mce", status = status, kb = kb_mce)
   les_og_lagra("patientlist", status = NULL, kb = kb_pas) # Datafila mangler STATUS-kolonne, så inga filtrering på dette
 
@@ -135,10 +133,7 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
     d_filtrert = dplyr::filter(d_full, mceid %in% !!mceid_akt)
     assign(objektnamn_filtrert, d_filtrert, envir = omgjevnad)
   }
-  filtrer_og_lagra("basereg")
-  filtrer_og_lagra("pros")
-  filtrer_og_lagra("gkv")
-  filtrer_og_lagra("rand12")
+  purrr::walk(kb_skjema, filtrer_og_lagra)
   filtrer_og_lagra("mce")
   # Pasientlista har (naturleg nok) ikkje mceid, så der ser me berre
   # på pasientane som òg har eit aktuelt *forløp* (dvs. eit forløp som
