@@ -13,8 +13,9 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #'     eller eit [base::Date]-objekt). Vert brukt til å velja rett undermappe
 #'     til `mappe_dd`. Viss `NULL` (standard), vert nyaste dato brukt.
 #' @param maksdato Dato for siste prosedyre som skal vera med i datauttrekket (same datoformat
-#'     som for `dato`). Prosedyreskjema og andre skjema som tilhøyrer seinare prosedyredatoar,
-#'     vert filtrerte ut. Viss `NULL` (standard), vert det ikkje noko filtrering på prosedyredato.
+#'     som for `dato`). Oppføringar som tilhøyrer seinare prosedyredatoar,
+#'     vert filtrerte ut, både frå prosedyreskjemaet og andre skjema.
+#'     Viss `NULL` (standard), vert det ikkje noko filtrering på prosedyredato.
 #' @param status Type oppføringar som skal lesast. Sjå [rapwhale::les_dd_oqr()]
 #'     for informasjon om moglege verdiar. Som standard vert berre ferdigstilte oppføringar lesne.
 #' @param valider Skal dataa validerast, dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
