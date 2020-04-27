@@ -107,7 +107,7 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
       status = status, dato = dato, kodebok = kb,
       valider_kb = FALSE, valider_dd = valider
     )
-    if (skjema == "pros" && !is.null(maksdato)) { # Andre skjema vert *indirekte' filtrerte på prosedyredato
+    if (skjema == "pros" && !is.null(maksdato)) { # Andre skjema vert *indirekte* filtrerte på prosedyredato
       d = dplyr::filter(d, dato_pros <= !!maksdato)
     }
     objektnamn = paste0("d_full_", skjema)
