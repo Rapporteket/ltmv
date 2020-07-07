@@ -100,7 +100,21 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
     ),
     verdi = NA_character_
   )
-
+  kb_friendlycentre = tibble::tibble(
+    skjema_id = "friendlycentre",
+    variabel_id = tolower(c(
+      "ID", "CENTRENAME", "CENTRESHORTNAME",
+      "TYPEID", "LANGUAGEID", "TSCREATED",
+      "FRIENDLYNAME"
+    )),
+    variabeltype = c(
+      "tekst", # ID kan være TESTNO
+      "tekst", "tekst",
+      "numerisk", "tekst", "dato_kl",
+      "tekst"
+    ),
+    verdi = NA_character_
+  )
   les_og_lagra = function(skjema, status, kb) {
     d = rapwhale::les_dd_oqr(mappe_dd,
       reg_id = register_id, skjema_id = skjema,
@@ -121,6 +135,7 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   purrr::walk(kb_skjema, les_og_lagra, status = status, kb = kb)
   les_og_lagra("mce", status = status, kb = kb_mce)
   les_og_lagra("patientlist", status = NULL, kb = kb_pas) # Datafila mangler STATUS-kolonne, så inga filtrering på dette
+  les_og_lagra("friendlycentre", status = NULL, kb = kb_friendlycentre)
 
   # I AblaNor skal me berre sjå på forløp som har resultert
   # i prosedyrar (inkl. avbrotne prosedyrar). Filtrerer derfor
