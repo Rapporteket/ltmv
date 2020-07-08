@@ -64,6 +64,15 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   # ID brukt i datadump-filnamn
   register_id = "AblaNor"
 
+  # lagre dato for datadump
+  if (is.null(dato)) {
+    dato = dir(mappe_dd, pattern = "^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", full.names = FALSE) %>%
+      sort() %>%
+      last()
+  }
+  dato = lubridate::as_date(dato)
+  assign("datadump_dato", dato, envir = omgjevnad)
+
   # Standard kodebok
   kb = rapwhale::les_kb_oqr(mappe_dd, reg_id = register_id, dato = dato, valider_kb = valider)
   assign("kb", kb, envir = omgjevnad)
