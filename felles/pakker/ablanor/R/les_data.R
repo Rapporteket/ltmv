@@ -99,7 +99,8 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
       "numerisk", "numerisk",
       "dato_kl", "tekst", "dato_kl", "tekst"
     ),
-    verdi = NA_character_
+    verdi = NA_character_, verditekst = NA_character_,
+    min = NA_character_, maks = NA_character_
   )
   kb_pas = tibble::tibble(
     skjema_id = "patientlist",
@@ -113,7 +114,8 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
       "numerisk", "numerisk", "dato",
       "numerisk", "numerisk", "numerisk"
     ),
-    verdi = NA_character_
+    verdi = NA_character_, verditekst = NA_character_,
+    min = NA_character_, maks = NA_character_
   )
   kb_friendlycentre = tibble::tibble(
     skjema_id = "friendlycentre",
@@ -128,7 +130,8 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
       "numerisk", "tekst", "dato_kl",
       "tekst"
     ),
-    verdi = NA_character_
+    verdi = NA_character_, verditekst = NA_character_,
+    min = NA_character_, maks = NA_character_
   )
   les_og_lagra = function(skjema, status, kb) {
     d = rapwhale::les_dd_oqr(mappe_dd,
