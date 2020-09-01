@@ -100,7 +100,11 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
       "dato_kl", "tekst", "dato_kl", "tekst"
     ),
     verdi = NA_character_, verditekst = NA_character_,
-    min = NA_character_, maks = NA_character_
+    desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
+    obligatorisk = c(
+      TRUE, TRUE, TRUE, TRUE, FALSE, FALSE,
+      TRUE, TRUE, TRUE, TRUE, TRUE
+    )
   )
   kb_pas = tibble::tibble(
     skjema_id = "patientlist",
@@ -115,7 +119,11 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
       "numerisk", "numerisk", "numerisk"
     ),
     verdi = NA_character_, verditekst = NA_character_,
-    min = NA_character_, maks = NA_character_
+    desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
+    obligatorisk = c(
+      TRUE, TRUE, TRUE, TRUE, TRUE,
+      FALSE, FALSE, FALSE, FALSE
+    )
   )
   kb_friendlycentre = tibble::tibble(
     skjema_id = "friendlycentre",
@@ -131,13 +139,14 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
       "tekst"
     ),
     verdi = NA_character_, verditekst = NA_character_,
-    min = NA_character_, maks = NA_character_
+    desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
+    obligatorisk = TRUE
   )
   les_og_lagra = function(skjema, status, kb) {
     d = rapwhale::les_dd_oqr(mappe_dd,
       reg_id = register_id, skjema_id = skjema,
       status = status, dato = dato, kodebok = kb,
-      valider_kb = FALSE, valider_dd = valider
+      valider_kb = TRUE, valider_dd = valider
     )
     if (skjema == "pros" && !is.null(maksdato)) { # Andre skjema vert *indirekte* filtrerte på prosedyredato
       d = dplyr::filter(d, dato_pros <= !!maksdato)
