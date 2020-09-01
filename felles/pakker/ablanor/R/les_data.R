@@ -80,6 +80,10 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   # Heimesnikra kodebøker for registerspesifikke filer
   # Fixme: Bør oppdaterast når me får ny datadumpinnlesar for OQR
   #        (og kanskje endrast til å bruka les_csv_oqr()?)
+  # Fixme: Må dokumenterast kor me har fått informasjon om kva
+  #        variablar og variabeltypar kvar fil har (til no har
+  #        me berre gjetta på bakgrunn av filene?).
+  #        Må meldast JIRA-saker der det manglar dokumentasjon.
   kb_mce = tibble::tibble(
     skjema_id = "mce",
     variabel_id = tolower(c(
