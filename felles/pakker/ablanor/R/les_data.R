@@ -84,14 +84,16 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
     skjema_id = "mce",
     variabel_id = tolower(c(
       "MCEID", "CENTREID",
-      "MCETYPE", "PATIENT_ID", "STATUS", "MAIL_STATUS",
+      "MCETYPE", "PATIENT_ID", "PARENTMCEID",
+      "HAS_FOLLOWUP", "STATUS",
       "TSCREATED", "CREATEDBY", "TSUPDATED",
       "UPDATEDBY"
     )),
     variabeltype = c(
       "numerisk", "tekst", # CENTREID kan vera "TEST001"
-      "numerisk", "numerisk", "numerisk", "numerisk",
-      "dato_kl", "tekst", "dato_kl", "dato_kl"
+      "numerisk", "numerisk", "numerisk",
+      "numerisk", "numerisk",
+      "dato_kl", "tekst", "dato_kl", "tekst"
     ),
     verdi = NA_character_
   )
