@@ -155,8 +155,6 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
     assign(objektnamn, d, envir = omgjevnad)
   }
 
-  # fixme: Legg til validering
-
   # Les inn fullstendige datasett (utan filtrering på forløp)
   kb_skjema = setdiff(kb$skjema_id, "patient") # Manglar datafil for pasienttabellen
   purrr::walk(kb_skjema, les_og_lagra, status = status, kb = kb)
@@ -187,4 +185,8 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
     ),
     envir = omgjevnad
   )
+
+  # Sjekker om datadumper/skjema er i samsvar med logikker i
+  # i registerbeskrivelsen.
+  valider_dd_ablanor(d_basereg, d_pros, d_gkv, d_rand12, d_mce, d_patientlist)
 }
