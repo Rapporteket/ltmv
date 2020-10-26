@@ -188,5 +188,7 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
 
   # Sjekker om datadumper/skjema er i samsvar med logikker i
   # i registerbeskrivelsen.
-  valider_dd_ablanor(d_basereg, d_pros, d_gkv, d_rand12, d_mce, d_patientlist)
+  if (valider) {
+    valider_dd_ablanor(d_basereg, d_pros, d_gkv, d_rand12, d_mce, d_patientlist)
+  }
 }
