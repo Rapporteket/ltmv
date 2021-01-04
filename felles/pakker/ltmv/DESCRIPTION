@@ -1,0 +1,20 @@
+Package: ltmv
+Title: Ymse funksjonar for registeret LTMV
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Stian Tufte",
+           family = "Veisene",
+           role = c("aut", "cre"),
+           email = "stian.tufte.veisene@helse-bergen.no")
+Description: Ymse funksjonar som kan brukast til å skriva
+    rapportar og gjera analysar for LTMV (Nasjonalt register
+    for langtids mekanisk ventilasjon).
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
+Imports: 
+    rapwhale
+Suggests: 
+    testthat
