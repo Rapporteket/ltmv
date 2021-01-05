@@ -1,10 +1,10 @@
 # Grunnmappe for datafiler (pakkeintern variabel)
-grunnmappe_ablanor = "***FJERNA-ADRESSE***"
+grunnmappe_ltmv = "***FJERNA-ADRESSE***"
 
-#' Les inn AblaNor-data
+#' Les inn LTMV-data
 #'
 #' @description
-#' Les inn AblaNor-datadumpar og lagra dei som objekt, eventuelt med automatisk validering.
+#' Les inn LTMV-datadumpar og lagra dei som objekt, eventuelt med automatisk validering.
 #'
 #' @param mappe_dd Grunnmappe som datadumpar skal hentast frå. Må ha undermapper
 #'     med datonamn (format: `ÅÅÅÅ-MM-DD`). Viss `NULL` (standard), vert standardmappa
@@ -25,28 +25,13 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' @details
 #' Alle standard datafiler til registeret vert lesne inn, eventuelt validerte,
 #' filtrerte (sjå nedanfor) og så lagra som R-objekt. Dei får namna `d_skjemanamn`, der `skjemanamn`
-#' er namnet på det aktuelle skjemaet (for eksempel `d_basereg` for basisskjemaet).
+#' er namnet på det aktuelle skjemaet (for eksempel `d_ventfol` for oppfølgingskjemaet).
 #' Som standard vert dei lagra i den globale omgjevnaden, og dei vil overskriva eventuelle
 #' eksisterande objekt med same namn.
-#'
-#' I AblaNor skal berre skjema som høyrer til forløp som har resultert i ein prosedyre
-#' (eventuelt ein avbroten ein) analyserast. I objekta nemnde ovanfor er derfor oppføringar
-#' for andre forløp filtrerte vekk. Viss ein person for eksempel berre har eit basisskjema
-#' men ikkje (enno) eit prosedyreskjema, vil personen også vera filtrert vekk frå
-#' basisskjema-datsettet (og forløpsdatasettet, pasientdatasettet og andre datasett).
-#'
-#' Men dei *ufiltrerte* datasetta vert også lagra, då med namn på forma `d_full_skjemanamn`,
-#' for eksempel `d_full_basereg` for basisdatasettet. Merk at desse «fullversjonane»
-#' vanlegvis *ikkje* skal brukast til analysar. Men dei kan vera nyttige når ein skal
-#' sjå på ferdigstillings&#173;statistikk (gjerne i kombinasjon med `status =  NULL`
-#' og eventuelt `maksdato = NULL`). Merk at også alle fullversjonane er filtrerte på `status`,
-#' men det er berre prosedyreskjemaet som er filtrert på `maksdato` (prosedyredato).
-#' Kort sagt er forskjellen mellom `d_*`- og `d_full_*`-objekta at førstnemnde
-#' berre inneheld skjema der det finst eit tilhøyrande prosedyreskjema.
-#'
+#' 
 #' I tillegg til alle standardskjemaa som er nemnde i kodeboka, vert datasett for
-#' `mce`- og `patientlist`-filene òg lagra. Den filtrete versjonen av `patientlist`
-#' inneheld berre pasientar som har minst eitt forløp i prosedyreskjemaet.
+#' `mce`- og `patientlist`-filene òg lagra.
+#' 
 #' Kodeboka for registeret vert òg lagra, med namnet `kb`.
 #'
 #' @export
@@ -57,18 +42,18 @@ grunnmappe_ablanor = "***FJERNA-ADRESSE***"
 #' }
 les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
                             status = 1, valider = TRUE, omgjevnad = .GlobalEnv) {
-  if (is.null(mappe_dd)) {
+  if(is.null(mappe_dd)) {
     mappe_dd = grunnmappe_ablanor
   }
 
   # ID brukt i datadump-filnamn
   register_id = "AblaNor"
-
+  
   # lagre dato for datadump
-  if (is.null(dato)) {
+  if(is.null(dato)) {
     dato = dir(mappe_dd, pattern = "^[0-9]{4}-[0-1][0-9]-[0-9]{2}$", full.names = FALSE) %>%
-      sort() %>%
-      last()
+      sort %>%
+      last
   }
   dato = lubridate::as_date(dato)
   assign("datadump_dato", dato, envir = omgjevnad)
@@ -76,7 +61,7 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   # Standard kodebok
   kb = rapwhale::les_kb_oqr(mappe_dd, reg_id = register_id, dato = dato, valider_kb = valider)
   assign("kb", kb, envir = omgjevnad)
-
+  
   # Heimesnikra kodebøker for registerspesifikke filer
   # Fixme: Bør oppdaterast når me får ny datadumpinnlesar for OQR
   #        (og kanskje endrast til å bruka les_csv_oqr()?)
@@ -84,84 +69,60 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   #        variablar og variabeltypar kvar fil har (til no har
   #        me berre gjetta på bakgrunn av filene?).
   #        Må meldast JIRA-saker der det manglar dokumentasjon.
-  kb_mce = tibble::tibble(
-    skjema_id = "mce",
-    variabel_id = tolower(c(
-      "MCEID", "CENTREID",
-      "MCETYPE", "PATIENT_ID", "PARENTMCEID",
-      "HAS_FOLLOWUP", "STATUS",
-      "TSCREATED", "CREATEDBY", "TSUPDATED",
-      "UPDATEDBY"
-    )),
-    variabeltype = c(
-      "numerisk", "tekst", # CENTREID kan vera "TEST001"
-      "numerisk", "numerisk", "numerisk",
-      "numerisk", "numerisk",
-      "dato_kl", "tekst", "dato_kl", "tekst"
-    ),
-    verdi = NA_character_, verditekst = NA_character_,
-    desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
-    obligatorisk = c(
-      TRUE, TRUE, TRUE, TRUE, FALSE, FALSE,
-      TRUE, TRUE, TRUE, TRUE, TRUE
-    )
-  )
-  kb_pas = tibble::tibble(
-    skjema_id = "patientlist",
-    variabel_id = tolower(c(
-      "ID", "REGISTERED_DATE", "BIRTH_DATE",
-      "GENDER", "DECEASED", "DECEASED_DATE",
-      "MUNICIPALITY_NUMBER", "MUNICIPALITY_NAME", "COUNTY"
-    )),
-    variabeltype = c(
-      "numerisk", "dato", "dato",
-      "numerisk", "numerisk", "dato",
-      "numerisk", "numerisk", "numerisk"
-    ),
-    verdi = NA_character_, verditekst = NA_character_,
-    desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
-    obligatorisk = c(
-      TRUE, TRUE, TRUE, TRUE, TRUE,
-      FALSE, FALSE, FALSE, FALSE
-    )
-  )
-  kb_friendlycentre = tibble::tibble(
-    skjema_id = "friendlycentre",
-    variabel_id = tolower(c(
-      "ID", "CENTRENAME", "CENTRESHORTNAME",
-      "TYPEID", "LANGUAGEID", "TSCREATED",
-      "FRIENDLYNAME"
-    )),
-    variabeltype = c(
-      "tekst", # ID kan være TESTNO
-      "tekst", "tekst",
-      "numerisk", "tekst", "dato_kl",
-      "tekst"
-    ),
-    verdi = NA_character_, verditekst = NA_character_,
-    desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
-    obligatorisk = TRUE
-  )
-  les_og_lagra = function(skjema, status, kb) {
-    d = rapwhale::les_dd_oqr(mappe_dd,
-      reg_id = register_id, skjema_id = skjema,
-      status = status, dato = dato, kodebok = kb,
-      valider_kb = TRUE, valider_dd = valider
-    )
-    if (skjema == "pros" && !is.null(maksdato)) { # Andre skjema vert *indirekte* filtrerte på prosedyredato
+  kb_mce = tibble::tibble(skjema_id="mce",
+                  variabel_id = tolower(c("MCEID", "CENTREID",
+                                          "MCETYPE", "PATIENT_ID", "PARENTMCEID",
+                                          "HAS_FOLLOWUP", "STATUS",
+                                          "TSCREATED", "CREATEDBY", "TSUPDATED",
+                                          "UPDATEDBY")),
+                  variabeltype = c("numerisk", "tekst", # CENTREID kan vera "TEST001"
+                                   "numerisk", "numerisk", "numerisk",
+                                   "numerisk", "numerisk",
+                                   "dato_kl", "tekst", "dato_kl", "tekst"),
+                  verdi = NA_character_, verditekst = NA_character_,
+                  desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
+                  obligatorisk = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE,
+                                   TRUE, TRUE, TRUE, TRUE, TRUE))
+  kb_pas = tibble::tibble(skjema_id="patientlist",
+                  variabel_id = tolower(c("ID", "REGISTERED_DATE", "BIRTH_DATE",
+                                          "GENDER", "DECEASED", "DECEASED_DATE",
+                                          "MUNICIPALITY_NUMBER", "MUNICIPALITY_NAME", "COUNTY")),
+                  variabeltype = c("numerisk", "dato", "dato",
+                                   "numerisk", "numerisk", "dato",
+                                   "numerisk", "numerisk", "numerisk"),
+                  verdi = NA_character_, verditekst = NA_character_,
+                  desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
+                  obligatorisk = c(TRUE, TRUE, TRUE, TRUE, TRUE,
+                                   FALSE, FALSE, FALSE, FALSE))
+  kb_friendlycentre = tibble::tibble(skjema_id="friendlycentre", 
+                             variabel_id = tolower(c("ID", "CENTRENAME", "CENTRESHORTNAME",
+                                                     "TYPEID", "LANGUAGEID", "TSCREATED",
+                                                     "FRIENDLYNAME")),
+                             variabeltype = c("tekst", # ID kan være TESTNO
+                                              "tekst", "tekst",
+                                              "numerisk", "tekst", "dato_kl", 
+                                              "tekst"),
+                             verdi = NA_character_, verditekst = NA_character_,
+                             desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
+                             obligatorisk = TRUE)
+les_og_lagra = function(skjema, status, kb) {
+    d = rapwhale::les_dd_oqr(mappe_dd, reg_id = register_id, skjema_id = skjema,
+                             status = status, dato = dato, kodebok = kb,
+                             valider_kb = TRUE, valider_dd = valider)
+    if(skjema == "pros" && !is.null(maksdato)) { # Andre skjema vert *indirekte* filtrerte på prosedyredato
       d = dplyr::filter(d, dato_pros <= !!maksdato)
     }
     objektnamn = paste0("d_full_", skjema)
     assign(objektnamn, d, envir = omgjevnad)
   }
-
+  
   # Les inn fullstendige datasett (utan filtrering på forløp)
   kb_skjema = setdiff(kb$skjema_id, "patient") # Manglar datafil for pasienttabellen
   purrr::walk(kb_skjema, les_og_lagra, status = status, kb = kb)
   les_og_lagra("mce", status = status, kb = kb_mce)
   les_og_lagra("patientlist", status = NULL, kb = kb_pas) # Datafila mangler STATUS-kolonne, så inga filtrering på dette
   les_og_lagra("friendlycentre", status = NULL, kb = kb_friendlycentre)
-
+  
   # I AblaNor skal me berre sjå på forløp som har resultert
   # i prosedyrar (inkl. avbrotne prosedyrar). Filtrerer derfor
   # ut eventuelle andre forløp.
@@ -179,20 +140,16 @@ les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   # på pasientane som òg har eit aktuelt *forløp* (dvs. eit forløp som
   # finst i «d_mce», altså implisitt ein prosedyre som finst i «d_pros»).
   assign("d_patientlist",
-    filter(
-      get("d_full_patientlist", envir = omgjevnad),
-      id %in% get("d_mce", envir = omgjevnad)$patient_id
-    ),
-    envir = omgjevnad
-  )
-
+         filter(get("d_full_patientlist", envir = omgjevnad),
+                id %in% get("d_mce", envir = omgjevnad)$patient_id),
+         envir = omgjevnad)
+  
   # Sjekker om datadumper/skjema er i samsvar med logikker i
   # i registerbeskrivelsen.
-  if (valider) {
-    valider_dd_ablanor(
-      omgjevnad$d_full_basereg, omgjevnad$d_full_pros,
-      omgjevnad$d_full_gkv, omgjevnad$d_full_rand12,
-      omgjevnad$d_full_mce, omgjevnad$d_full_patientlist
-    )
+  if(valider) {
+    valider_dd_ablanor(omgjevnad$d_full_basereg, omgjevnad$d_full_pros, 
+                       omgjevnad$d_full_gkv, omgjevnad$d_full_rand12, 
+                       omgjevnad$d_full_mce, omgjevnad$d_full_patientlist)
   }
 }
+
