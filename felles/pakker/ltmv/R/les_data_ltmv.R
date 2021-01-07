@@ -38,16 +38,16 @@ grunnmappe_ltmv = "***FJERNA-ADRESSE***"
 #' @examples
 #' \dontrun{
 #' # Les inn ferdigstilte skjema (nyaste datadumpar)
-#' les_data_ablanor()
+#' les_data_ltmv()
 #' }
-les_data_ablanor = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
-                            status = 1, valider = TRUE, omgjevnad = .GlobalEnv) {
+les_data_ltmv = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
+                         status = 1, valider = TRUE, omgjevnad = .GlobalEnv) {
   if(is.null(mappe_dd)) {
-    mappe_dd = grunnmappe_ablanor
+    mappe_dd = grunnmappe_ltmv
   }
 
   # ID brukt i datadump-filnamn
-  register_id = "AblaNor"
+  register_id = "Nasjonalt_register_for_langtids_mekanisk_ventilasjon"
   
   # lagre dato for datadump
   if(is.null(dato)) {
