@@ -106,17 +106,6 @@ les_data_ltmv = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
                   desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
                   obligatorisk = c(TRUE, TRUE, TRUE, TRUE, TRUE,
                                    FALSE, FALSE, FALSE, FALSE, FALSE)) # fixme: må sjekke om disse er obligatoriske
-  kb_friendlycentre = tibble::tibble(skjema_id="friendlycentre", 
-                             variabel_id = tolower(c("ID", "CENTRENAME", "CENTRESHORTNAME",
-                                                     "TYPEID", "LANGUAGEID", "TSCREATED",
-                                                     "FRIENDLYNAME")),
-                             variabeltype = c("tekst", # ID kan være TESTNO
-                                              "tekst", "tekst",
-                                              "numerisk", "tekst", "dato_kl", 
-                                              "tekst"),
-                             verdi = NA_character_, verditekst = NA_character_,
-                             desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
-                             obligatorisk = TRUE)
 les_og_lagra = function(skjema, status, kb) {
     d = rapwhale::les_dd_oqr(mappe_dd, reg_id = register_id, skjema_id = skjema,
                              status = status, dato = dato, kodebok = kb,
