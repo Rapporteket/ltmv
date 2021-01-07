@@ -70,19 +70,29 @@ les_data_ltmv = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   #        me berre gjetta på bakgrunn av filene?).
   #        Må meldast JIRA-saker der det manglar dokumentasjon.
   kb_mce = tibble::tibble(skjema_id="mce",
-                  variabel_id = tolower(c("MCEID", "CENTREID",
-                                          "MCETYPE", "PATIENT_ID", "PARENTMCEID",
-                                          "HAS_FOLLOWUP", "STATUS",
-                                          "TSCREATED", "CREATEDBY", "TSUPDATED",
-                                          "UPDATEDBY")),
-                  variabeltype = c("numerisk", "tekst", # CENTREID kan vera "TEST001"
+                  variabel_id = tolower(c("MCEID", "CENTREID", "PATIENT_ID", 
+                                          "MCETYPE", "HISTORICAL", "PARENT_MCE",
+                                          "END_DATE", "MCE_TOTAL_STATUS", 
+                                          "REGISTRATION_DATE", "LAST_FOLLOWUP_YEAR", 
+                                          "STATUS", "CREATEDBY", "UPDATEDBY", 
+                                          "FIRST_TIME_CLOSED", "FIRST_TIME_CLOSED_BY",
+                                          "TSCREATED", "TSUPDATED")),
+                  variabeltype = c("numerisk", "tekst", "numerisk", # CENTREID kan vera "TEST001"
                                    "numerisk", "numerisk", "numerisk",
-                                   "numerisk", "numerisk",
-                                   "dato_kl", "tekst", "dato_kl", "tekst"),
+                                   "dato", "numerisk",
+                                   "dato", "numerisk",
+                                   "numerisk", "tekst", "tekst",
+                                   "dato_kl", "dato_kl", # fixme: må sjekke variabeltypene
+                                   "dato_kl", "dato_kl"),
                   verdi = NA_character_, verditekst = NA_character_,
                   desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
-                  obligatorisk = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE,
-                                   TRUE, TRUE, TRUE, TRUE, TRUE))
+                  obligatorisk = c(TRUE, TRUE, TRUE, # fixme: må sjekke hvilke variabler som er obligatoriske
+                                   TRUE, FALSE, FALSE,
+                                   FALSE, FALSE, 
+                                   FALSE, FALSE,
+                                   TRUE, TRUE, FALSE,
+                                   FALSE, FALSE,
+                                   TRUE, FALSE))
   kb_pas = tibble::tibble(skjema_id="patientlist",
                   variabel_id = tolower(c("ID", "REGISTERED_DATE", "BIRTH_DATE",
                                           "GENDER", "DECEASED", "DECEASED_DATE",
