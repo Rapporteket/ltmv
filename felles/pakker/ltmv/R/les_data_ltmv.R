@@ -149,38 +149,4 @@ les_data_ltmv = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   purrr::walk(kb_skjema, les_og_lagra, status = status, kb = kb)
   les_og_lagra("mce", status = status, kb = kb_mce)
   les_og_lagra("patientlist", status = NULL, kb = kb_pas) # Datafila mangler STATUS-kolonne, så inga filtrering på dette
-
-  # I AblaNor skal me berre sjå på forløp som har resultert
-  # i prosedyrar (inkl. avbrotne prosedyrar). Filtrerer derfor
-  # ut eventuelle andre forløp.
-  mceid_akt = omgjevnad$d_full_pros$mceid
-  filtrer_og_lagra = function(skjema) {
-    objektnamn_full = paste0("d_full_", skjema)
-    objektnamn_filtrert = paste0("d_", skjema)
-    d_full = get(objektnamn_full, envir = omgjevnad)
-    d_filtrert = dplyr::filter(d_full, mceid %in% !!mceid_akt)
-    assign(objektnamn_filtrert, d_filtrert, envir = omgjevnad)
-  }
-  purrr::walk(kb_skjema, filtrer_og_lagra)
-  filtrer_og_lagra("mce")
-  # Pasientlista har (naturleg nok) ikkje mceid, så der ser me berre
-  # på pasientane som òg har eit aktuelt *forløp* (dvs. eit forløp som
-  # finst i «d_mce», altså implisitt ein prosedyre som finst i «d_pros»).
-  assign("d_patientlist",
-    filter(
-      get("d_full_patientlist", envir = omgjevnad),
-      id %in% get("d_mce", envir = omgjevnad)$patient_id
-    ),
-    envir = omgjevnad
-  )
-
-  # Sjekker om datadumper/skjema er i samsvar med logikker i
-  # i registerbeskrivelsen.
-  if (valider) {
-    valider_dd_ablanor(
-      omgjevnad$d_full_basereg, omgjevnad$d_full_pros,
-      omgjevnad$d_full_gkv, omgjevnad$d_full_rand12,
-      omgjevnad$d_full_mce, omgjevnad$d_full_patientlist
-    )
-  }
 }
