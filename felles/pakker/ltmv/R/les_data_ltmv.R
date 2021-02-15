@@ -137,14 +137,17 @@ les_data_ltmv = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
       status = status, dato = dato, kodebok = kb,
       valider_kb = TRUE, valider_dd = valider
     )
-    if (skjema == "ventreg" && !is.null(maksdato)) { # Andre skjema vert *indirekte* filtrerte på start_date (dato for behandlingsstart)
+    if (skjema == "ventreg" && !is.null(maksdato)) {
       d = dplyr::filter(d, start_date <= !!maksdato)
+    }
+    if (skjema == "ventfol" && !is.null(maksdato)) {
+      d = dplyr::filter(d, followup_date <= !!maksdato)
     }
     objektnamn = paste0("d_full_", skjema)
     assign(objektnamn, d, envir = omgjevnad)
   }
 
-  # Les inn fullstendige datasett (utan filtrering på forløp)
+  # Les inn fullstendige datasett
   kb_skjema = setdiff(kb$skjema_id, "patient") # Manglar datafil for pasienttabellen
   purrr::walk(kb_skjema, les_og_lagra, status = status, kb = kb)
   les_og_lagra("mce", status = status, kb = kb_mce)
