@@ -143,6 +143,12 @@ les_data_ltmv = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
     if (skjema == "ventfol" && !is.null(maksdato)) {
       d = dplyr::filter(d, followup_date <= !!maksdato)
     }
+    if (skjema == "conclude" && !is.null(maksdato)) {
+      d = dplyr::filter(
+        d, is.na(stop_date) | stop_date <= !!maksdato,
+        is.na(deceased_date) | deceased_date <= !!maksdato
+      )
+    }
     objektnamn = paste0("d_full_", skjema)
     assign(objektnamn, d, envir = omgjevnad)
   }
