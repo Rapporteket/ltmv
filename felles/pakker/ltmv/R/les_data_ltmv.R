@@ -12,20 +12,20 @@ grunnmappe_ltmv = "***FJERNA-ADRESSE***"
 #' @param dato Datoen for den aktuelle datadumpen (anten tekst på formatet `ÅÅÅÅ-MM-DD`
 #'     eller eit [base::Date]-objekt). Vert brukt til å velja rett undermappe
 #'     til `mappe_dd`. Viss `NULL` (standard), vert nyaste dato brukt.
-#' @param maksdato Dato for siste prosedyre som skal vera med i datauttrekket (same datoformat
-#'     som for `dato`). Oppføringar som tilhøyrer seinare prosedyredatoar,
-#'     vert filtrerte ut, både frå prosedyreskjemaet og andre skjema.
-#'     Viss `NULL` (standard), vert det ikkje noko filtrering på prosedyredato.
+#' @param maksdato Dato for siste startdato, oppfølgingsdato og avslutningsdato som skal vera med i datauttrekket (same datoformat
+#'     som for `dato`). Oppføringar som tilhøyrer seinare datoar,
+#'     vert filtrerte ut frå skjemaa.
+#'     Viss `NULL` (standard), vert det ikkje noko filtrering på datoane.
 #' @param status Type oppføringar som skal lesast. Sjå [rapwhale::les_dd_oqr()]
 #'     for informasjon om moglege verdiar. Som standard vert berre ferdigstilte oppføringar lesne.
 #' @param valider Skal dataa validerast, dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
-#'     Omfattar både testar ved bruk av kodeboka og registerspesifikke testar.
+#'     Omfattar testar ved bruk av kodeboka.
 #' @param omgjevnad Omgjevnad som dataobjekta skal lagrast til. Standard er den globale omgjevnaden.
 #'
 #' @details
 #' Alle standard datafiler til registeret vert lesne inn, eventuelt validerte,
-#' filtrerte (sjå nedanfor) og så lagra som R-objekt. Dei får namna `d_skjemanamn`, der `skjemanamn`
-#' er namnet på det aktuelle skjemaet (for eksempel `d_ventfol` for oppfølgingskjemaet).
+#' filtrerte (sjå nedanfor) og så lagra som R-objekt. Dei får namna `d_full_skjemanamn`, der `skjemanamn`
+#' er namnet på det aktuelle skjemaet (for eksempel `d_full_ventfol` for oppfølgingskjemaet).
 #' Som standard vert dei lagra i den globale omgjevnaden, og dei vil overskriva eventuelle
 #' eksisterande objekt med same namn.
 #'
