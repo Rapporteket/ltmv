@@ -1,6 +1,9 @@
 # Grunnmappe for datafiler (pakkeintern variabel)
 grunnmappe_ltmv = "***FJERNA-ADRESSE***"
 
+#' @importFrom magrittr %>%
+NULL
+
 #' Les inn LTMV-data
 #'
 #' @description
@@ -65,11 +68,11 @@ les_data_ltmv = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
   # Må legge til variabelen "year" i kodeboken. I følge dokumentasjonen
   # finnes den kun i databasen og vises ikke i registerskjemaet (ventfol).
   # Den dukker derfor ikke opp i kodeboken.
-  ekstra_var = tribble(
+  ekstra_var = tibble::tribble(
     ~skjema_id, ~skjemanavn, ~variabel_id, ~variabeletikett, ~variabeltype, ~unik, ~obligatorisk, ~desimalar,
     "ventfol", "Avslutt", "year", "Antall år etter registrering", "numerisk", "nei", "ja", 0L
   )
-  kb = bind_rows(kb, ekstra_var)
+  kb = dplyr::bind_rows(kb, ekstra_var)
 
   # Heimesnikra kodebøker for registerspesifikke filer
   # Fixme: Bør oppdaterast når me får ny datadumpinnlesar for OQR
