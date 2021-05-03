@@ -5,6 +5,13 @@
 #' @importFrom readxl read_excel
 NULL
 
+#' Legg til overordnede diagnosegrupper
+#'
+#' @param d_ventreg
+#'
+#' @return
+#' @export
+#'
 legg_til_overordnet_diag = function(d_ventreg) {
   grunnmappe = "***FJERNA-ADRESSE***"
 
@@ -33,6 +40,13 @@ legg_til_overordnet_diag = function(d_ventreg) {
 }
 
 
+#' Legg til HF-navn og RHF-navn
+#'
+#' @param d
+#'
+#' @return
+#' @export
+#'
 legg_til_hf_rhf_navn = function(d) {
   grunnmappe = "***FJERNA-ADRESSE***"
 
@@ -65,6 +79,13 @@ legg_til_hf_rhf_navn = function(d) {
 }
 
 
+#' Legg til oppdaterte fylkesnavn og rekkefølge på helseregioner
+#'
+#' @param d
+#'
+#' @return
+#' @export
+#'
 legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
 
   # Legger til navn på fylker, omkoding til nye fylkesnummer,
@@ -96,11 +117,15 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
   d
 }
 
-# d %>% select(mceid,diagnosis1, hf_resh, county, rhf_kode,diag_gruppe_barn,
-#             diag_gruppe_barn_navn,diag_gruppe,diag_gruppe_navn,hf_tekst,
-#             hf_gr,hf_gr_tekst,fylker_oppdatert,fylker_ltmv,rhf_tekst,rhf_resh) %>% view()
 
-# d_full %>% select(P_ID,R_FID,R_DIAGNOSIS1, hf_resh, R_FYLKE, R_FYLKESNR,
-#                  rhf_kode,diag_gruppe_barn,diag_gruppe_barn_navn,diag_gruppe,
-#                  diag_gruppe_navn,hf_tekst,hf_gr,hf_gr_tekst,fylker_tekst,
-#                  fylker_oppdatert,fylker_ltmv,rhf_tekst,rhf_resh) %>% view()
+#' Regn ut prosent for andel trakeostomi eller maske (for bruk i teksten)
+#'
+#' @param d
+#' @param trakeostomi_type
+#'
+#' @return
+#' @export
+#'
+regn_ut_gj_trakestomi = function(d, trakeostomi_type) {
+  round(100 * mean((d %>% filter(!is.na(respcon)))$respcon == trakeostomi_type))
+}
