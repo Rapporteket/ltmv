@@ -129,3 +129,72 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
 regn_ut_gj_trakestomi = function(d, trakeostomi_type) {
   round(100 * mean((d %>% filter(!is.na(respcon)))$respcon == trakeostomi_type))
 }
+
+
+#' Regn ut antall og prosent for diagnosegrupper
+#'
+#' @param d
+#' @param alderkat
+#'
+#' @return
+#' @export
+#'
+regn_antall = function(d, alderkat = TRUE) {
+  # vi grupperer bare på alderkat hvis ønskelig
+  if (alderkat) {
+    d_n_diag = d %>%
+      count(alderkat, diag_gruppe, diag_gruppe_navn) %>%
+      group_by(alderkat)
+  } else {
+    d_n_diag = d %>%
+      count(diag_gruppe, diag_gruppe_navn)
+  }
+  # regner ut prosent
+  d_n_diag = d_n_diag %>%
+    mutate(pro = (n / sum(n)))
+
+  # sette rekkefølgen basert på størst til minst.
+  rekkefolge_diag = d %>%
+    arrange(diag_gruppe) %>%
+    distinct(diag_gruppe) %>%
+    pull("diag_gruppe")
+  rekkefolge_diag_navn = d %>%
+    arrange(diag_gruppe) %>%
+    distinct(diag_gruppe_navn) %>%
+    pull("diag_gruppe_navn")
+  d_n_diag = d_n_diag %>%
+    mutate(diagnose = factor(diag_gruppe,
+      levels = rev(rekkefolge_diag),
+      labels = rev(rekkefolge_diag_navn)
+    ))
+
+  # spytter ut resultat
+  d_n_diag
+}
+
+
+#' Hent ut antall, navn, eller prosent for diagnosegrupper av ulik størrelse
+#'
+#' @param d_n_diaggruppe_akt
+#' @param alderkat
+#' @param type
+#' @param str_orden
+#'
+#' @return
+#' @export
+#'
+finn_storrelse_diag = function(d_n_diaggruppe_akt, alderkat, type, str_orden) {
+  # gjør disse klare for bangbang
+  alderkat = quo_name(enquo(alderkat))
+  type = enquo(type)
+
+  # filtrerer ut aktuell aldergruppe, og henter ut ønsket nivå (største, minste osv.)
+  # av ønsket kolonne
+  resultat = d_n_diaggruppe_akt %>%
+    filter(alderkat == !!alderkat) %>%
+    arrange(desc(n)) %>%
+    pull(!!type) %>%
+    nth(str_orden)
+
+  resultat
+}
