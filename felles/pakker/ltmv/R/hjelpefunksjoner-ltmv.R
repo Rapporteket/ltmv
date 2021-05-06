@@ -198,3 +198,20 @@ finn_storrelse_diag = function(d_n_diaggruppe_akt, alderkat, type, str_orden) {
 
   resultat
 }
+
+
+#' Regn ut antall pasienter gitt en gruppe
+#'
+#' @param d
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+regn_n_pas = function(d, ...) {
+  var_gruppe = enquos(...) # variabler som er gruppene man ønsker regne antall på
+  d_n_pas = d %>%
+    distinct(patient_id, .keep_all = TRUE) %>%
+    count(!!!var_gruppe)
+  d_n_pas
+}
