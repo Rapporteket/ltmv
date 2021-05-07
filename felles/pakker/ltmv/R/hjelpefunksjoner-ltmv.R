@@ -215,3 +215,23 @@ regn_n_pas = function(d, ...) {
     count(!!!var_gruppe)
   d_n_pas
 }
+
+
+#' Finn andel som har en måling for sentrale variabler brukt i årsrapporten
+#'
+#' @param d
+#' @param var
+#'
+#' @return
+#' @export
+#'
+regn_andel_missing = function(d, var) {
+  var = enquos(var)
+  d = d %>%
+    summarise(
+      teller = sum(!is.na(!!!var)),
+      nevner = n(), .groups = "drop"
+    ) %>%
+    mutate(prop = teller / nevner)
+  d
+}
