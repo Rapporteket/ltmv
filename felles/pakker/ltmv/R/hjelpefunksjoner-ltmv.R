@@ -95,10 +95,11 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
   d_fylker = d_fylke_til_rhf %>%
     select(starts_with("fylker"))
 
-  d_fylker$fylker_tekst = toupper(d_fylker$fylker_tekst) # For at det skal samsvare med datadumpene
+  # Gjør om "fylker_historisk" til en tekstvariabel for at det skal samsvare med registeret
+  d_fylker$fylker_historisk = as.character(d_fylker$fylker_historisk)
 
   d = d %>%
-    left_join(d_fylker, by = c("county" = "fylker_tekst")) # FIXME: finnes ikke fylkeskode i de nye datadumpene
+    left_join(d_fylker, by = c("kode_fylke" = "fylker_historisk"))
 
   # Vi vil også ha navn på helseregioner.
   # Registeret har en variabel som koder for rekkefølgen
