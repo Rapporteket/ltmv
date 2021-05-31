@@ -45,16 +45,13 @@ regn_insprev = function(d, var_folk, insidens = TRUE, ...) {
   if (insidens) {
     d = d %>%
       summarise(n_akt = n(), insidens = 100000 * (n_akt / !!var_folk), .groups = "drop")
-    d
   } else {
     d = d %>%
       summarise(n_reg = n(), prevalens = 100000 * (n_reg / !!var_folk), .groups = "drop")
-    d
   }
 
-  d = d %>%
+  d %>%
     distinct(!!!var_gruppe, .keep_all = TRUE)
-  d
 }
 
 #' Kvalitetsindikator for blodgass
@@ -77,7 +74,7 @@ ki_blodgass = function(d_ventreg) {
         !is.na(capillarypco2_air) |
         !is.na(be) |
         !is.na(arterialpco2_air)),
-      ki_krit_nevner = !is.na(dato_start)
+      ki_krit_nevner = TRUE
     )
 }
 
