@@ -63,7 +63,6 @@ legg_til_hf_rhf_navn = function(d) {
     )
 
   hf_akt = d_sjukehus_info %>%
-    filter(hf_resh %in% d$move_to_centre) %>%
     distinct(hf_resh, .keep_all = TRUE) %>%
     select(hf_resh, hf_tekst, hf_gr, hf_gr_tekst)
 
