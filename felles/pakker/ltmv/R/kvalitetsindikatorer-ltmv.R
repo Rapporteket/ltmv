@@ -93,9 +93,10 @@ ki_elektiv = function(d_ventreg) {
   d_ventreg %>%
     mutate(
       ki_krit_teller = situation_ventilation == 2,
-      ki_krit_nevner = situation_ventilation == 1 |
-        situation_ventilation == 2 |
-        situation_ventilation == 9
+      ki_krit_nevner = !is.na(situation_ventilation) &
+        (situation_ventilation == 1 |
+          situation_ventilation == 2 |
+          situation_ventilation == 9)
     )
 }
 
