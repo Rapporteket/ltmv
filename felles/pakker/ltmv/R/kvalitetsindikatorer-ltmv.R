@@ -122,6 +122,6 @@ ki_prom = function(d_prom) {
     distinct(patient_id, .keep_all = TRUE) %>%
     mutate(
       ki_krit_teller = mangler_ikke == 1,
-      ki_krit_nevner = !is.na(patient_id)
+      ki_krit_nevner = TRUE
     )
 }
