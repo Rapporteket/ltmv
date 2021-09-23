@@ -90,7 +90,7 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
   # Legger til navn på fylker, omkoding til nye fylkesnummer,
   # og kode for rekkefølgen som skal brukes for helseregioner.
   # Henter inn data på fylkeskoder og helseregion tilhørighet.
-  d_fylke_til_rhf = read_excel("H:\\kvalreg\\felles\\kodeboker\\fylke-rhf.xlsx")
+  d_fylke_til_rhf = read_excel("H:\\kvalreg\\fellesting\\dokumentasjon\\kodeboker\\fylke-rhf.xlsx")
   d_fylker = d_fylke_til_rhf %>%
     select(starts_with("fylker"))
 
