@@ -1,0 +1,9 @@
+^norspis\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^\.lintr$
+^codecov\.yml$
+^\.github$
+^docker-compose\.yml$
+^CODE_OF_CONDUCT\.md$
+^data-raw$

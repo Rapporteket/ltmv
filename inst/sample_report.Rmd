@@ -1,0 +1,99 @@
+---
+params:
+  title: tom tittel
+  author: ukjent forfatter
+  hospital_name: ukjent sykehus
+  table_format: html
+  resh_id: 999999
+  registry_name: norspis
+  user_full_name: Tore Tester
+  user_role: ukjent rolle
+title: Nasjonalt register for langtidsmekanisk ventilasjon (LTMV) EKSEMPELRAPPORT
+abstract: Dette er en eksempelrapport for LTMV som er basert på eksempeldata men som antagelig ikke er nyttig for noe. Formålet er å gi praktiske eksempler på hvordan slike rapporter kan etableres
+date: '`r format(Sys.time(), "%d. %B, %Y")`'
+registry_name: '`r params$registry_name`'
+reglogo: '`r system.file("logo_ltmv.png", package = "ltmv")`'
+regtext: '`r readLines(system.file("registry_short_description.txt", package = "ltmv"))`'
+user_full_name: '`r params$user_full_name`'
+output:
+  fig_caption: yes
+---
+
+
+
+
+```{r knitrOptions, include=FALSE}
+options(knitr.table.format = params$tableFormat)
+knitr::opts_chunk$set(warnings = FALSE, echo = FALSE)
+options(stringsAsFactors = FALSE)
+Sys.setlocale("LC_TIME", "nb_NO.UTF-8")
+```
+
+
+
+
+```{r SKDEcol, include=FALSE}
+colPrimary <- c("#000059", "#084594", "#2171b5", "#4292c6", "#6baed6",
+                "#c6dbef")
+colNeutral <- c("#4D4D4D", "#737373", "#A6A6A6", "#DADADA")
+colKontrast <- "#FF7260"
+```
+
+```{r getData}
+df <- mtcars
+```
+
+
+# Formål
+Formålet med denne rapporten er å gi praktiske eksempler på hvordan sammensatte
+rapporter kan lages. Selv om datagrunnlaget godt kan være "ekte", så er
+nødvendigvis ikke resultatene som framkommer her anvendbare på annet vis en som
+metodisk illustrasjon.
+
+Rapporten viser blant annet hvordan resultater kan flettes inn i teksten og
+hvordan tabeller og figurer kan lages basert på på et datasett som endrer seg
+over tid. Rapporten viser også hvordan kryssreferanser til figurer og tabeller
+benyttes.
+
+[Malen for rapporten](https://github.com/Rapporteket/ltmv/blob/main/inst/sample_report.Rmd)
+er skrevet i [R-Markdown](https://rmarkdown.rstudio.com/) som er svært enkel i
+bruk men som har enkelte begrensninger. Med en slik tilnærming kan det enkelt
+fra samme mal produsere rapporter i både html (for nettlesere) og pdf-format
+(for tilsending og/eller utskrift).
+
+# Datagrunnlag
+Eksempeldata brukt i denne rapporten er hentet fra _mtcars_. Rapporten er
+generert via Rapporteket for LTMV av brukeren
+__`r params$author`__ logget på med  __`r params$user_role`__-rolle ved
+__`r params$hospital_name`__. Rapporten er laget den
+`r format(Sys.time(), '%d. %B %Y')` og er enten manuelt nedlastet eller
+automatisk tilsent av abonnementstjenesten til Rapporteket.
+
+
+# Totalt antall biltyper fordelt på antall sylindre
+Datagrunnlaget og består av totalt `r dim(df)[1]` biltyper for i alt
+`r dplyr::distinct(df, cyl) %>% dplyr::count()` ulike antall sylindre.
+
+Antall biltyper for ulike sylinderantall er gitt i Figur \@ref(fig:typeSylFig) og i Tabell \@ref(tab:typeSylTab).
+
+```{r processForlopPerYear}
+syl <- df %>%
+  dplyr::group_by(cyl) %>%
+  dplyr::summarise(n = dplyr::n()) %>%
+  dplyr::select(cyl, n)
+```
+
+```{r typeSylTab}
+cap <- paste("Totalt antall biltyper per sylinderantall.")
+rapbase::mst(syl,
+             type = params$table_format,
+             cap = cap,
+             digs = 0,
+             align = "cc",
+             fs = 9, lsd = FALSE)
+```
+
+```{r typeSylFig, fig.cap = paste("Totalt antall biltyper kategorisert i antall sylindre"), fig.pos = "H", fig.align = "center", out.width = "100%" }
+ggplot2::ggplot(data = syl, ggplot2::aes(x = cyl, y = n)) +
+  ggplot2::geom_bar(stat="identity")
+```
