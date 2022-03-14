@@ -19,6 +19,20 @@ test_that("server can run", {
   })
 })
 
+test_that("example report can be provided for ui", {
+  shiny::testServer(app = app_server, {
+    expect_true("list" %in% class(output$ex_report))
+  })
+})
+
+test_that("example report can be provided for download", {
+  shiny::testServer(app = app_server, {
+    session$setInputs(format_report = "html")
+    session$setInputs(download_report = 1)
+    expect_true(file.exists(output$download_report))
+  })
+})
+
 
 # Restore instance
 Sys.setenv(R_RAP_CONFIG_PATH = current_config_path)

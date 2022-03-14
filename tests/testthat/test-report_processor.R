@@ -4,4 +4,13 @@ test_that("report processor provides files", {
                                 title = "Unit test")
     )
   )
+  expect_true(
+    file.exists(report_processor("sample_report", output_type = "html",
+                                 title = "Unit test")
+    )
+  )
+})
+
+test_that("a warning is provided when no report title given", {
+  expect_warning(report_processor("sample_report", output_type = "html"))
 })
