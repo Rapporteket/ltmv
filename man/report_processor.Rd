@@ -32,11 +32,11 @@ default.}
 \item{org_name}{Character string with the name of the organization/hospital.
 Default is "unknown organization".}
 
-\item{org_id}{Integer (?) with the id of the organization/hospital. Default is
-999999.}
+\item{org_id}{Integer (?) with the id of the organization/hospital. Default
+is 999999.}
 
 \item{registry_name}{Character string with registry name. Default is
-"norspis".}
+"ltmv".}
 
 \item{user_full_name}{Character string giving the person name, normally the
 user requesting the report. Default is "unknown person name".}

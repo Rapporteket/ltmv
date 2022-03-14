@@ -87,13 +87,13 @@ app_server <- function(input, output, session) {
 
   # dispatch
   org <- rapbase::autoReportOrgServer("ltmv_dispatch_org", orgs)
-  fileFormat <- rapbase::autoReportFormatServer("ltmv_dispatch_format")
-  paramNames <- shiny::reactive(c("output_format"))
-  paramValues <- shiny::reactive(c(fileFormat()))
+  file_format <- rapbase::autoReportFormatServer("ltmv_dispatch_format")
+  param_names <- shiny::reactive(c("output_format"))
+  param_values <- shiny::reactive(c(file_format()))
   rapbase::autoReportServer(
     "ltmv_dispatch", registryName = registry_name, type = "dispatchment",
     org = org$value,
-    paramNames = paramNames, paramValues = paramValues, reports = report,
+    paramNames = param_names, paramValues = param_values, reports = report,
     orgs = orgs
   )
 

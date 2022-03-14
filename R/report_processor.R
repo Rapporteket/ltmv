@@ -19,10 +19,10 @@
 #' "unknown author".
 #' @param org_name Character string with the name of the organization/hospital.
 #' Default is "unknown organization".
-#' @param org_id Integer (?) with the id of the organization/hospital. Default is
-#' 999999.
+#' @param org_id Integer (?) with the id of the organization/hospital. Default
+#' is 999999.
 #' @param registry_name Character string with registry name. Default is
-#' "norspis".
+#' "ltmv".
 #' @param user_full_name Character string giving the person name, normally the
 #' user requesting the report. Default is "unknown person name".
 #' @param user_role Character string giving a user role, normally the one of the
@@ -51,14 +51,14 @@ report_processor <- function(report,
 
   stopifnot(output_type %in% c("html", "pdf"))
 
-  filePath <- NULL
+  file_path <- NULL
 
   if (title == "") {
     warning("No title given! Reports should have a title...")
   }
 
   if (report == "guide") {
-    filePath <- rapbase::renderRmd(
+    file_path <- rapbase::renderRmd(
       system.file("guide.Rmd", package = "ltmv"),
       outputType = output_type,
       params = list(
@@ -72,7 +72,7 @@ report_processor <- function(report,
   }
 
   if (report == "sample_report") {
-    filePath <- rapbase::renderRmd(
+    file_path <- rapbase::renderRmd(
       system.file("sample_report.Rmd", package = "ltmv"),
       outputType = output_type,
       params = list(
@@ -85,5 +85,5 @@ report_processor <- function(report,
     )
   }
 
-  filePath
+  file_path
 }

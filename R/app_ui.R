@@ -6,7 +6,7 @@
 app_ui <- function() {
 
   shiny::addResourcePath("rap", system.file("www", package = "rapbase"))
-  appTitle <- "LTMV"
+  app_title <- "LTMV"
 
   shiny::tagList(
 
@@ -17,9 +17,9 @@ app_ui <- function() {
             system.file("www/logo.svg", package = "rapbase")
           )
         ),
-        appTitle
+        app_title
       ),
-      windowTitle = appTitle,
+      windowTitle = app_title,
       theme = "rap/bootstrap.css",
       id = "tabs",
 

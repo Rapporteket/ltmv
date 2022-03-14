@@ -68,11 +68,11 @@ close(fc)
 sql <- paste0(t, collapse = "\n")
 queries <- strsplit(sql, ";")[[1]]
 
-registryName <- "testReg"
+registry_name <- "testReg"
 
 test_that("relevant test database and tables can be made", {
   check_db()
-  con <- rapbase::rapOpenDbConnection(registryName)$con
+  con <- rapbase::rapOpenDbConnection(registry_name)$con
   for (i in seq_len(length(queries))) {
     expect_equal(class(RMariaDB::dbExecute(con, queries[i])), "integer")
 
@@ -83,7 +83,7 @@ test_that("relevant test database and tables can be made", {
 # onto main testing
 session <- list()
 attr(session, "class") <- "ShinySession"
-registryName
+registry_name
 ## simply check if data frames are returned
 
 ### ADD TEST ON SQL FUNCTIONS HERE ###
@@ -91,7 +91,7 @@ registryName
 
 # remove test db
 if (is.null(check_db(is_test_that = FALSE))) {
-  con <- rapbase::rapOpenDbConnection(registryName)$con
+  con <- rapbase::rapOpenDbConnection(registry_name)$con
   RMariaDB::dbExecute(con, "DROP DATABASE testDb;")
   rapbase::rapCloseDbConnection(con)
 }
