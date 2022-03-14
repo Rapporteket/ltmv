@@ -27,7 +27,7 @@ remotes::install_github("Rapporteket/ltmv")
 ## Usage
 Start the shiny application from the R console:
 ```r
-ltmvApp()
+run_app()
 ```
 
 ## Issues
