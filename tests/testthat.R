@@ -1,4 +1,4 @@
 library(testthat)
-library(norspis)
+library(ltmv)
 
-test_check("norspis")
+test_check("ltmv")
