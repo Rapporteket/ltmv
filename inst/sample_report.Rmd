@@ -11,10 +11,10 @@ params:
 title: Nasjonalt register for langtidsmekanisk ventilasjon (LTMV) EKSEMPELRAPPORT
 abstract: Dette er en eksempelrapport for LTMV som er basert på eksempeldata men som antagelig ikke er nyttig for noe. Formålet er å gi praktiske eksempler på hvordan slike rapporter kan etableres
 date: '`r format(Sys.time(), "%d. %B, %Y")`'
-registry_name: '`r params$registry_name`'
+registryName: '`r params$registry_name`'
 reglogo: '`r system.file("logo_ltmv.png", package = "ltmv")`'
 regtext: '`r readLines(system.file("registry_short_description.txt", package = "ltmv"))`'
-user_full_name: '`r params$user_full_name`'
+userFullName: '`r params$user_full_name`'
 output:
   fig_caption: yes
 ---
