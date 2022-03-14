@@ -5,7 +5,7 @@ params:
   hospital_name: ukjent sykehus
   table_format: html
   resh_id: 999999
-  registry_name: norspis
+  registry_name: ltmv
   user_full_name: Tore Tester
   user_role: ukjent rolle
 title: Nasjonalt register for langtidsmekanisk ventilasjon (LTMV) EKSEMPELRAPPORT
