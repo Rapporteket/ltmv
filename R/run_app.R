@@ -4,5 +4,5 @@
 #' @export
 
 run_app <- function() {
-  shiny::shinyApp(ui = app_ui, server = app_server)
+  shiny::shinyApp(ui = ltmv::app_ui, server = ltmv::app_server)
 }
