@@ -83,11 +83,19 @@ test_that("relevant test database and tables can be made", {
 # onto main testing
 session <- list()
 attr(session, "class") <- "ShinySession"
-registry_name
+resh_id <- 999999
 ## simply check if data frames are returned
 
-### ADD TEST ON SQL FUNCTIONS HERE ###
-
+# ADD TEST ON SQL FUNCTIONS HERE
+## simply check if data frames are returned
+test_that("data frame is returned", {
+  check_db()
+  expect_true(
+    class(
+      query_all_hospitals(registry_name, resh_id, session = session)
+    ) == "data.frame"
+  )
+})
 
 # remove test db
 if (is.null(check_db(is_test_that = FALSE))) {

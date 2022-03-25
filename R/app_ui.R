@@ -52,6 +52,16 @@ app_ui <- function() {
       ),
 
       shiny::tabPanel(
+        "Alle sykehus",
+        shiny::sidebarLayout(
+          shiny::sidebarPanel(),
+          shiny::mainPanel(
+            shiny::htmlOutput("hospital_report", inline = TRUE)
+          )
+        )
+      ),
+
+      shiny::tabPanel(
         "Abonnement",
         shiny::sidebarLayout(
           shiny::sidebarPanel(
