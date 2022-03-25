@@ -19,7 +19,7 @@ app_server <- function(input, output, session) {
 
   rapbase::navbarWidgetServer("ltmv_navbar_widget", "ltmv", caller = "ltmv")
 
-  # Eksempelrapport
+  # sample report
   output$ex_report <- shiny::renderUI({
     rapbase::renderRmd(
       system.file("sample_report.Rmd", package = "ltmv"),
@@ -57,6 +57,11 @@ app_server <- function(input, output, session) {
       file.rename(fn, file)
     }
   )
+
+  # simple table report
+  output$hospital_report <- shiny::renderTable({
+    query_all_hospitals(registry_name, resh_id, session = session)
+  })
 
 
 
