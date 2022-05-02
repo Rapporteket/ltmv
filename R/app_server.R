@@ -17,7 +17,7 @@ app_server <- function(input, output, session) {
   user_role <- rapbase::getUserRole(session)
   user_resh_id <- rapbase::getUserReshId(session)
 
-  rapbase::navbarWidgetServer("ltmv_navbar_widget", "ltmv", caller = "ltmv")
+  rapbase::navbarWidgetServer("ltmv-navbar-widget", "ltmv", caller = "ltmv")
 
   # sample report
   output$ex_report <- shiny::renderUI({
@@ -86,26 +86,26 @@ app_server <- function(input, output, session) {
 
   # subscribe
   rapbase::autoReportServer(
-    "ltmv_subscription", registryName = registry_name, type = "subscription",
+    "ltmv-subscription", registryName = registry_name, type = "subscription",
     reports = report, orgs = orgs
   )
 
   # dispatch
-  org <- rapbase::autoReportOrgServer("ltmv_dispatch_org", orgs)
-  file_format <- rapbase::autoReportFormatServer("ltmv_dispatch_format")
+  org <- rapbase::autoReportOrgServer("ltmv-dispatch-org", orgs)
+  file_format <- rapbase::autoReportFormatServer("ltmv-dispatch-format")
   param_names <- shiny::reactive(c("output_format"))
   param_values <- shiny::reactive(c(file_format()))
   rapbase::autoReportServer(
-    "ltmv_dispatch", registryName = registry_name, type = "dispatchment",
+    "ltmv-dispatch", registryName = registry_name, type = "dispatchment",
     org = org$value,
     paramNames = param_names, paramValues = param_values, reports = report,
     orgs = orgs
   )
 
   # use stats
-  rapbase::statsServer("ltmv_stats", registryName = registry_name)
+  rapbase::statsServer("ltmv-stats", registryName = registry_name)
 
   # export
-  rapbase::exportGuideServer("ltmv_export", registry_name)
-  rapbase::exportUCServer("ltmv_export", registry_name)
+  rapbase::exportGuideServer("ltmv-export", registry_name)
+  rapbase::exportUCServer("ltmv-export", registry_name)
 }
