@@ -15,6 +15,12 @@ LazyData: true
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Imports: 
-    rapwhale
+    rapwhale,
+    dplyr,
+    magrittr,
+    readxl,
+    tibble,
+    lubridate,
+    purrr
 Suggests: 
     testthat
