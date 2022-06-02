@@ -60,7 +60,7 @@ app_server <- function(input, output, session) {
 
   # simple table report
   output$hospital_report <- shiny::renderTable({
-    query_all_hospitals(registry_name, resh_id, session = session)
+    query_all_hospitals(registry_name, user_resh_id, session = session)
   })
 
 
