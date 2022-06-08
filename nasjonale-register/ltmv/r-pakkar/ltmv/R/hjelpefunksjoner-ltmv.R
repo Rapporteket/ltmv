@@ -127,7 +127,9 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
 #' @export
 #'
 regn_ut_gj_trakestomi = function(d, trakeostomi_type) {
-  round(100 * mean((d %>% filter(!is.na(respcon)))$respcon == trakeostomi_type))
+  round(100 * mean(
+    (filter(d, !is.na(respcon)))$respcon == trakeostomi_type
+  ), digits = 1)
 }
 
 
