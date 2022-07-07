@@ -8,8 +8,12 @@ NULL
 #' Legg til overordnede diagnosegrupper
 #'
 #' @param d_ventreg
+#' Tibble/dataramme med data fra skjemaet ventreg,
+#' f.eks. hentet med [les_data_ltmv()].
 #'
 #' @return
+#' Inndatarammen `d_ventreg` med ekstra kolonner med info om overordnede
+#' diagnosegrupper lagt til.
 #' @export
 #'
 legg_til_overordnet_diag = function(d_ventreg) {
@@ -43,8 +47,12 @@ legg_til_overordnet_diag = function(d_ventreg) {
 #' Legg til HF-navn og RHF-navn
 #'
 #' @param d
+#' Tibble/dataramme med data fra et av skjemaene ventreg,
+#' ventfol eller conclude,
+#' f.eks. hentet med [les_data_ltmv()].
 #'
 #' @return
+#' Inndatarammen `d` med ekstra kolonner med info om HF lagt til.
 #' @export
 #'
 legg_til_hf_rhf_navn = function(d) {
@@ -81,8 +89,13 @@ legg_til_hf_rhf_navn = function(d) {
 #' Legg til oppdaterte fylkesnavn og rekkefølge på helseregioner
 #'
 #' @param d
+#' Tibble/dataramme med data fra et av skjemaene ventreg,
+#' ventfol eller conclude,
+#' f.eks. hentet med [les_data_ltmv()].
 #'
 #' @return
+#' Inndatarammen `d` med ekstra kolonner med info om fylke og RHF lagt til.
+#'
 #' @export
 #'
 legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
@@ -122,9 +135,15 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
 #' Regn ut prosent for andel trakeostomi eller maske (for bruk i teksten)
 #'
 #' @param d
+#' Tibble/dataramme med data fra et av skjemaene ventreg eller ventfol,
+#' f.eks. hentet med [les_data_ltmv()].
 #' @param trakeostomi_type
+#' Hvilken type ventilering skal det regnes ut andel for?
+#' Verdien 1 for trakeostomi, verdien 2 for non-invasiv.
 #'
 #' @return
+#' Andel forløp i `d` med ventilering av typen `trakeostomi_type`.
+#' (I prosent, med én desimal og uten prosenttegn, altså andel * 100)
 #' @export
 #'
 regn_ut_gj_trakestomi = function(d, trakeostomi_type) {
@@ -137,9 +156,19 @@ regn_ut_gj_trakestomi = function(d, trakeostomi_type) {
 #' Regn ut antall og prosent for diagnosegrupper
 #'
 #' @param d
+#' Tibble/dataramme med data fra skjemae ventreg,
+#' f.eks. hentet med [les_data_ltmv()],
+#' med info om diagnosegruppe lagt til med [legg_til_overordnet_diag()],
+#' og en kolonne `alderkat` som sier om pasienten er barn (under 18 år)
+#' eller voksen (18 år eller eldre).
 #' @param alderkat
+#' Boolsk variabel som sier om det skal gupperes på kolonnen `alderkat` i `d`.
+#' Standardverdi er `TRUE`.
 #'
 #' @return
+#' Tibble med oppsumert antall og andel pasienter de ulike diagnosegruppene,
+#' eventuelt gruppert på alderskategori (barn/voksen) også.
+#'
 #' @export
 #'
 regn_antall = function(d, alderkat = TRUE) {
@@ -180,11 +209,20 @@ regn_antall = function(d, alderkat = TRUE) {
 #' Hent ut antall, navn, eller prosent for diagnosegrupper av ulik størrelse
 #'
 #' @param d_n_diaggruppe_akt
+#' Tibble/dataramme med diagnosegrupper, alderskategori, antall og andel.
 #' @param alderkat
+#' Tekstvektor med alderskategorien skal det sjekkes for, "Barn" eler "Voksen".
 #' @param type
+#' Tekstvektor med navnet på kolonnen som utverdien skal hentes fra.
 #' @param str_orden
+#' Heltall som sier hvilken diagnosegruppe det skal hentes tall for.
+#' Henter for den n-te største diagnosegruppen etter antall.
 #'
 #' @return
+#' Verdien i kolonnen `type` for den `str_orden`-te største diagnosegruppen
+#' etter antall i `d_n_diaggruppe_akt`,
+#' filtrert på alderskategori `alderkat`.
+#'
 #' @export
 #'
 finn_storrelse_diag = function(d_n_diaggruppe_akt, alderkat, type, str_orden) {
@@ -207,9 +245,15 @@ finn_storrelse_diag = function(d_n_diaggruppe_akt, alderkat, type, str_orden) {
 #' Regn ut antall pasienter gitt en gruppe
 #'
 #' @param d
+#' Tibble/dataramme.
 #' @param ...
+#' Kolonner det skal grupperes på.
 #'
 #' @return
+#' Tibble med kolonnene gitt til funksjonen i `...`,
+#' samt kolonnen `n` som gir antallet rader i `d` med alle kombinasjoner av
+#' verdiene i kolonnene gitt i `...`.
+#'
 #' @export
 #'
 regn_n_pas = function(d, ...) {
@@ -224,9 +268,16 @@ regn_n_pas = function(d, ...) {
 #' Finn andel som har en måling for sentrale variabler brukt i årsrapporten
 #'
 #' @param d
+#' Tibble/dataramme.
 #' @param var
+#' Kolonne det skal regnes antall og andel missing for.
 #'
 #' @return
+#' Tibble/dataramme med 3 kolonner og 1 rad.
+#' Kolonnene er `teller` (antall rader i `d` som har en verdi i kolonnen `var`),
+#' `nevner` (antall rader i `d`) og `prop`
+#' (andel rader i `d` som har en verdi i kolonnen `var`(`teller/nevner`)).
+#'
 #' @export
 #'
 regn_andel_missing = function(d, var) {
