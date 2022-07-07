@@ -64,7 +64,7 @@ legg_til_hf_rhf_navn = function(d) {
 
   hf_akt = d_sjukehus_info %>%
     distinct(hf_resh, .keep_all = TRUE) %>%
-    select(hf_resh, hf_tekst, hf_gr, hf_gr_tekst)
+    select(hf_resh, hf_tekst, hf_gr, hf_gr_tekst) # FIXME Funksjonen legg berre til info om HF, ikkje RHF som funksjonsnamnet seier?
 
   # Gjør om "hf_resh" til en tekstvariabel for at det skal samsvare med registeret
   hf_akt$hf_resh = as.character(hf_akt$hf_resh)
@@ -86,6 +86,7 @@ legg_til_hf_rhf_navn = function(d) {
 #' @export
 #'
 legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
+  # FIXME Anna namn på funksjonen, den legg ikkje til rekkefølge, men RHF-namn og resh? (I tillegg til info om fylke)
 
   # Legger til navn på fylker, omkoding til nye fylkesnummer,
   # og kode for rekkefølgen som skal brukes for helseregioner.
@@ -127,7 +128,7 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
 #' @export
 #'
 regn_ut_gj_trakestomi = function(d, trakeostomi_type) {
-  round(100 * mean(
+  round(100 * mean( # FIXME Gje ut som andel, kan gjerast om til prosent seinare med prosent()
     (filter(d, !is.na(respcon)))$respcon == trakeostomi_type
   ), digits = 1)
 }
@@ -142,6 +143,7 @@ regn_ut_gj_trakestomi = function(d, trakeostomi_type) {
 #' @export
 #'
 regn_antall = function(d, alderkat = TRUE) {
+  # FIXME alderkat er namnet på både boolsk argument og kolonne i datasettet
   # vi grupperer bare på alderkat hvis ønskelig
   if (alderkat) {
     d_n_diag = d %>%
