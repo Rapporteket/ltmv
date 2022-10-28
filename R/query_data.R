@@ -32,7 +32,7 @@ FROM
   ")
 
   if ("session" %in% names(list(...))) {
-    msg = paste0("Query centre data from ", registry_name, ": ", query)
+    msg <- paste0("Query centre data from ", registry_name, ": ", query)
     rapbase::repLogger(session = list(...)[["session"]], msg)
   }
 
