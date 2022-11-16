@@ -84,5 +84,5 @@ rapbase::mst(syl,
 
 ```{r typeSylFig, fig.cap = paste("Totalt antall biltyper kategorisert i antall sylindre"), fig.pos = "H", fig.align = "center", out.width = "100%" }
 ggplot2::ggplot(data = syl, ggplot2::aes(x = cyl, y = n)) +
-  ggplot2::geom_bar(stat="identity")
+  ggplot2::geom_bar(stat = "identity")
 ```
