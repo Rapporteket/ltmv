@@ -30,7 +30,7 @@ app_ui <- function() {
             system.file("guide.Rmd", package = "ltmv"),
             outputType = "html_fragment"
           ),
-          rapbase::navbarWidgetInput("ltmv_navbar_widget")
+          rapbase::navbarWidgetInput("ltmv-navbar-widget")
         )
       ),
 
@@ -65,10 +65,10 @@ app_ui <- function() {
         "Abonnement",
         shiny::sidebarLayout(
           shiny::sidebarPanel(
-            rapbase::autoReportInput("ltmv_subscription")
+            rapbase::autoReportInput("ltmv-subscription")
           ),
           shiny::mainPanel(
-            rapbase::autoReportUI("ltmv_subscription")
+            rapbase::autoReportUI("ltmv-subscription")
           )
         )
       ),
@@ -80,12 +80,12 @@ app_ui <- function() {
           "Utsending",
           shiny::sidebarLayout(
             shiny::sidebarPanel(
-              rapbase::autoReportFormatInput("ltmv_dispatch_format"),
-              rapbase::autoReportOrgInput("ltmv_dispatch_org"),
-              rapbase::autoReportInput("ltmv_dispatch")
+              rapbase::autoReportFormatInput("ltmv-dispatch-format"),
+              rapbase::autoReportOrgInput("ltmv-dispatch-org"),
+              rapbase::autoReportInput("ltmv-dispatch")
             ),
             shiny::mainPanel(
-              rapbase::autoReportUI("ltmv_dispatch")
+              rapbase::autoReportUI("ltmv-dispatch")
             )
           )
         ),
@@ -94,11 +94,11 @@ app_ui <- function() {
           "Bruksstatistikk",
           shiny::sidebarLayout(
             shiny::sidebarPanel(
-              rapbase::statsInput("ltmv_stats"),
-              rapbase::statsGuideUI("ltmv_stats")
+              rapbase::statsInput("ltmv-stats"),
+              rapbase::statsGuideUI("ltmv-stats")
             ),
             shiny::mainPanel(
-              rapbase::statsUI("ltmv_stats")
+              rapbase::statsUI("ltmv-stats")
             )
           )
         ),
@@ -107,10 +107,10 @@ app_ui <- function() {
           "Eksport",
           shiny::sidebarLayout(
             shiny::sidebarPanel(
-              rapbase::exportUCInput("ltmv_export")
+              rapbase::exportUCInput("ltmv-export")
             ),
             shiny::mainPanel(
-              rapbase::exportGuideUI("ltmv_export")
+              rapbase::exportGuideUI("ltmv-export")
             )
           )
         )
