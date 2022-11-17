@@ -103,6 +103,7 @@ app_server <- function(input, output, session) {
   )
 
   # use stats
+  rapbase::statsGuideServer("ltmv-stats", "test")
   rapbase::statsServer("ltmv-stats", registryName = registry_name)
 
   # export
