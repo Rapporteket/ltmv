@@ -1,17 +1,29 @@
 Package: ltmv
 Title: LTMV at Rapporteket
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(
     person(given = "Are",
            family = "Edvardsen",
            role = c("aut", "cre"),
            email = "biorakel@gmail.com",
            comment = c(ORCID = "0000-0002-5210-3656")),
-    person(given = "TBD",
-           family = "TBD",
+    person(given = "Endre", 
+           family = "Kvåle Evjen", 
            role = c("aut"),
-           email = "tbd@nowhere.no"))
-Maintainer: TBD <tbd@nowhere.no>
+           email = "endre.kvale.evjen@helse-bergen.no"), 
+    person(given = "Per Erik",
+           family = "Haugedal",
+           role = c("aut"),
+           email = "per.erik.haugedal@helse-bergen.no"),
+    person(given = "Sergio",
+           family = "Carracedo Huroz",
+           role = c("aut"),
+           email = "sergio.carracedo.huroz@helse-bergen.no"),
+    person(given = "Fatemeh",
+           family = "Ghavidel",
+           role = c("aut"),
+           email = "fatemeh.zamanzad.ghavidel@helse-bergen.no"))
+Maintainer: Per Erik Haugedal <per.erik.haugedal@helse-bergen.no>
 Description: Mainly R functions providing the shiny app at Rapporteket but may
     also include tools for general data analysis and presentation of LTMV
     registry data.
