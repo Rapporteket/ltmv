@@ -9,7 +9,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-5210-3656")),
     person(given = "Endre", 
            family = "Kvåle Evjen", 
-           role = c("aut", "cre"), 
+           role = c("aut"),
            email = "endre.kvale.evjen@helse-bergen.no"), 
     person(given = "Per Erik",
            family = "Haugedal",
