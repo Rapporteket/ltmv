@@ -23,7 +23,6 @@ Authors@R: c(
            family = "Ghavidel",
            role = c("aut"),
            email = "fatemeh.zamanzad.ghavidel@helse-bergen.no"))
-
 Maintainer: Per Erik Haugedal <per.erik.haugedal@helse-bergen.no>
 Description: Mainly R functions providing the shiny app at Rapporteket but may
     also include tools for general data analysis and presentation of LTMV
