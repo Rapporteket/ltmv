@@ -18,7 +18,11 @@ Authors@R: c(
     person(given = "Sergio",
            family = "Carracedo Huroz",
            role = c("aut"),
-           email = "sergio.carracedo.huroz@helse-bergen.no"))
+           email = "sergio.carracedo.huroz@helse-bergen.no"),
+    person(given = "Fatemeh",
+           family = "Ghavidel",
+           role = c("aut"),
+           email = "fatemeh.zamanzad.ghavidel@helse-bergen.no"))
 
 Maintainer: Per Erik Haugedal <per.erik.haugedal@helse-bergen.no>
 Description: Mainly R functions providing the shiny app at Rapporteket but may
