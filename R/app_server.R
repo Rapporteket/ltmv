@@ -9,7 +9,7 @@
 
 app_server <- function(input, output, session) {
 
-  rapbase::appLogger(session = session, msg = "Starting ltmv application now")
+  rapbase::appLogger(session = session, msg = "Starting ltmv application")
 
   registry_name <- "ltmv"
   hospital_name <- "Udefinert avdeling/sykehus"
