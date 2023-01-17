@@ -27,6 +27,19 @@ NULL
 #' @examples
 #' ltmv:::aggreger_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
 aggreger_antall_skjema_tabell = function(d_skjemaoversikt, fra, til) {
+  d_skjemaoversikt %>%
+    filter(
+      opprettetdato >= !!fra,
+      opprettetdato <= !!til
+    ) %>%
+    grupper_skjemaoversikt() %>%
+    count(skjema_gruppe, sykehusnavn) %>%
+    tidyr::pivot_wider(
+      names_from = skjema_gruppe,
+      values_from = n,
+      values_fill = 0,
+      names_expand = TRUE
+    )
 }
 
 #' Grupper skjemaoversikt
