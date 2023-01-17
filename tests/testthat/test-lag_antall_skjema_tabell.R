@@ -85,6 +85,13 @@ test_that("aggreger_antall_skjema_tabell() gjev ut forventa resultat", {
   expect_identical(d_antall_skjema_kort, d_antall_skjema_kort_fasit)
 })
 
+# Testar for formater_antall_skjema_tabell()
+
+test_that("formater_antall_skjema_tabell() gjev ut ein «kable»", {
+  tab_antall_skjema = formater_antall_skjema_tabell(d_antall_skjema)
+  expect_true("knitr_kable" %in% class(tab_antall_skjema))
+})
+
 # Testar for grupper_skjemaoversikt()
 
 test_that("grupper_skjemaoversikt() gjev ut forventa resultat", {
