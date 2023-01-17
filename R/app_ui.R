@@ -61,6 +61,30 @@ app_ui <- function() {
         )
       ),
 
+      shiny::navbarMenu(
+        "Figurer/tabeller",
+        shiny::tabPanel(
+          "Antall ferdige/uferdige skjema",
+          shiny::sidebarLayout(
+            shiny::sidebarPanel(
+              shiny::dateRangeInput("dato_antall_skjema",
+                label = "Dato:",
+                start = lubridate::today() - lubridate::years(1),
+                end = lubridate::today(),
+                max = lubridate::today(),
+                language = "no",
+                weekstart = 1,
+                separator = " til "
+              ),
+              width = 3
+            ),
+            shiny::mainPanel(
+              shiny::htmlOutput("antall_skjema")
+            )
+          )
+        )
+      ),
+
       shiny::tabPanel(
         "Abonnement",
         shiny::sidebarLayout(
