@@ -1,5 +1,32 @@
 #' @import dplyr
 NULL
+#' Lag HTML-tabell med oversikt over ferdige og uferdige skjema på sjukehusnivå
+#'
+#' @description
+#' Funksjonen tek inn ein dato `fra` og ein dato `til`,
+#' og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
+#' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
+#'
+#' @param fra
+#' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
+#' Skjema oppretta frå og med denne datoen vert inkludert.
+#' @param til
+#' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
+#' Skjema oppretta til og med denne datoen vert inkludert.
+#'
+#' @return
+#' HTML-tabell med talet på ferdige og uferdige skjema på sjukehusnivå
+#' for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
+#' @export
+#'
+#' @examples
+#' lag_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
+lag_antall_skjema_tabell = function(fra, til) {
+  hent_skjema("SkjemaOversikt") %>%
+    aggreger_antall_skjema_tabell(fra, til) %>%
+    formater_antall_skjema_tabell()
+}
+
 #' Lag dataramme med oversikt over ferdige og uferdige skjema på sjukehusnivå
 #'
 #' @description
