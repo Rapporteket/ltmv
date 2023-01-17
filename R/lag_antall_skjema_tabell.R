@@ -1,5 +1,34 @@
 #' @import dplyr
 NULL
+#' Lag dataramme med oversikt over ferdige og uferdige skjema på sjukehusnivå
+#'
+#' @description
+#' Funksjonen tek inn ei dataramme `d_skjemaoversikt`,
+#' ein dato `fra` og ein dato `til`,
+#' og gjev ut ein dataramme med talet på ferdige og uferdige skjema på
+#' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
+#'
+#' @param d_skjemaoversikt
+#' Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
+#' Eventuelt filtrert på t.d. sjukehus.
+#' @param fra
+#' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
+#' Skjema oppretta frå og med denne datoen vert inkludert.
+#' @param til
+#' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
+#' Skjema oppretta til og med denne datoen vert inkludert.
+#'
+#' @return
+#' Dataramme med talet på ferdige og uferdige skjema på sjukehusnivå
+#' for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
+#'
+#' @keywords internal
+#'
+#' @examples
+#' ltmv:::aggreger_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
+aggreger_antall_skjema_tabell = function(d_skjemaoversikt, fra, til) {
+}
+
 #' Grupper skjemaoversikt
 #'
 #' @description
