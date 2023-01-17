@@ -64,6 +64,11 @@ app_server <- function(input, output, session) {
   })
 
 
+  output$antall_skjema <- reactive({
+    lag_antall_skjema_tabell(input$dato_antall_skjema[1], input$dato_antall_skjema[2])
+  })
+
+
 
   # dummy report and orgs to subscribe and dispatch
   orgs <- list(
