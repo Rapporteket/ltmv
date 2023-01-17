@@ -47,7 +47,9 @@ Imports:
     rlang,
     readxl,
     tibble,
-    purrr
+    purrr,
+    tidyr,
+    tibble
 Remotes:
     Rapporteket/rapbase@*release,
     Rapporteket/rapwhale
