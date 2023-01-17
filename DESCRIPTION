@@ -49,7 +49,9 @@ Imports:
     tibble,
     purrr,
     tidyr,
-    tibble
+    tibble,
+    knitr,
+    kableExtra
 Remotes:
     Rapporteket/rapbase@*release,
     Rapporteket/rapwhale

@@ -42,6 +42,47 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, fra, til) {
     )
 }
 
+#' Formater antall skjema-tabell
+#'
+#' @description
+#' Tek inn ei dataramme med tal på ferdige og uferdige skjema,
+#' frå [aggreger_antall_skjema_tabell()],
+#' og gjev den ut som HTML-tabell klar til å visast i Rapporteket.
+#'
+#' @param d_antall_skjema
+#' Dataramme frå [aggreger_antall_skjema_tabell()].
+#'
+#' @return
+#' `d_antall_skjema` formatert som HTML-tabell,
+#' med samlande overskrifter, hover-effekt og så vidare.
+#'
+#' @keywords internal
+#'
+#' @examples
+#' d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(
+#'   Sys.Date() - 365, Sys.Date()
+#' )
+#' ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
+formater_antall_skjema_tabell = function(d_antall_skjema) {
+  d_antall_skjema %>%
+    knitr::kable("html", col.names = NULL) %>%
+    kableExtra::add_header_above(
+      header = c("", rep(c("Ferdig", "Uferdig"), 5)),
+      color = "grey",
+      font_size = 12,
+      align = "r"
+    ) %>%
+    kableExtra::add_header_above(
+      header = c(
+        "", "Registrering år 0" = 2,
+        "Oppfølging år 1" = 2, "Oppfølging år 3" = 2,
+        "Videre oppfølging\n(år 5+ og AdHoc)" = 2, "Avslutning" = 2
+      )
+    ) %>%
+    kableExtra::column_spec(seq(3, 11, 2), color = "red") %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
+}
+
 #' Grupper skjemaoversikt
 #'
 #' @description
