@@ -1,18 +1,93 @@
+# Eksempeldata for skjemaoversikt
+# Slik kan data frå hent_skjema("SkjemaOversikt") sjå ut
+skjemanavn = c(
+  "Registrering år 0", "Avslutning", "Oppfølging år 1", "Oppfølging år 3",
+  "Oppfølging år 5", "Oppfølging år 35", "Oppfølging ad-hoc"
+)
+skjemarekkeflg = c(0, 999, 1, 3, 5, 35, 500.253)
+skjemadato = seq(as.POSIXct("2020-01-01 00:00:00"), as.POSIXct("2020-01-14 00:00:00"), by = 60*60*24)
+
+d_skjemaoversikt_eksempel = tibble::tibble(
+  skjemanavn = rep(!!skjemanavn, each = 2),
+  skjemastatus = rep(1:0, length(!!skjemanavn)),
+  forlopsid = 1:(2*length(!!skjemanavn)),
+  opprettetav = "test",
+  opprettetdato = !!skjemadato,
+  sistlagretav = "test",
+  sistlagretdato = opprettetdato,
+  hoveddato = as.Date(opprettetdato),
+  sykehusnavn = rep(c("OSLO UNIVERSITETSSYKEHUS HF", "HELSE BERGEN HF"), each = 7),
+  avdelingsresh = rep(c("4001031", "100082"), each = 7),
+  skjemarekkeflg = rep(!!skjemarekkeflg, each = 2)
+)
+
+# Testar for aggreger_antall_skjema_tabell()
+d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
+  fra = "2020-01-01",
+  til = "2021-01-01"
+)
+
+d_antall_skjema_fasit = tibble::tibble(
+  sykehusnavn = c("OSLO UNIVERSITETSSYKEHUS HF","HELSE BERGEN HF"),
+  `Registrering år 0` = c(1L, 0L),
+  `Registrering år 0 (uferdig)` = c(1L, 0L),
+  `Oppfølging år 1` = c(1L, 0L),
+  `Oppfølging år 1 (uferdig)` = c(1L, 0L),
+  `Oppfølging år 3` = c(1L, 0L),
+  `Oppfølging år 3 (uferdig)` = c(0L, 1L),
+  `Videre oppfølging (år 5+ og AdHoc)` = c(0L, 3L),
+  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(0L, 3L),
+  Avslutning = c(1L, 0L),
+  `Avslutning (uferdig)` = c(1L, 0L)
+)
+
+d_antall_skjema_kort = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
+  fra = "2020-01-07",
+  til = "2020-01-08"
+)
+
+d_antall_skjema_kort_fasit = tibble::tibble(
+  sykehusnavn = c("OSLO UNIVERSITETSSYKEHUS HF",
+                  "HELSE BERGEN HF"),
+  `Registrering år 0` = c(0L, 0L),
+  `Registrering år 0 (uferdig)` = c(0L, 0L),
+  `Oppfølging år 1` = c(0L, 0L),
+  `Oppfølging år 1 (uferdig)` = c(0L, 0L),
+  `Oppfølging år 3` = c(1L, 0L),
+  `Oppfølging år 3 (uferdig)` = c(0L, 1L),
+  `Videre oppfølging (år 5+ og AdHoc)` = c(0L, 0L),
+  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(0L, 0L),
+  Avslutning = c(0L, 0L),
+  `Avslutning (uferdig)` = c(0L, 0L)
+)
+
+test_that("aggreger_antall_skjema_tabell() gjev ut forventa tal på kolonner", {
+  # 11 kolonner: sjukehusnamn + ferdig/uferdig for 5 skjemagrupper
+  expect_true(ncol(d_antall_skjema) == 11)
+})
+
+test_that("aggreger_antall_skjema_tabell() gjev ut rette kolonner i rett rekkjefylgje", {
+  kolonner_finst = names(d_antall_skjema)
+  kolonner_skal_finnast = c(
+    "sykehusnavn",
+    "Registrering år 0", "Registrering år 0 (uferdig)",
+    "Oppfølging år 1", "Oppfølging år 1 (uferdig)",
+    "Oppfølging år 3", "Oppfølging år 3 (uferdig)",
+    "Videre oppfølging (år 5+ og AdHoc)",
+    "Videre oppfølging (år 5+ og AdHoc) (uferdig)",
+    "Avslutning", "Avslutning (uferdig)"
+  )
+  expect_identical(kolonner_finst, kolonner_skal_finnast)
+})
+
+test_that("aggreger_antall_skjema_tabell() gjev ut forventa resultat", {
+  expect_identical(d_antall_skjema, d_antall_skjema_fasit)
+  expect_identical(d_antall_skjema_kort, d_antall_skjema_kort_fasit)
+})
+
+# Testar for grupper_skjemaoversikt()
+
 test_that("grupper_skjemaoversikt() gjev ut forventa resultat", {
-  skjemanavn = c(
-    "Registrering år 0", "Avslutning", "Oppfølging år 1", "Oppfølging år 3",
-    "Oppfølging år 5", "Oppfølging år 35", "Oppfølging ad-hoc"
-  )
-  skjemarekkeflg = c(0, 999, 1, 3, 5, 35, 500.253)
-
-  d_skjemaoversikt_eksempel = tibble::tibble(
-    skjemanavn = rep(!!skjemanavn, each = 2),
-    skjemastatus = rep(1:0, length(!!skjemanavn)),
-    forlopsid = 1:(2*length(!!skjemanavn)),
-    opprettetdato = as.POSIXct("2020-01-01 00:00:00"),
-    skjemarekkeflg = rep(!!skjemarekkeflg, each = 2)
-  )
-
   d_skjemaoversikt_gruppert = d_skjemaoversikt_eksempel %>%
     mutate(
       skjema_gruppe_nr = c(
