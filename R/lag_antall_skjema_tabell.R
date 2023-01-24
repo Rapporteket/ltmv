@@ -14,6 +14,19 @@ NULL
 #' @param til
 #' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
 #' Skjema oppretta til og med denne datoen vert inkludert.
+#' @param resh_id
+#' Tekststreng med RESH-ID til eininga til innlogga brukar.
+#' @param user_role
+#' Tekststreng med rolla til innlogga brukar.
+#' Til dømes "SC" (system coordinator) eller "LU" (local user).
+#'
+#' @details
+#' Funksjonen tek inn ein dato `fra` og ein dato `til`,
+#' og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
+#' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
+#'
+#' Viss `user_role` ikkje er lik "SC" (system coordinator),
+#' vert berre data frå eininga med RESH-ID `resh_id` vist.
 #'
 #' @return
 #' HTML-tabell med talet på ferdige og uferdige skjema på sjukehusnivå
@@ -22,8 +35,13 @@ NULL
 #'
 #' @examples
 #' lag_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
-lag_antall_skjema_tabell = function(fra, til) {
-  hent_skjema("SkjemaOversikt") %>%
+lag_antall_skjema_tabell = function(fra, til, resh_id, user_role) {
+  d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+  if (user_role != "SC") {
+    d_skjemaoversikt = filter(d_skjemaoversikt, avdresh == !!resh_id)
+  }
+
+  d_skjemaoversikt %>%
     aggreger_antall_skjema_tabell(fra, til) %>%
     formater_antall_skjema_tabell()
 }
