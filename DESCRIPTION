@@ -51,7 +51,8 @@ Imports:
     tidyr,
     tibble,
     knitr,
-    kableExtra
+    kableExtra,
+    lubridate
 Remotes:
     Rapporteket/rapbase@*release,
     Rapporteket/rapwhale

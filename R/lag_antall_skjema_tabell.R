@@ -1,4 +1,5 @@
 #' @import dplyr
+#' @importFrom lubridate date
 NULL
 #' Lag HTML-tabell med oversikt over ferdige og uferdige skjema på sjukehusnivå
 #'
@@ -56,8 +57,8 @@ lag_antall_skjema_tabell = function(fra, til) {
 aggreger_antall_skjema_tabell = function(d_skjemaoversikt, fra, til) {
   d_skjemaoversikt %>%
     filter(
-      opprettetdato >= !!fra,
-      opprettetdato <= !!til
+      date(opprettetdato) >= !!fra,
+      date(opprettetdato) <= !!til
     ) %>%
     grupper_skjemaoversikt() %>%
     count(skjema_gruppe, sykehusnavn) %>%
