@@ -75,7 +75,8 @@ lag_antall_skjema_tabell = function(fra, til, resh_id, user_role) {
 #' @keywords internal
 #'
 #' @examples
-#' ltmv:::aggreger_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
+#' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+#' ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt, Sys.Date() - 365, Sys.Date())
 aggreger_antall_skjema_tabell = function(d_skjemaoversikt, fra, til) {
   d_skjemaoversikt %>%
     filter(
