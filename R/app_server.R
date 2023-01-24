@@ -65,7 +65,12 @@ app_server <- function(input, output, session) {
 
 
   output$antall_skjema <- reactive({
-    lag_antall_skjema_tabell(input$dato_antall_skjema[1], input$dato_antall_skjema[2])
+    lag_antall_skjema_tabell(
+      fra = input$dato_antall_skjema[1],
+      til = input$dato_antall_skjema[2],
+      resh_id = user_resh_id,
+      user_role = user_role
+    )
   })
 
 

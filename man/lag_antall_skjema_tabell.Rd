@@ -4,7 +4,7 @@
 \alias{lag_antall_skjema_tabell}
 \title{Lag HTML-tabell med oversikt over ferdige og uferdige skjema på sjukehusnivå}
 \usage{
-lag_antall_skjema_tabell(fra, til)
+lag_antall_skjema_tabell(fra, til, resh_id, user_role)
 }
 \arguments{
 \item{fra}{Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
@@ -12,6 +12,11 @@ Skjema oppretta frå og med denne datoen vert inkludert.}
 
 \item{til}{Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
 Skjema oppretta til og med denne datoen vert inkludert.}
+
+\item{resh_id}{Tekststreng med RESH-ID til eininga til innlogga brukar.}
+
+\item{user_role}{Tekststreng med rolla til innlogga brukar.
+Til dømes "SC" (system coordinator) eller "LU" (local user).}
 }
 \value{
 HTML-tabell med talet på ferdige og uferdige skjema på sjukehusnivå
@@ -21,6 +26,14 @@ for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 Funksjonen tek inn ein dato \code{fra} og ein dato \code{til},
 og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
+}
+\details{
+Funksjonen tek inn ein dato \code{fra} og ein dato \code{til},
+og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
+sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
+
+Viss \code{user_role} ikkje er lik "SC" (system coordinator),
+vert berre data frå eininga med RESH-ID \code{resh_id} vist.
 }
 \examples{
 lag_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
