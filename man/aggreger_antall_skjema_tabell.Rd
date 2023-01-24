@@ -27,6 +27,7 @@ og gjev ut ein dataramme med talet på ferdige og uferdige skjema på
 sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }
 \examples{
-ltmv:::aggreger_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
+d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt, Sys.Date() - 365, Sys.Date())
 }
 \keyword{internal}
