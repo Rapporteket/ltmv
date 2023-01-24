@@ -41,9 +41,13 @@ lag_antall_skjema_tabell = function(fra, til, resh_id, user_role) {
     d_skjemaoversikt = filter(d_skjemaoversikt, avdresh == !!resh_id)
   }
 
-  d_skjemaoversikt %>%
-    aggreger_antall_skjema_tabell(fra, til) %>%
-    formater_antall_skjema_tabell()
+  d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt, fra, til)
+
+  if (nrow(d_antall_skjema) != 0) {
+    formater_antall_skjema_tabell(d_antall_skjema)
+  } else {
+    htmltools::HTML("Ingen skjema for valgt datointervall.")
+  }
 }
 
 #' Lag dataramme med oversikt over ferdige og uferdige skjema på sjukehusnivå
