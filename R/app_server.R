@@ -64,6 +64,44 @@ app_server <- function(input, output, session) {
   })
 
 
+  dagens_dato = lubridate::today()
+
+  observeEvent(input$alle_datoer_knapp, {
+    updateDateRangeInput(
+      session = session,
+      inputId = "dato_antall_skjema",
+      start = "2014-01-01",
+      end = dagens_dato,
+    )
+  })
+
+  observeEvent(input$innevarende_aar_knapp, {
+    updateDateRangeInput(
+      session = session,
+      inputId = "dato_antall_skjema",
+      start = paste0(lubridate::year(dagens_dato), "-01-01"),
+      end = dagens_dato,
+    )
+  })
+
+  observeEvent(input$tretti_dager_knapp, {
+    updateDateRangeInput(
+          session = session,
+      inputId = "dato_antall_skjema",
+      start = dagens_dato - 29,
+      end = dagens_dato,
+    )
+  })
+
+  observeEvent(input$syv_dager_knapp, {
+    updateDateRangeInput(
+      session = session,
+      inputId = "dato_antall_skjema",
+      start = dagens_dato - 6,
+      end = dagens_dato,
+    )
+  })
+
   output$antall_skjema <- reactive({
     lag_antall_skjema_tabell(
       fra = input$dato_antall_skjema[1],

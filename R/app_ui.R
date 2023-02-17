@@ -67,6 +67,10 @@ app_ui <- function() {
           "Antall ferdige/uferdige skjema",
           shiny::sidebarLayout(
             shiny::sidebarPanel(
+              shiny::actionButton("alle_datoer_knapp", "Alt"),
+              shiny::actionButton("innevarende_aar_knapp", "Inneværende år"),
+              shiny::actionButton("tretti_dager_knapp", "Siste 30 dager"),
+              shiny::actionButton("syv_dager_knapp", "Siste 7 dager"),
               shiny::dateRangeInput("dato_antall_skjema",
                 label = "Dato:",
                 start = "2014-01-01",
