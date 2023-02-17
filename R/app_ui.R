@@ -69,8 +69,9 @@ app_ui <- function() {
             shiny::sidebarPanel(
               shiny::dateRangeInput("dato_antall_skjema",
                 label = "Dato:",
-                start = lubridate::today() - lubridate::years(1),
+                start = "2014-01-01",
                 end = lubridate::today(),
+                min = "2014-01-01",
                 max = lubridate::today(),
                 language = "no",
                 weekstart = 1,
