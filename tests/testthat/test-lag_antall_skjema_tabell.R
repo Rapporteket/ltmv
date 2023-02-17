@@ -28,17 +28,19 @@ d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
 )
 
 d_antall_skjema_fasit = tibble::tibble(
-  sykehusnavn = c("OSLO UNIVERSITETSSYKEHUS HF","HELSE BERGEN HF"),
-  `Registrering år 0` = c(1L, 0L),
-  `Registrering år 0 (uferdig)` = c(1L, 0L),
-  `Oppfølging år 1` = c(1L, 0L),
-  `Oppfølging år 1 (uferdig)` = c(1L, 0L),
-  `Oppfølging år 3` = c(1L, 0L),
-  `Oppfølging år 3 (uferdig)` = c(0L, 1L),
-  `Videre oppfølging (år 5+ og AdHoc)` = c(0L, 3L),
-  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(0L, 3L),
-  Avslutning = c(1L, 0L),
-  `Avslutning (uferdig)` = c(1L, 0L)
+  sykehusnavn = c("OSLO UNIVERSITETSSYKEHUS HF", "HELSE BERGEN HF", "Totalt"),
+  `Registrering år 0` = c(1L, 0L, 1L),
+  `Registrering år 0 (uferdig)` = c(1L, 0L, 1L),
+  `Oppfølging år 1` = c(1L, 0L, 1L),
+  `Oppfølging år 1 (uferdig)` = c(1L, 0L, 1L),
+  `Oppfølging år 3` = c(1L, 0L, 1L),
+  `Oppfølging år 3 (uferdig)` = c(0L, 1L, 1L),
+  `Videre oppfølging (år 5+ og AdHoc)` = c(0L, 3L, 3L),
+  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(0L, 3L, 3L),
+  Avslutning = c(1L, 0L, 1L),
+  `Avslutning (uferdig)` = c(1L, 0L, 1L),
+  Totalt = c(4L, 3L, 7L),
+  `Totalt (uferdig)` = c(3L, 4L, 7L)
 )
 
 d_antall_skjema_kort = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
@@ -47,23 +49,28 @@ d_antall_skjema_kort = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
 )
 
 d_antall_skjema_kort_fasit = tibble::tibble(
-  sykehusnavn = c("OSLO UNIVERSITETSSYKEHUS HF",
-                  "HELSE BERGEN HF"),
-  `Registrering år 0` = c(0L, 0L),
-  `Registrering år 0 (uferdig)` = c(0L, 0L),
-  `Oppfølging år 1` = c(0L, 0L),
-  `Oppfølging år 1 (uferdig)` = c(0L, 0L),
-  `Oppfølging år 3` = c(1L, 0L),
-  `Oppfølging år 3 (uferdig)` = c(0L, 1L),
-  `Videre oppfølging (år 5+ og AdHoc)` = c(0L, 0L),
-  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(0L, 0L),
-  Avslutning = c(0L, 0L),
-  `Avslutning (uferdig)` = c(0L, 0L)
+  sykehusnavn = c(
+    "OSLO UNIVERSITETSSYKEHUS HF",
+    "HELSE BERGEN HF",
+    "Totalt"
+  ),
+  `Registrering år 0` = c(0L, 0L, 0L),
+  `Registrering år 0 (uferdig)` = c(0L, 0L, 0L),
+  `Oppfølging år 1` = c(0L, 0L, 0L),
+  `Oppfølging år 1 (uferdig)` = c(0L, 0L, 0L),
+  `Oppfølging år 3` = c(1L, 0L, 1L),
+  `Oppfølging år 3 (uferdig)` = c(0L, 1L, 1L),
+  `Videre oppfølging (år 5+ og AdHoc)` = c(0L, 0L, 0L),
+  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(0L, 0L, 0L),
+  Avslutning = c(0L, 0L, 0L),
+  `Avslutning (uferdig)` = c(0L, 0L, 0L),
+  Totalt = c(1L, 0L, 1L),
+  `Totalt (uferdig)` = c(0L, 1L, 1L)
 )
 
 test_that("aggreger_antall_skjema_tabell() gjev ut forventa tal på kolonner", {
   # 11 kolonner: sjukehusnamn + ferdig/uferdig for 5 skjemagrupper
-  expect_true(ncol(d_antall_skjema) == 11)
+  expect_true(ncol(d_antall_skjema) == 13)
 })
 
 test_that("aggreger_antall_skjema_tabell() gjev ut rette kolonner i rett rekkjefylgje", {
@@ -75,7 +82,8 @@ test_that("aggreger_antall_skjema_tabell() gjev ut rette kolonner i rett rekkjef
     "Oppfølging år 3", "Oppfølging år 3 (uferdig)",
     "Videre oppfølging (år 5+ og AdHoc)",
     "Videre oppfølging (år 5+ og AdHoc) (uferdig)",
-    "Avslutning", "Avslutning (uferdig)"
+    "Avslutning", "Avslutning (uferdig)",
+    "Totalt", "Totalt (uferdig)"
   )
   expect_identical(kolonner_finst, kolonner_skal_finnast)
 })
