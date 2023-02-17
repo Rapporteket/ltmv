@@ -146,8 +146,10 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
         "Totalt" = 2
       )
     ) %>%
-    kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
     kableExtra::column_spec(seq(3, 13, 2), color = "red") %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+    kableExtra::row_spec(nrow(d_antall_skjema), bold = TRUE) %>%
+    kableExtra::column_spec(12:13, bold = TRUE)
 }
 
 #' Grupper skjemaoversikt
