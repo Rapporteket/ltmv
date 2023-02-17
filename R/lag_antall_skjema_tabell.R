@@ -78,7 +78,7 @@ lag_antall_skjema_tabell = function(fra, til, resh_id, user_role) {
 #' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
 #' ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt, Sys.Date() - 365, Sys.Date())
 aggreger_antall_skjema_tabell = function(d_skjemaoversikt, fra, til) {
-  d_skjemaoversikt %>%
+  d_antall_skjema = d_skjemaoversikt %>%
     filter(
       date(opprettetdato) >= !!fra,
       date(opprettetdato) <= !!til
@@ -90,7 +90,22 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, fra, til) {
       values_from = n,
       values_fill = 0,
       names_expand = TRUE
-    )
+    ) %>%
+    janitor::adorn_totals(name = "Totalt") %>%
+    tibble::as_tibble() %>%
+    rowwise() %>%
+    mutate(
+      Totalt = sum(c_across(!sykehusnavn & !contains("(uferdig)"))),
+      `Totalt (uferdig)` = sum(c_across(!sykehusnavn & contains("(uferdig)")))
+    ) %>%
+    ungroup()
+
+  # Fjern attributt lagt til av janotor::adorn_totals()
+  attr(d_antall_skjema, "totals") = NULL
+  attr(d_antall_skjema, "tabyl_type") = NULL
+  attr(d_antall_skjema, "core") = NULL
+
+  d_antall_skjema
 }
 
 #' Formater antall skjema-tabell
@@ -118,7 +133,7 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
   d_antall_skjema %>%
     knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) %>%
     kableExtra::add_header_above(
-      header = c("", rep(c("Ferdig", "Uferdig"), 5)),
+      header = c("", rep(c("Ferdig", "Uferdig"), 6)),
       color = "grey",
       font_size = 12,
       align = "r"
@@ -127,11 +142,12 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
       header = c(
         "", "Registrering år 0" = 2,
         "Oppfølging år 1" = 2, "Oppfølging år 3" = 2,
-        "Videre oppfølging\n(år 5+ og AdHoc)" = 2, "Avslutning" = 2
+        "Videre oppfølging\n(år 5+ og AdHoc)" = 2, "Avslutning" = 2,
+        "Totalt" = 2
       )
     ) %>%
-    kableExtra::column_spec(seq(3, 11, 2), color = "red") %>%
     kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
+    kableExtra::column_spec(seq(3, 13, 2), color = "red") %>%
 }
 
 #' Grupper skjemaoversikt
