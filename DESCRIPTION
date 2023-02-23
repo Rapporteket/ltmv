@@ -52,7 +52,8 @@ Imports:
     tibble,
     knitr,
     kableExtra,
-    lubridate
+    lubridate,
+    janitor
 Remotes:
     Rapporteket/rapbase@*release,
     Rapporteket/rapwhale
