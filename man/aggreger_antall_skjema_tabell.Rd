@@ -4,17 +4,11 @@
 \alias{aggreger_antall_skjema_tabell}
 \title{Lag dataramme med oversikt over ferdige og uferdige skjema på sjukehusnivå}
 \usage{
-aggreger_antall_skjema_tabell(d_skjemaoversikt, fra, til)
+aggreger_antall_skjema_tabell(d_skjemaoversikt)
 }
 \arguments{
 \item{d_skjemaoversikt}{Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
 Eventuelt filtrert på t.d. sjukehus.}
-
-\item{fra}{Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
-Skjema oppretta frå og med denne datoen vert inkludert.}
-
-\item{til}{Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
-Skjema oppretta til og med denne datoen vert inkludert.}
 }
 \value{
 Dataramme med talet på ferdige og uferdige skjema på sjukehusnivå
@@ -22,8 +16,7 @@ for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }
 \description{
 Funksjonen tek inn ei dataramme \code{d_skjemaoversikt},
-ein dato \code{fra} og ein dato \code{til},
-og gjev ut ein dataramme med talet på ferdige og uferdige skjema på
+og gjev ut ei dataramme med talet på ferdige og uferdige skjema på
 sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }
 \examples{
