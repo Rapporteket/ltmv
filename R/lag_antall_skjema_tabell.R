@@ -36,12 +36,19 @@ NULL
 #' @examples
 #' lag_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
 lag_antall_skjema_tabell = function(fra, til, resh_id, user_role) {
-  d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+  d_skjemaoversikt = hent_skjema("SkjemaOversikt") %>%
+    filter(
+      date(opprettetdato) >= !!fra,
+      date(opprettetdato) <= !!til,
+      alderkat %in% !!alderkat | (is.na(alderkat) & "" %in% !!alderkat),
+      aktiv_behandling %in% !!aktiv_behandling
+    )
+
   if (user_role != "SC") {
     d_skjemaoversikt = filter(d_skjemaoversikt, avdresh == !!resh_id)
   }
 
-  d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt, fra, til)
+  d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt)
 
   if (nrow(d_antall_skjema) != 0) {
     formater_antall_skjema_tabell(d_antall_skjema)
@@ -54,19 +61,12 @@ lag_antall_skjema_tabell = function(fra, til, resh_id, user_role) {
 #'
 #' @description
 #' Funksjonen tek inn ei dataramme `d_skjemaoversikt`,
-#' ein dato `fra` og ein dato `til`,
-#' og gjev ut ein dataramme med talet på ferdige og uferdige skjema på
+#' og gjev ut ei dataramme med talet på ferdige og uferdige skjema på
 #' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 #'
 #' @param d_skjemaoversikt
 #' Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
 #' Eventuelt filtrert på t.d. sjukehus.
-#' @param fra
-#' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
-#' Skjema oppretta frå og med denne datoen vert inkludert.
-#' @param til
-#' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
-#' Skjema oppretta til og med denne datoen vert inkludert.
 #'
 #' @return
 #' Dataramme med talet på ferdige og uferdige skjema på sjukehusnivå
@@ -77,12 +77,8 @@ lag_antall_skjema_tabell = function(fra, til, resh_id, user_role) {
 #' @examples
 #' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
 #' ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt, Sys.Date() - 365, Sys.Date())
-aggreger_antall_skjema_tabell = function(d_skjemaoversikt, fra, til) {
+aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
   d_antall_skjema = d_skjemaoversikt %>%
-    filter(
-      date(opprettetdato) >= !!fra,
-      date(opprettetdato) <= !!til
-    ) %>%
     grupper_skjemaoversikt() %>%
     count(skjema_gruppe, sykehusnavn) %>%
     tidyr::pivot_wider(
