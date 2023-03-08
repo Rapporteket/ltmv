@@ -4,7 +4,8 @@ NULL
 #' Lag HTML-tabell med oversikt over ferdige og uferdige skjema på sjukehusnivå
 #'
 #' @description
-#' Funksjonen tek inn ein dato `fra` og ein dato `til`,
+#' Funksjonen tek inn ein dato `fra`, ein dato `til`,
+#' og ein tekstvektor `alderkat`,
 #' og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 #' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 #'
@@ -14,6 +15,8 @@ NULL
 #' @param til
 #' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
 #' Skjema oppretta til og med denne datoen vert inkludert.
+#' @param alderkat
+#' Tekstvektor med éin eller fleire av verdiane "barn", "voksen" og "".
 #' @param resh_id
 #' Tekststreng med RESH-ID til eininga til innlogga brukar.
 #' @param user_role
@@ -35,8 +38,12 @@ NULL
 #'
 #' @examples
 #' lag_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
-lag_antall_skjema_tabell = function(fra, til, resh_id, user_role) {
+lag_antall_skjema_tabell = function(fra, til, alderkat, resh_id, user_role) {
   d_skjemaoversikt = hent_skjema("SkjemaOversikt") %>%
+    mutate(skjema_id = as.integer(forlopsid)) %>%
+    legg_til_pasientid(skjema_id) %>%
+    legg_til_pasientinfo(patient_id) %>%
+    legg_til_alder_og_kategori(birth_date, hoveddato)
     filter(
       date(opprettetdato) >= !!fra,
       date(opprettetdato) <= !!til,
