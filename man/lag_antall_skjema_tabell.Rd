@@ -4,7 +4,13 @@
 \alias{lag_antall_skjema_tabell}
 \title{Lag HTML-tabell med oversikt over ferdige og uferdige skjema på sjukehusnivå}
 \usage{
-lag_antall_skjema_tabell(fra, til, resh_id, user_role)
+lag_antall_skjema_tabell(
+  fra,
+  til,
+  alderkat,
+  resh_id,
+  user_role
+)
 }
 \arguments{
 \item{fra}{Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
@@ -12,6 +18,8 @@ Skjema oppretta frå og med denne datoen vert inkludert.}
 
 \item{til}{Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
 Skjema oppretta til og med denne datoen vert inkludert.}
+
+\item{alderkat}{Tekstvektor med éin eller fleire av verdiane "barn", "voksen" og "".}
 
 \item{resh_id}{Tekststreng med RESH-ID til eininga til innlogga brukar.}
 
@@ -23,7 +31,8 @@ HTML-tabell med talet på ferdige og uferdige skjema på sjukehusnivå
 for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }
 \description{
-Funksjonen tek inn ein dato \code{fra} og ein dato \code{til},
+Funksjonen tek inn ein dato \code{fra}, ein dato \code{til},
+og ein tekstvektor \code{alderkat},
 og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }

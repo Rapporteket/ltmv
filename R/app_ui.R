@@ -81,6 +81,12 @@ app_ui <- function() {
               shiny::actionButton("innevarende_aar_knapp", "Inneværende år"),
               shiny::actionButton("tretti_dager_knapp", "Siste 30 dager"),
               shiny::actionButton("syv_dager_knapp", "Siste 7 dager"),
+              shiny::checkboxGroupInput("alderkat",
+                label = "Alder:",
+                choices = c("Barn" = "barn", "Voksen" = "voksen", "Ukjent" = NA),
+                selected = c("barn", "voksen", NA),
+                inline = TRUE
+              ),
               width = 3
             ),
             shiny::mainPanel(
