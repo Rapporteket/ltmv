@@ -107,6 +107,7 @@ app_server <- function(input, output, session) {
       fra = input$dato_antall_skjema[1],
       til = input$dato_antall_skjema[2],
       alderkat = input$alderkat,
+      aktiv_behandling = input$aktiv_behandling,
       resh_id = user_resh_id,
       user_role = user_role
     )
