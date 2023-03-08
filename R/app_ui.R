@@ -87,6 +87,12 @@ app_ui <- function() {
                 selected = c("barn", "voksen", NA),
                 inline = TRUE
               ),
+              shiny::checkboxGroupInput("aktiv_behandling",
+                label = "Aktiv behandling per i dag:",
+                choices = c("Ja" = TRUE, "Nei" = FALSE),
+                selected = c(TRUE, FALSE),
+                inline = TRUE
+              ),
               width = 3
             ),
             shiny::mainPanel(

@@ -4,8 +4,9 @@ NULL
 #' Lag HTML-tabell med oversikt over ferdige og uferdige skjema på sjukehusnivå
 #'
 #' @description
-#' Funksjonen tek inn ein dato `fra`, ein dato `til`,
-#' og ein tekstvektor `alderkat`,
+#' Funksjonen tek inn datoar `fra` og `til`,
+#' tekstvektorar `alderkat`, `resh_id` og `user_role`,
+#' og ein logisk vektor `aktiv_behandling`,
 #' og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 #' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 #'
@@ -17,6 +18,8 @@ NULL
 #' Skjema oppretta til og med denne datoen vert inkludert.
 #' @param alderkat
 #' Tekstvektor med éin eller fleire av verdiane "barn", "voksen" og "".
+#' @param aktiv_behandling
+#' Logisk vektor med éin eller begge verdiane `TRUE` og `FALSE`.
 #' @param resh_id
 #' Tekststreng med RESH-ID til eininga til innlogga brukar.
 #' @param user_role
@@ -24,7 +27,9 @@ NULL
 #' Til dømes "SC" (system coordinator) eller "LU" (local user).
 #'
 #' @details
-#' Funksjonen tek inn ein dato `fra` og ein dato `til`,
+#' Funksjonen tek inn datoar `fra` og `til`,
+#' tekstvektorar `alderkat`, `resh_id` og `user_role`,
+#' og ein logisk vektor `aktiv_behandling`,
 #' og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 #' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 #'
@@ -37,13 +42,22 @@ NULL
 #' @export
 #'
 #' @examples
-#' lag_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
-lag_antall_skjema_tabell = function(fra, til, alderkat, resh_id, user_role) {
+#' lag_antall_skjema_tabell(
+#'   fra = Sys.Date() - 365,
+#'   til = Sys.Date(),
+#'   alderkat = "voksen",
+#'   aktiv_behandling = TRUE,
+#'   resh_id = 99999,
+#'   user_role = "SC"
+#' )
+lag_antall_skjema_tabell = function(fra, til, alderkat, aktiv_behandling, resh_id, user_role) {
   d_skjemaoversikt = hent_skjema("SkjemaOversikt") %>%
     mutate(skjema_id = as.integer(forlopsid)) %>%
     legg_til_pasientid(skjema_id) %>%
     legg_til_pasientinfo(patient_id) %>%
-    legg_til_alder_og_kategori(birth_date, hoveddato)
+    legg_til_alder_og_kategori(birth_date, hoveddato) %>%
+    legg_til_stoppinfo(skjema_id) %>%
+    legg_til_aktiv_behandling() %>%
     filter(
       date(opprettetdato) >= !!fra,
       date(opprettetdato) <= !!til,

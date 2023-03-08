@@ -8,6 +8,7 @@ lag_antall_skjema_tabell(
   fra,
   til,
   alderkat,
+  aktiv_behandling,
   resh_id,
   user_role
 )
@@ -21,6 +22,8 @@ Skjema oppretta til og med denne datoen vert inkludert.}
 
 \item{alderkat}{Tekstvektor med éin eller fleire av verdiane "barn", "voksen" og "".}
 
+\item{aktiv_behandling}{Logisk vektor med éin eller begge verdiane \code{TRUE} og \code{FALSE}.}
+
 \item{resh_id}{Tekststreng med RESH-ID til eininga til innlogga brukar.}
 
 \item{user_role}{Tekststreng med rolla til innlogga brukar.
@@ -31,13 +34,16 @@ HTML-tabell med talet på ferdige og uferdige skjema på sjukehusnivå
 for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }
 \description{
-Funksjonen tek inn ein dato \code{fra}, ein dato \code{til},
-og ein tekstvektor \code{alderkat},
+Funksjonen tek inn datoar \code{fra} og \code{til},
+tekstvektorar \code{alderkat}, \code{resh_id} og \code{user_role},
+og ein logisk vektor \code{aktiv_behandling},
 og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }
 \details{
-Funksjonen tek inn ein dato \code{fra} og ein dato \code{til},
+Funksjonen tek inn datoar \code{fra} og \code{til},
+tekstvektorar \code{alderkat}, \code{resh_id} og \code{user_role},
+og ein logisk vektor \code{aktiv_behandling},
 og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 
@@ -45,5 +51,12 @@ Viss \code{user_role} ikkje er lik "SC" (system coordinator),
 vert berre data frå eininga med RESH-ID \code{resh_id} vist.
 }
 \examples{
-lag_antall_skjema_tabell(Sys.Date() - 365, Sys.Date())
+lag_antall_skjema_tabell(
+  fra = Sys.Date() - 365,
+  til = Sys.Date(),
+  alderkat = "voksen",
+  aktiv_behandling = TRUE,
+  resh_id = 99999,
+  user_role = "SC"
+)
 }
