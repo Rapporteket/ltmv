@@ -31,10 +31,34 @@
     <loc>/reference/exposition_pipe.html</loc>
   </url>
   <url>
+    <loc>/reference/finn_storrelse_diag.html</loc>
+  </url>
+  <url>
     <loc>/reference/force_names.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ki_blodgass.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ki_elektiv.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ki_prom.html</loc>
+  </url>
+  <url>
+    <loc>/reference/legg_til_hf_rhf_navn.html</loc>
+  </url>
+  <url>
+    <loc>/reference/legg_til_oppdaterte_fylker_og_rekkefolge_helseregion.html</loc>
+  </url>
+  <url>
+    <loc>/reference/legg_til_overordnet_diag.html</loc>
+  </url>
+  <url>
+    <loc>/reference/les_data_ltmv.html</loc>
   </url>
   <url>
     <loc>/reference/pipe.html</loc>
@@ -44,6 +68,21 @@
   </url>
   <url>
     <loc>/reference/query_data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/regn_andel_missing.html</loc>
+  </url>
+  <url>
+    <loc>/reference/regn_antall.html</loc>
+  </url>
+  <url>
+    <loc>/reference/regn_insprev.html</loc>
+  </url>
+  <url>
+    <loc>/reference/regn_n_pas.html</loc>
+  </url>
+  <url>
+    <loc>/reference/regn_ut_gj_trakestomi.html</loc>
   </url>
   <url>
     <loc>/reference/report_processor.html</loc>
