@@ -2,19 +2,14 @@ Package: ltmv
 Title: LTMV at Rapporteket
 Version: 0.0.1.9000
 Authors@R: c(
-    person(given = "Are",
-           family = "Edvardsen",
-           role = c("aut", "cre"),
-           email = "biorakel@gmail.com",
-           comment = c(ORCID = "0000-0002-5210-3656")),
-    person(given = "Endre", 
-           family = "Kvåle Evjen", 
-           role = c("aut"),
-           email = "endre.kvale.evjen@helse-bergen.no"), 
     person(given = "Per Erik",
            family = "Haugedal",
            role = c("aut"),
            email = "per.erik.haugedal@helse-bergen.no"),
+	  person(given = "Endre",
+           family = "Kvåle Evjen",
+           role = c("aut"),
+           email = "endre.kvale.evjen@helse-bergen.no"),
     person(given = "Sergio",
            family = "Carracedo Huroz",
            role = c("aut"),
@@ -22,7 +17,16 @@ Authors@R: c(
     person(given = "Fatemeh",
            family = "Ghavidel",
            role = c("aut"),
-           email = "fatemeh.zamanzad.ghavidel@helse-bergen.no"))
+           email = "fatemeh.zamanzad.ghavidel@helse-bergen.no"),
+    person(given = "Stian Tufte",
+           family = "Veisene",
+           role = c("aut"),
+           email = "stian.tufte.veisene@helse-bergen.no"),
+    person(given = "Are",
+           family = "Edvardsen",
+           role = c("aut", "cre"),
+           email = "biorakel@gmail.com",
+           comment = c(ORCID = "0000-0002-5210-3656")))
 Maintainer: Per Erik Haugedal <per.erik.haugedal@helse-bergen.no>
 Description: Mainly R functions providing the shiny app at Rapporteket but may
     also include tools for general data analysis and presentation of LTMV
@@ -31,7 +35,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports:
     dplyr,
     ggplot2,
@@ -39,9 +43,14 @@ Imports:
     magrittr,
     shiny,
     rapbase,
-    rlang
+    rapwhale,
+    rlang,
+    readxl,
+    tibble,
+    purrr
 Remotes:
     Rapporteket/rapbase@*release,
+    Rapporteket/rapwhale
 Suggests: 
     covr,
     lintr,
