@@ -36,8 +36,8 @@ NULL
 #'   rhf_kode, rhf_tekst
 #' )
 regn_insprev = function(d, var_folk, insidens = TRUE, ...) {
-  var_gruppe = enquos(...)
-  var_folk = enquo(var_folk)
+  var_gruppe = rlang::enquos(...)
+  var_folk = rlang::enquo(var_folk)
 
   d = d %>%
     group_by(!!!var_gruppe)
