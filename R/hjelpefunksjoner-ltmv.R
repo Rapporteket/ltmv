@@ -10,15 +10,15 @@ NULL
 #' @param d_ventreg
 #' Tibble/dataramme med data fra skjemaet ventreg,
 #' f.eks. hentet med [les_data_ltmv()].
+#' @param grunnmappe
+#' Tekststreng med adresse til ltmv sin kvalitetsserver.
 #'
 #' @return
 #' Inndatarammen `d_ventreg` med ekstra kolonner med info om overordnede
 #' diagnosegrupper lagt til.
 #' @export
 #'
-legg_til_overordnet_diag = function(d_ventreg) {
-  grunnmappe = "***FJERNA-ADRESSE***"
-
+legg_til_overordnet_diag = function(d_ventreg, grunnmappe) {
   # Datadumpen til LTMV inneholder finkornede diagnoser,
   # men i alle figurer samler vi en eller flere i overordnede grupper.
   # Diagnosegrupper er kodet i en egen fil på kvalitetsserveren.
@@ -50,14 +50,14 @@ legg_til_overordnet_diag = function(d_ventreg) {
 #' Tibble/dataramme med data fra et av skjemaene ventreg,
 #' ventfol eller conclude,
 #' f.eks. hentet med [les_data_ltmv()].
+#' @param grunnmappe
+#' Tekststreng med adresse til ltmv sin kvalitetsserver.
 #'
 #' @return
 #' Inndatarammen `d` med ekstra kolonner med info om HF lagt til.
 #' @export
 #'
-legg_til_hf_rhf_navn = function(d) {
-  grunnmappe = "***FJERNA-ADRESSE***"
-
+legg_til_hf_rhf_navn = function(d, grunnmappe) {
   mappe_kb = paste0(grunnmappe, "kodebok\\")
 
   # Tar inn sykehusdata for å få navn på foretak

@@ -1,6 +1,3 @@
-# Grunnmappe for datafiler (pakkeintern variabel)
-grunnmappe_ltmv = "***FJERNA-ADRESSE***"
-
 #' @importFrom magrittr %>%
 NULL
 
@@ -10,8 +7,7 @@ NULL
 #' Les inn LTMV-datadumpar og lagra dei som objekt, eventuelt med automatisk validering.
 #'
 #' @param mappe_dd Grunnmappe som datadumpar skal hentast frå. Må ha undermapper
-#'     med datonamn (format: `ÅÅÅÅ-MM-DD`). Viss `NULL` (standard), vert standardmappa
-#'     med PROD-data brukt.
+#'     med datonamn (format: `ÅÅÅÅ-MM-DD`).
 #' @param dato Datoen for den aktuelle datadumpen (anten tekst på formatet `ÅÅÅÅ-MM-DD`
 #'     eller eit [base::Date]-objekt). Vert brukt til å velja rett undermappe
 #'     til `mappe_dd`. Viss `NULL` (standard), vert nyaste dato brukt.
@@ -43,12 +39,8 @@ NULL
 #' # Les inn ferdigstilte skjema (nyaste datadumpar)
 #' les_data_ltmv()
 #' }
-les_data_ltmv = function(mappe_dd = NULL, dato = NULL, maksdato = NULL,
+les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
                          status = 1, valider = TRUE, omgjevnad = .GlobalEnv) {
-  if (is.null(mappe_dd)) {
-    mappe_dd = grunnmappe_ltmv
-  }
-
   # ID brukt i datadump-filnamn
   register_id = "Nasjonalt_register_for_langtids_mekanisk_ventilasjon"
 
