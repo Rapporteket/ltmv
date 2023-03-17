@@ -94,12 +94,13 @@ eller som inneholder data fra hele registeret / alle år (for prevalens).</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># d_pers_folketall_akt er et datasett som inneholder LTMV-pasienter</span></span></span>
 <span class="r-in"><span><span class="co"># som er registrert i rapporteringsåret.</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">ins_akt_rhf</span> <span class="op">=</span> <span class="fu">regn_insprev</span><span class="op">(</span><span class="va">d_pers_folketall_akt</span>,</span></span>
 <span class="r-in"><span>  <span class="va">folketall_rhf</span>,</span></span>
 <span class="r-in"><span>  insidens <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  <span class="va">rhf_kode</span>, <span class="va">rhf_tekst</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in group_by(., !!!var_gruppe):</span> object 'd_pers_folketall_akt' not found</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
