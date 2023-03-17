@@ -4,14 +4,12 @@
 \alias{legg_til_hf_rhf_navn}
 \title{Legg til HF-navn og RHF-navn}
 \usage{
-legg_til_hf_rhf_navn(d, grunnmappe)
+legg_til_hf_rhf_navn(d)
 }
 \arguments{
 \item{d}{Tibble/dataramme med data fra et av skjemaene ventreg,
 ventfol eller conclude,
 f.eks. hentet med \code{\link[=les_data_ltmv]{les_data_ltmv()}}.}
-
-\item{grunnmappe}{Tekststreng med adresse til ltmv sin kvalitetsserver.}
 }
 \value{
 Inndatarammen \code{d} med ekstra kolonner med info om HF lagt til.

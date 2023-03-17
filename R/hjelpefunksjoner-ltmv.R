@@ -50,21 +50,20 @@ legg_til_overordnet_diag = function(d_ventreg, grunnmappe) {
 #' Tibble/dataramme med data fra et av skjemaene ventreg,
 #' ventfol eller conclude,
 #' f.eks. hentet med [les_data_ltmv()].
-#' @param grunnmappe
-#' Tekststreng med adresse til ltmv sin kvalitetsserver.
 #'
 #' @return
 #' Inndatarammen `d` med ekstra kolonner med info om HF lagt til.
 #' @export
 #'
-legg_til_hf_rhf_navn = function(d, grunnmappe) {
-  mappe_kb = paste0(grunnmappe, "kodebok\\")
-
+legg_til_hf_rhf_navn = function(d) {
   # Tar inn sykehusdata for å få navn på foretak
   # henter ut foretaksdata og tar bort "HF" navn på foretak.
   # Helseregionnavn får vi fra fylkeskobling lenger nede.
-  filnavn_kb_sjukehus = "s_registerresh_sjukehusinfo.xlsx"
-  d_sjukehus_info = read_excel(paste0(mappe_kb, filnavn_kb_sjukehus)) %>%
+  kb_sjukehus_adresse = system.file("extdata",
+    "s_registerresh_sjukehusinfo.xlsx",
+    package = "ltmv"
+  )
+  d_sjukehus_info = read_excel(kb_sjukehus_adresse) %>%
     mutate(
       hf_tekst = str_replace_all(hf_tekst, "\\ HF", ""),
       hf_gr_tekst = str_replace_all(hf_gr_tekst, "\\ HF", "")
