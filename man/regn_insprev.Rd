@@ -32,9 +32,11 @@ eller som inneholder data fra hele registeret / alle år (for prevalens).
 \examples{
 # d_pers_folketall_akt er et datasett som inneholder LTMV-pasienter
 # som er registrert i rapporteringsåret.
+\dontrun{
 ins_akt_rhf = regn_insprev(d_pers_folketall_akt,
   folketall_rhf,
   insidens = TRUE,
   rhf_kode, rhf_tekst
 )
+}
 }
