@@ -22,10 +22,7 @@ d_skjemaoversikt_eksempel = tibble::tibble(
 )
 
 # Testar for aggreger_antall_skjema_tabell()
-d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
-  fra = "2020-01-01",
-  til = "2021-01-01"
-)
+d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel)
 
 d_antall_skjema_fasit = tibble::tibble(
   sykehusnavn = c("OSLO UNIVERSITETSSYKEHUS HF", "HELSE BERGEN HF", "Totalt"),
@@ -41,31 +38,6 @@ d_antall_skjema_fasit = tibble::tibble(
   `Avslutning (uferdig)` = c(1L, 0L, 1L),
   Totalt = c(4L, 3L, 7L),
   `Totalt (uferdig)` = c(3L, 4L, 7L)
-)
-
-d_antall_skjema_kort = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
-  fra = "2020-01-07",
-  til = "2020-01-08"
-)
-
-d_antall_skjema_kort_fasit = tibble::tibble(
-  sykehusnavn = c(
-    "OSLO UNIVERSITETSSYKEHUS HF",
-    "HELSE BERGEN HF",
-    "Totalt"
-  ),
-  `Registrering år 0` = c(0L, 0L, 0L),
-  `Registrering år 0 (uferdig)` = c(0L, 0L, 0L),
-  `Oppfølging år 1` = c(0L, 0L, 0L),
-  `Oppfølging år 1 (uferdig)` = c(0L, 0L, 0L),
-  `Oppfølging år 3` = c(1L, 0L, 1L),
-  `Oppfølging år 3 (uferdig)` = c(0L, 1L, 1L),
-  `Videre oppfølging (år 5+ og AdHoc)` = c(0L, 0L, 0L),
-  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(0L, 0L, 0L),
-  Avslutning = c(0L, 0L, 0L),
-  `Avslutning (uferdig)` = c(0L, 0L, 0L),
-  Totalt = c(1L, 0L, 1L),
-  `Totalt (uferdig)` = c(0L, 1L, 1L)
 )
 
 test_that("aggreger_antall_skjema_tabell() gjev ut forventa tal på kolonner", {
@@ -90,7 +62,6 @@ test_that("aggreger_antall_skjema_tabell() gjev ut rette kolonner i rett rekkjef
 
 test_that("aggreger_antall_skjema_tabell() gjev ut forventa resultat", {
   expect_identical(d_antall_skjema, d_antall_skjema_fasit)
-  expect_identical(d_antall_skjema_kort, d_antall_skjema_kort_fasit)
 })
 
 # Testar for formater_antall_skjema_tabell()
