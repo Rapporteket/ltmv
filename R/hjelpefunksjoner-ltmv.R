@@ -3,6 +3,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate filter select left_join right_join case_when group_by summarise
 #' @importFrom readxl read_excel
+#' @importFrom stringr str_replace_all
 NULL
 
 #' Legg til overordnede diagnosegrupper

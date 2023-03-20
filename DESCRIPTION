@@ -53,7 +53,8 @@ Imports:
     knitr,
     kableExtra,
     lubridate,
-    janitor
+    janitor,
+    stringr
 Remotes:
     Rapporteket/rapbase@*release,
     Rapporteket/rapwhale
