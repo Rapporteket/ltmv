@@ -58,6 +58,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkat, aktiv_behandling, resh_i
     legg_til_alder_og_kategori(birth_date, hoveddato) %>%
     legg_til_stoppinfo(skjema_id) %>%
     legg_til_aktiv_behandling() %>%
+    mutate(move_to_centre = avdresh) %>%
+    legg_til_hf_rhf_navn() %>%
     filter(
       date(opprettetdato) >= !!fra,
       date(opprettetdato) <= !!til,
@@ -101,7 +103,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkat, aktiv_behandling, resh_i
 aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
   d_antall_skjema = d_skjemaoversikt %>%
     grupper_skjemaoversikt() %>%
-    count(skjema_gruppe, sykehusnavn) %>%
+    count(hf_gr, skjema_gruppe, sykehusnavn) %>%
+    select(-hf_gr) %>%
     tidyr::pivot_wider(
       names_from = skjema_gruppe,
       values_from = n,
