@@ -5,7 +5,7 @@ NULL
 #'
 #' @description
 #' Funksjonen tek inn datoar `fra` og `til`,
-#' tekstvektorar `alderkat`, `resh_id` og `user_role`,
+#' tekstvektorar `alderkategori`, `resh_id` og `user_role`,
 #' og ein logisk vektor `aktiv_behandling`,
 #' og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 #' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
@@ -16,7 +16,7 @@ NULL
 #' @param til
 #' Dato, eller eventuelt tekst på formatet "yyyy-mm-dd".
 #' Skjema oppretta til og med denne datoen vert inkludert.
-#' @param alderkat
+#' @param alderkategori
 #' Tekstvektor med éin eller fleire av verdiane "barn", "voksen" og "".
 #' @param aktiv_behandling
 #' Logisk vektor med éin eller begge verdiane `TRUE` og `FALSE`.
@@ -28,7 +28,7 @@ NULL
 #'
 #' @details
 #' Funksjonen tek inn datoar `fra` og `til`,
-#' tekstvektorar `alderkat`, `resh_id` og `user_role`,
+#' tekstvektorar `alderkategori`, `resh_id` og `user_role`,
 #' og ein logisk vektor `aktiv_behandling`,
 #' og gjev ut ein HTML-tabell med talet på ferdige og uferdige skjema på
 #' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
@@ -45,12 +45,12 @@ NULL
 #' lag_antall_skjema_tabell(
 #'   fra = Sys.Date() - 365,
 #'   til = Sys.Date(),
-#'   alderkat = "voksen",
+#'   alderkategori = "voksen",
 #'   aktiv_behandling = TRUE,
 #'   resh_id = 99999,
 #'   user_role = "SC"
 #' )
-lag_antall_skjema_tabell = function(fra, til, alderkat, aktiv_behandling, resh_id, user_role) {
+lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, resh_id, user_role) {
   d_skjemaoversikt = hent_skjema("SkjemaOversikt") %>%
     mutate(skjema_id = as.integer(forlopsid)) %>%
     legg_til_pasientid(skjema_id) %>%
@@ -63,7 +63,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkat, aktiv_behandling, resh_i
     filter(
       date(opprettetdato) >= !!fra,
       date(opprettetdato) <= !!til,
-      alderkat %in% !!alderkat | (is.na(alderkat) & "" %in% !!alderkat),
+      alderkat %in% !!alderkategori | (is.na(alderkat) & "" %in% !!alderkategori),
       aktiv_behandling %in% !!aktiv_behandling
     )
 
