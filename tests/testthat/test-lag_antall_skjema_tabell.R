@@ -18,6 +18,7 @@ d_skjemaoversikt_eksempel = tibble::tibble(
   hoveddato = as.Date(opprettetdato),
   sykehusnavn = rep(c("OSLO UNIVERSITETSSYKEHUS HF", "HELSE BERGEN HF"), each = 7),
   avdelingsresh = rep(c("4001031", "100082"), each = 7),
+  hf_gr = rep(c(14, 6), each = 7),
   skjemarekkeflg = rep(!!skjemarekkeflg, each = 2)
 )
 
@@ -25,19 +26,19 @@ d_skjemaoversikt_eksempel = tibble::tibble(
 d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel)
 
 d_antall_skjema_fasit = tibble::tibble(
-  sykehusnavn = c("OSLO UNIVERSITETSSYKEHUS HF", "HELSE BERGEN HF", "Totalt"),
-  `Registrering år 0` = c(1L, 0L, 1L),
-  `Registrering år 0 (uferdig)` = c(1L, 0L, 1L),
-  `Oppfølging år 1` = c(1L, 0L, 1L),
-  `Oppfølging år 1 (uferdig)` = c(1L, 0L, 1L),
-  `Oppfølging år 3` = c(1L, 0L, 1L),
-  `Oppfølging år 3 (uferdig)` = c(0L, 1L, 1L),
-  `Videre oppfølging (år 5+ og AdHoc)` = c(0L, 3L, 3L),
-  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(0L, 3L, 3L),
-  Avslutning = c(1L, 0L, 1L),
-  `Avslutning (uferdig)` = c(1L, 0L, 1L),
-  Totalt = c(4L, 3L, 7L),
-  `Totalt (uferdig)` = c(3L, 4L, 7L)
+  sykehusnavn = c("HELSE BERGEN HF", "OSLO UNIVERSITETSSYKEHUS HF", "Totalt"),
+  `Registrering år 0` = c(0L, 1L, 1L),
+  `Registrering år 0 (uferdig)` = c(0L, 1L, 1L),
+  `Oppfølging år 1` = c(0L, 1L, 1L),
+  `Oppfølging år 1 (uferdig)` = c(0L, 1L, 1L),
+  `Oppfølging år 3` = c(0L, 1L, 1L),
+  `Oppfølging år 3 (uferdig)` = c(1L, 0L, 1L),
+  `Videre oppfølging (år 5+ og AdHoc)` = c(3L, 0L, 3L),
+  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = c(3L, 0L, 3L),
+  Avslutning = c(0L, 1L, 1L),
+  `Avslutning (uferdig)` = c(0L, 1L, 1L),
+  Totalt = c(3L, 4L, 7L),
+  `Totalt (uferdig)` = c(4L, 3L, 7L)
 )
 
 test_that("aggreger_antall_skjema_tabell() gjev ut forventa tal på kolonner", {
