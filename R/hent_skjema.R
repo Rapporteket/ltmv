@@ -27,7 +27,9 @@ NULL
 #' @export
 #'
 #' @examples
-#' hent_skjema("ventreg")
+#' \dontrun{
+#'   hent_skjema("ventreg")
+#' }
 hent_skjema = function(skjemanamn, registernamn = "ltmv") {
   sporring = paste0("SELECT * FROM ", skjemanamn)
   rapbase::loadRegData(registernamn, sporring) %>%

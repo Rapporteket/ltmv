@@ -25,9 +25,11 @@ NULL
 #' @export
 #'
 #' @examples
-#' hent_skjema("ventreg") %>%
-#'   legg_til_pasientid(mceid) %>%
-#'   legg_til_pasientinfo(patient_id)
+#' \dontrun{
+#'   hent_skjema("ventreg") %>%
+#'     legg_til_pasientid(mceid) %>%
+#'     legg_til_pasientinfo(patient_id)
+#' }
 legg_til_pasientinfo = function(d, pasientid_varnavn) {
   d_patient = hent_skjema("patient") %>%
     select(id, registered_date, birth_date, gender, deceased, deceased_date)
@@ -51,8 +53,10 @@ legg_til_pasientinfo = function(d, pasientid_varnavn) {
 #' @export
 #'
 #' @examples
-#' hent_skjema("ventreg") %>%
-#'   legg_til_pasientid(mceid)
+#' \dontrun{
+#'   hent_skjema("ventreg") %>%
+#'     legg_til_pasientid(mceid)
+#' }
 legg_til_pasientid = function(d, skjemaid_varnavn) {
   d_mce = hent_skjema("mce") %>%
     select(patient_id, mceid)
@@ -84,10 +88,12 @@ legg_til_pasientid = function(d, skjemaid_varnavn) {
 #' @export
 #'
 #' @examples
-#' hent_skjema("ventreg") %>%
-#'   legg_til_pasientid(mceid) %>%
-#'   legg_til_pasientinfo(patient_id) %>%
-#'   legg_til_alder_og_kategori(birth_date, start_date)
+#' \dontrun{
+#'   hent_skjema("ventreg") %>%
+#'     legg_til_pasientid(mceid) %>%
+#'     legg_til_pasientinfo(patient_id) %>%
+#'     legg_til_alder_og_kategori(birth_date, start_date)
+#' }
 legg_til_alder_og_kategori = function(d, fodselsdato_varnavn, hendelsesdato_varnavn) {
   d %>% mutate(
     alder = time_length(
@@ -121,8 +127,10 @@ legg_til_alder_og_kategori = function(d, fodselsdato_varnavn, hendelsesdato_varn
 #' @export
 #'
 #' @examples
-#' hent_skjema("ventreg") %>%
-#'   legg_til_stoppinfo(mceid)
+#' \dontrun{
+#'   hent_skjema("ventreg") %>%
+#'     legg_til_stoppinfo(mceid)
+#' }
 legg_til_stoppinfo = function(d, skjemaid_varnavn) {
   d_mce = hent_skjema("mce") %>%
     mutate(parent_mce = if_else(mcetype == 1, mceid, parent_mce)) %>%
@@ -160,11 +168,13 @@ legg_til_stoppinfo = function(d, skjemaid_varnavn) {
 #' @export
 #'
 #' @examples
-#' hent_skjema("ventreg") %>%
-#'   legg_til_pasientid(mceid) %>%
-#'   legg_til_pasientinfo(patient_id) %>%
-#'   legg_til_stoppinfo(mceid) %>%
-#'   legg_til_aktiv_behandling()
+#' \dontrun{
+#'   hent_skjema("ventreg") %>%
+#'     legg_til_pasientid(mceid) %>%
+#'     legg_til_pasientinfo(patient_id) %>%
+#'     legg_til_stoppinfo(mceid) %>%
+#'     legg_til_aktiv_behandling()
+#' }
 legg_til_aktiv_behandling = function(d) {
   d %>% mutate(
     aktiv_behandling = (is.na(deceased) | deceased == 0) & is.na(stop_date) & (is.na(conclude_status) | conclude_status != 1)

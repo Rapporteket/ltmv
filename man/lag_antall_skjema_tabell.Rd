@@ -51,12 +51,14 @@ Viss \code{user_role} ikkje er lik "SC" (system coordinator),
 vert berre data frå eininga med RESH-ID \code{resh_id} vist.
 }
 \examples{
-lag_antall_skjema_tabell(
-  fra = Sys.Date() - 365,
-  til = Sys.Date(),
-  alderkategori = "voksen",
-  aktiv_behandling = TRUE,
-  resh_id = 99999,
-  user_role = "SC"
-)
+\dontrun{
+  lag_antall_skjema_tabell(
+    fra = Sys.Date() - 365,
+    til = Sys.Date(),
+    alderkategori = "voksen",
+    aktiv_behandling = TRUE,
+    resh_id = 99999,
+    user_role = "SC"
+  )
+}
 }

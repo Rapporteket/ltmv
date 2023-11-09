@@ -18,6 +18,8 @@ Datarammen \code{d}, med en ekstra kolonne med med pasient-ID.
 Tar inn en dataramme, og legger til en ekstra kolonne med pasient-ID.
 }
 \examples{
-hent_skjema("ventreg") \%>\%
-  legg_til_pasientid(mceid)
+\dontrun{
+  hent_skjema("ventreg") \%>\%
+    legg_til_pasientid(mceid)
+}
 }

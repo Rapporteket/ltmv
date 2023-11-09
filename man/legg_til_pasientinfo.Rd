@@ -25,7 +25,9 @@ info om pasienten er død eller levende, og eventuell dødsdato.
 Denne infoen legges så til som nye kolonner i den originale datarammen.
 }
 \examples{
-hent_skjema("ventreg") \%>\%
-  legg_til_pasientid(mceid) \%>\%
-  legg_til_pasientinfo(patient_id)
+\dontrun{
+  hent_skjema("ventreg") \%>\%
+    legg_til_pasientid(mceid) \%>\%
+    legg_til_pasientinfo(patient_id)
+}
 }

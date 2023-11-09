@@ -19,9 +19,10 @@ frå \code{\link[=aggreger_antall_skjema_tabell]{aggreger_antall_skjema_tabell()
 og gjev den ut som HTML-tabell klar til å visast i Rapporteket.
 }
 \examples{
-d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(
-  Sys.Date() - 365, Sys.Date()
-)
-ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
+\dontrun{
+  d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+  d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
+  ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
+}
 }
 \keyword{internal}
