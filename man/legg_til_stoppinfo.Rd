@@ -19,6 +19,8 @@ Tar inn en dataramme,
 og legger til ekstra kolonner med info om behandlingsstopp.
 }
 \examples{
-hent_skjema("ventreg") \%>\%
-  legg_til_stoppinfo(mceid)
+\dontrun{
+  hent_skjema("ventreg") \%>\%
+    legg_til_stoppinfo(mceid)
+}
 }

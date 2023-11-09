@@ -42,14 +42,16 @@ NULL
 #' @export
 #'
 #' @examples
-#' lag_antall_skjema_tabell(
-#'   fra = Sys.Date() - 365,
-#'   til = Sys.Date(),
-#'   alderkategori = "voksen",
-#'   aktiv_behandling = TRUE,
-#'   resh_id = 99999,
-#'   user_role = "SC"
-#' )
+#' \dontrun{
+#'   lag_antall_skjema_tabell(
+#'     fra = Sys.Date() - 365,
+#'     til = Sys.Date(),
+#'     alderkategori = "voksen",
+#'     aktiv_behandling = TRUE,
+#'     resh_id = 99999,
+#'     user_role = "SC"
+#'   )
+#' }
 lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, resh_id, user_role) {
   d_skjemaoversikt = hent_skjema("SkjemaOversikt") %>%
     mutate(skjema_id = as.integer(forlopsid)) %>%
@@ -98,8 +100,10 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 #' @keywords internal
 #'
 #' @examples
-#' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
-#' ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt, Sys.Date() - 365, Sys.Date())
+#' \dontrun{
+#'   d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+#'   ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
+#' }
 aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
   d_antall_skjema = d_skjemaoversikt %>%
     grupper_skjemaoversikt() %>%
@@ -145,10 +149,11 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
 #' @keywords internal
 #'
 #' @examples
-#' d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(
-#'   Sys.Date() - 365, Sys.Date()
-#' )
-#' ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
+#' \dontrun{
+#'   d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+#'   d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
+#'   ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
+#' }
 formater_antall_skjema_tabell = function(d_antall_skjema) {
   d_antall_skjema %>%
     knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) %>%
@@ -220,12 +225,14 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
 #' @keywords internal
 #'
 #' @examples
-#' d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") %>%
-#'   ltmv:::grupper_skjemaoversikt()
+#' \dontrun{
+#'   d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") %>%
+#'     ltmv:::grupper_skjemaoversikt()
 #'
-#' d_skjemaoversikt_gruppert %>%
-#'   head(20) %>%
-#'   dplyr::select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
+#'   d_skjemaoversikt_gruppert %>%
+#'     head(20) %>%
+#'     dplyr::select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
+#' }
 grupper_skjemaoversikt = function(d_skjemaoversikt) {
   d_skjema_grupper = tibble::tibble(
     skjema_gruppe_nr = c(0, 0.5, 1, 1.5, 3, 3.5, 99, 99.5, 999, 999.5),
