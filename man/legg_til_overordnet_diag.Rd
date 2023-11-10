@@ -4,13 +4,11 @@
 \alias{legg_til_overordnet_diag}
 \title{Legg til overordnede diagnosegrupper}
 \usage{
-legg_til_overordnet_diag(d_ventreg, grunnmappe)
+legg_til_overordnet_diag(d_ventreg)
 }
 \arguments{
 \item{d_ventreg}{Tibble/dataramme med data fra skjemaet ventreg,
 f.eks. hentet med \code{\link[=les_data_ltmv]{les_data_ltmv()}}.}
-
-\item{grunnmappe}{Tekststreng med adresse til ltmv sin kvalitetsserver.}
 }
 \value{
 Inndatarammen \code{d_ventreg} med ekstra kolonner med info om overordnede

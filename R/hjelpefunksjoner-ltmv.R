@@ -10,21 +10,20 @@ NULL
 #' @param d_ventreg
 #' Tibble/dataramme med data fra skjemaet ventreg,
 #' f.eks. hentet med [les_data_ltmv()].
-#' @param grunnmappe
-#' Tekststreng med adresse til ltmv sin kvalitetsserver.
 #'
 #' @return
 #' Inndatarammen `d_ventreg` med ekstra kolonner med info om overordnede
 #' diagnosegrupper lagt til.
 #' @export
 #'
-legg_til_overordnet_diag = function(d_ventreg, grunnmappe) {
+legg_til_overordnet_diag = function(d_ventreg) {
   # Datadumpen til LTMV inneholder finkornede diagnoser,
   # men i alle figurer samler vi en eller flere i overordnede grupper.
-  # Diagnosegrupper er kodet i en egen fil på kvalitetsserveren.
-  mappe_kb = paste0(grunnmappe, "kodebok\\")
-  filnavn_kb_diag = "diagnose-grupper.xlsx"
-  kb_diag = read_excel(paste0(mappe_kb, filnavn_kb_diag))
+  # Diagnosegrupper er kodet i en egen fil i ltmv-pakken.
+  kb_diag_adresse = system.file("extdata", "diagnose-grupper.xlsx",
+    package = "ltmv"
+  )
+  kb_diag = read_excel(kb_diag_adresse)
 
   # Gjør om "diagnose" til en tekstvariabel for at det skal samsvare med registeret
   kb_diag$diagnose = as.character(kb_diag$diagnose)
