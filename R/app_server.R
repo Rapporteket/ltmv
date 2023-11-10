@@ -6,8 +6,9 @@
 #'
 #' @return A shiny app server object
 #' @export
-
 app_server = function(input, output, session) {
+  rapwhale::aktiver_kvalregtema()
+
   rapbase::appLogger(session = session, msg = "Starting ltmv application :-)")
 
   registry_name = "ltmv"
