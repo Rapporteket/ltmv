@@ -68,6 +68,14 @@ app_ui = function() {
                 width = 4,
                 "Aktivitetsoversikt",
                 shiny::tableOutput("aktivitetsoversikt")
+              ),
+              column(
+                width = 4,
+                shiny::plotOutput("diagnosefordeling")
+              ),
+              column(
+                width = 4,
+                shiny::plotOutput("aldersfordeling")
               )
             )
           )
