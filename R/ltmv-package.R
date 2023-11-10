@@ -23,6 +23,7 @@
 #' @importFrom dplyr summarise
 #' @importFrom dplyr ungroup
 #' @importFrom forcats fct_inorder
+#' @importFrom lubridate year
 #' @importFrom magrittr %>%
 #' @importFrom purrr walk
 #' @importFrom readxl read_excel
