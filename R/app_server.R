@@ -18,6 +18,22 @@ app_server = function(input, output, session) {
 
   rapbase::navbarWidgetServer("ltmv-navbar-widget", "ltmv", caller = "ltmv")
 
+  d_dashboard <- shiny::reactive({
+    lag_datasett_dashboard(
+      fra = input$dato_dashboard[1],
+      til = input$dato_dashboard[2],
+      alderkat = input$alderkat_dashboard,
+      kjonn = input$kjonn,
+      inkluder_missing = input$inkluder_missing,
+      resh_id = user_resh_id,
+      user_role = user_role
+    )
+  })
+
+  output$aktivitetsoversikt = shiny::reactive({
+    lag_aktivitetsoversikt(d_dashboard())
+  })
+
   # sample report
   output$ex_report = shiny::renderUI({
     rapbase::renderRmd(

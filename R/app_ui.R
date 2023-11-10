@@ -31,6 +31,50 @@ app_ui = function() {
         )
       ),
       shiny::tabPanel(
+        "Dashboard",
+        shiny::sidebarLayout(
+          shiny::sidebarPanel(
+            shiny::dateRangeInput("dato_dashboard",
+              label = "Startdato:",
+              start = "1961-01-01",
+              end = lubridate::today(),
+              min = "1961-01-01",
+              max = lubridate::today(),
+              language = "no",
+              weekstart = 1,
+              separator = " til "
+            ),
+            shiny::checkboxInput("inkluder_missing",
+              label = "Inkluder manglende startdato",
+              value = TRUE
+            ),
+            shiny::checkboxGroupInput("alderkat_dashboard",
+              label = "Alder ved start:",
+              choices = c("Barn" = "barn", "Voksen" = "voksen", "Ukjent" = NA),
+              selected = c("barn", "voksen", NA),
+              inline = TRUE
+            ),
+            shiny::checkboxGroupInput("kjonn",
+              label = "Kjønn:",
+              choices = c("Mann" = 1, "Kvinne" = 2, "Ukjent" = NA),
+              selected = c(1, 2, NA),
+              inline = TRUE
+            ),
+            width = 3
+          ),
+          shiny::mainPanel(
+            shiny::fluidRow(
+              column(
+                width = 4,
+                "Aktivitetsoversikt",
+                shiny::tableOutput("aktivitetsoversikt")
+              )
+            )
+          )
+        )
+      ),
+
+      shiny::tabPanel(
         "Eksempelrapport",
         shiny::sidebarLayout(
           shiny::sidebarPanel(
