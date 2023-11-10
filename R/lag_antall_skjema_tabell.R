@@ -156,7 +156,7 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
 #' }
 formater_antall_skjema_tabell = function(d_antall_skjema) {
   d_antall_skjema %>%
-    knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) %>%
+    knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) %>%
     kableExtra::add_header_above(
       header = c("", rep(c("Ferdig", "Uferdig"), 6)),
       color = "grey",
