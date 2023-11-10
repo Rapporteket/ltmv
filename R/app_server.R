@@ -35,6 +35,18 @@ app_server = function(input, output, session) {
     lag_aktivitetsoversikt(d_dashboard())
   })
 
+  output$diagnosefordeling = renderPlot({
+    lag_fig_diagnosefordeling(d_dashboard())
+    },
+    res = 150
+  )
+
+  output$aldersfordeling = renderPlot({
+    lag_fig_aldersfordeling(d_dashboard())
+    },
+    res = 150
+  )
+
   # sample report
   output$ex_report = shiny::renderUI({
     rapbase::renderRmd(
