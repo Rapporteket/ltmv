@@ -11,7 +11,7 @@ services:
   dev-ltmv:
     depends_on:
       - db-ltmv
-    image: rapporteket/ltmv-dev:nightly
+    image: rapporteket/ltmv-dev:weekly
     volumes:
       - ~/.ssh:/home/rstudio/.ssh
       - ~/.gitconfig:/home/rstudio/.gitconfig
