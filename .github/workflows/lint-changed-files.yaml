@@ -3,7 +3,7 @@
 on:
   pull_request:
     branches: [main]
-    paths: ["**.[rR]", "**.[qrR]md", "**.[rR]markdown", "**.[rR]nw", "**.[rR]profile"]
+    paths: ["**.[rR]", "**.[qrR]md", "**.[rR]markdown", "**.[rR]nw", "**.[rR]profile", "**/lint-changed-files.yaml"]
 
 name: lint-changed-files
 
