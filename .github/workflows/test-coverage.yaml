@@ -2,11 +2,11 @@ on:
   push:
     branches:
       - main
-    paths: ["R/**", "tests/**"]
+    paths: ["R/**", "tests/**", "**/test-coverage.yaml"]
   pull_request:
     branches:
       - main
-    paths: ["R/**", "tests/**"]
+    paths: ["R/**", "tests/**", "**/test-coverage.yaml"]
 
 name: test-coverage
 
