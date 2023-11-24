@@ -54,7 +54,8 @@ Imports:
     kableExtra,
     lubridate,
     janitor,
-    stringr
+    stringr,
+    forcats
 Remotes:
     Rapporteket/rapbase@*release,
     Rapporteket/rapwhale

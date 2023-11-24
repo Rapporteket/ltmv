@@ -1,9 +1,3 @@
-# Kvalitetsindikatorer for LTMV
-
-#' @importFrom magrittr %>%
-#' @importFrom dplyr group_by summarise distinct
-NULL
-
 #' Kvalitetsindikator for tilgjengelighet av behandling (insidens og prevalens)
 #'
 #' @description
