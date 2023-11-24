@@ -81,7 +81,6 @@ app_ui = function() {
           )
         )
       ),
-
       shiny::tabPanel(
         "Eksempelrapport",
         shiny::sidebarLayout(
