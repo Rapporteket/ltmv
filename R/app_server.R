@@ -19,7 +19,7 @@ app_server = function(input, output, session) {
 
   rapbase::navbarWidgetServer("ltmv-navbar-widget", "ltmv", caller = "ltmv")
 
-  d_dashboard <- shiny::reactive({
+  d_dashboard = shiny::reactive({
     lag_datasett_dashboard(
       fra = input$dato_dashboard[1],
       til = input$dato_dashboard[2],
@@ -35,14 +35,16 @@ app_server = function(input, output, session) {
     lag_aktivitetsoversikt(d_dashboard())
   })
 
-  output$diagnosefordeling = renderPlot({
-    lag_fig_diagnosefordeling(d_dashboard())
+  output$diagnosefordeling = renderPlot(
+    {
+      lag_fig_diagnosefordeling(d_dashboard())
     },
     res = 150
   )
 
-  output$aldersfordeling = renderPlot({
-    lag_fig_aldersfordeling(d_dashboard())
+  output$aldersfordeling = renderPlot(
+    {
+      lag_fig_aldersfordeling(d_dashboard())
     },
     res = 150
   )
