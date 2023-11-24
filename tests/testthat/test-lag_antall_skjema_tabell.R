@@ -7,7 +7,7 @@ skjemanavn = c(
 skjemarekkeflg = c(0, 999, 1, 3, 5, 35, 500.253)
 skjemadato = seq(as.POSIXct("2020-01-01 00:00:00"), as.POSIXct("2020-01-14 00:00:00"), by = 60 * 60 * 24)
 
-d_skjemaoversikt_eksempel = tibble::tibble(
+d_skjemaoversikt_eksempel = tibble(
   skjemanavn = rep(!!skjemanavn, each = 2),
   skjemastatus = rep(1:0, length(!!skjemanavn)),
   forlopsid = 1:(2 * length(!!skjemanavn)),
@@ -25,7 +25,7 @@ d_skjemaoversikt_eksempel = tibble::tibble(
 # Testar for aggreger_antall_skjema_tabell()
 d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel)
 
-d_antall_skjema_fasit = tibble::tibble(
+d_antall_skjema_fasit = tibble(
   sykehusnavn = c("HELSE BERGEN HF", "OSLO UNIVERSITETSSYKEHUS HF", "Totalt"),
   `Registrering år 0` = c(0L, 1L, 1L),
   `Registrering år 0 (uferdig)` = c(0L, 1L, 1L),

@@ -1,6 +1,3 @@
-#' @import dplyr
-#' @importFrom lubridate date
-NULL
 #' Lag HTML-tabell med oversikt over ferdige og uferdige skjema på sjukehusnivå
 #'
 #' @description
@@ -63,8 +60,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     mutate(move_to_centre = avdresh) %>%
     legg_til_hf_rhf_navn() %>%
     filter(
-      date(opprettetdato) >= !!fra,
-      date(opprettetdato) <= !!til,
+      lubridate::date(opprettetdato) >= !!fra,
+      lubridate::date(opprettetdato) <= !!til,
       alderkat %in% !!alderkategori | (is.na(alderkat) & "" %in% !!alderkategori),
       aktiv_behandling %in% !!aktiv_behandling
     )
@@ -109,14 +106,14 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
     grupper_skjemaoversikt() %>%
     count(hf_gr, skjema_gruppe, sykehusnavn) %>%
     select(-hf_gr) %>%
-    tidyr::pivot_wider(
+    pivot_wider(
       names_from = skjema_gruppe,
       values_from = n,
       values_fill = 0,
       names_expand = TRUE
     ) %>%
     janitor::adorn_totals(name = "Totalt") %>%
-    tibble::as_tibble() %>%
+    as_tibble() %>%
     rowwise() %>%
     mutate(
       Totalt = sum(c_across(!sykehusnavn & !contains("(uferdig)"))),
@@ -227,17 +224,19 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
 #'
 #' @examples
 #' \dontrun{
+#' library(dplyr)
+#'
 #' d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") %>%
 #'   ltmv:::grupper_skjemaoversikt()
 #'
 #' d_skjemaoversikt_gruppert %>%
 #'   head(20) %>%
-#'   dplyr::select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
+#'   select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
 #' }
 grupper_skjemaoversikt = function(d_skjemaoversikt) {
-  d_skjema_grupper = tibble::tibble(
+  d_skjema_grupper = tibble(
     skjema_gruppe_nr = c(0, 0.5, 1, 1.5, 3, 3.5, 99, 99.5, 999, 999.5),
-    skjema_gruppe = forcats::fct_inorder(c(
+    skjema_gruppe = fct_inorder(c(
       "Registrering år 0", "Registrering år 0 (uferdig)",
       "Oppfølging år 1", "Oppfølging år 1 (uferdig)",
       "Oppfølging år 3", "Oppfølging år 3 (uferdig)",

@@ -91,9 +91,9 @@ resh_id = 999999
 test_that("Funksjonen returnerer ein tibble", {
   check_db()
   d_ventreg = hent_skjema("ventreg", registernamn = registry_name)
-  expect_true(tibble::is_tibble(d_ventreg))
+  expect_true(is_tibble(d_ventreg))
   d_ventfol = hent_skjema("ventfol", registernamn = registry_name)
-  expect_true(tibble::is_tibble(d_ventfol))
+  expect_true(is_tibble(d_ventfol))
 })
 
 # remove test db

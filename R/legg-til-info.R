@@ -1,6 +1,3 @@
-#' @import dplyr
-#' @importFrom lubridate time_length interval
-NULL
 #' Legg til pasientinfo
 #'
 #' @description
@@ -97,8 +94,8 @@ legg_til_pasientid = function(d, skjemaid_varnavn) {
 legg_til_alder_og_kategori = function(d, fodselsdato_varnavn, hendelsesdato_varnavn) {
   d %>%
     mutate(
-      alder = time_length(
-        x = interval(
+      alder = lubridate::time_length(
+        x = lubridate::interval(
           start = {{ fodselsdato_varnavn }},
           end = {{ hendelsesdato_varnavn }}
         ),

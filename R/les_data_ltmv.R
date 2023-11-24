@@ -1,6 +1,3 @@
-#' @importFrom magrittr %>%
-NULL
-
 #' Les inn LTMV-data
 #'
 #' @description
@@ -60,11 +57,11 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
   # Må legge til variabelen "year" i kodeboken. I følge dokumentasjonen
   # finnes den kun i databasen og vises ikke i registerskjemaet (ventfol).
   # Den dukker derfor ikke opp i kodeboken.
-  ekstra_var = tibble::tribble(
+  ekstra_var = tribble(
     ~skjema_id, ~skjemanavn, ~variabel_id, ~variabeletikett, ~variabeltype, ~unik, ~obligatorisk, ~desimalar,
     "ventfol", "Avslutt", "year", "Antall år etter registrering", "numerisk", "nei", "ja", 0L
   )
-  kb = dplyr::bind_rows(kb, ekstra_var)
+  kb = bind_rows(kb, ekstra_var)
 
   # Heimesnikra kodebøker for registerspesifikke filer
   # Fixme: Bør oppdaterast når me får ny datadumpinnlesar for OQR
@@ -73,7 +70,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
   #        variablar og variabeltypar kvar fil har (til no har
   #        me berre gjetta på bakgrunn av filene?).
   #        Må meldast JIRA-saker der det manglar dokumentasjon.
-  kb_mce = tibble::tibble(
+  kb_mce = tibble(
     skjema_id = "mce",
     variabel_id = tolower(c(
       "MCEID", "CENTREID", "PATIENT_ID",
@@ -105,7 +102,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
       TRUE, FALSE
     )
   )
-  kb_pas = tibble::tibble(
+  kb_pas = tibble(
     skjema_id = "patientlist",
     variabel_id = tolower(c(
       "PasientID", "RegistreringsDato",
@@ -133,13 +130,13 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
       valider_kb = TRUE, valider_dd = valider
     )
     if (skjema == "ventreg" && !is.null(maksdato)) {
-      d = dplyr::filter(d, start_date <= !!maksdato)
+      d = filter(d, start_date <= !!maksdato)
     }
     if (skjema == "ventfol" && !is.null(maksdato)) {
-      d = dplyr::filter(d, followup_date <= !!maksdato)
+      d = filter(d, followup_date <= !!maksdato)
     }
     if (skjema == "conclude" && !is.null(maksdato)) {
-      d = dplyr::filter(
+      d = filter(
         d, is.na(stop_date) | stop_date <= !!maksdato,
         is.na(deceased_date) | deceased_date <= !!maksdato
       )
@@ -150,7 +147,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
 
   # Les inn fullstendige datasett
   kb_skjema = setdiff(kb$skjema_id, "patient") # Manglar datafil for pasienttabellen
-  purrr::walk(kb_skjema, les_og_lagra, status = status, kb = kb)
+  walk(kb_skjema, les_og_lagra, status = status, kb = kb)
   les_og_lagra("mce", status = status, kb = kb_mce)
   les_og_lagra("patientlist", status = NULL, kb = kb_pas) # Datafila mangler STATUS-kolonne, så inga filtrering på dette
 }

@@ -1,6 +1,3 @@
-#' @import dplyr
-NULL
-
 #' Hent skjema
 #'
 #' @description
@@ -33,6 +30,6 @@ NULL
 hent_skjema = function(skjemanamn, registernamn = "ltmv") {
   sporring = paste0("SELECT * FROM ", skjemanamn)
   rapbase::loadRegData(registernamn, sporring) %>%
-    tibble::as_tibble() %>%
-    rename_with(stringr::str_to_lower)
+    as_tibble() %>%
+    rename_with(str_to_lower)
 }
