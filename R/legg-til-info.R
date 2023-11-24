@@ -179,6 +179,7 @@ legg_til_stoppinfo = function(d, skjemaid_varnavn) {
 legg_til_aktiv_behandling = function(d) {
   d %>%
     mutate(
-      aktiv_behandling = (is.na(deceased) | deceased == 0) & is.na(stop_date) & (is.na(conclude_status) | conclude_status != 1)
+      aktiv_behandling = (is.na(deceased) | deceased == 0) & is.na(stop_date) &
+        (is.na(conclude_status) | conclude_status != 1)
     )
 }
