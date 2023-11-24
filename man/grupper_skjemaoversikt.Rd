@@ -51,12 +51,14 @@ tabelloversikt over ferdige og uferdige skjema.
 }
 \examples{
 \dontrun{
+library(dplyr)
+
 d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") \%>\%
   ltmv:::grupper_skjemaoversikt()
 
 d_skjemaoversikt_gruppert \%>\%
   head(20) \%>\%
-  dplyr::select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
+  select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
 }
 }
 \keyword{internal}
