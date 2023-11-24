@@ -16,7 +16,7 @@ lag_fig_aldersfordeling = function(d) {
     binwidth = soylebreidde,
     breaks_width = soylebreidde * 2
   ) +
-    xlab("Alder") +
-    ylab(NULL) +
-    ggtitle("Aldersfordeling ved start")
+    ggplot2::xlab("Alder") +
+    ggplot2::ylab(NULL) +
+    ggplot2::ggtitle("Aldersfordeling ved start")
 }

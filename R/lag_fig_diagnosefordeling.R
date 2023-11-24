@@ -19,8 +19,8 @@ lag_fig_diagnosefordeling = function(d) {
       prop = n / n_tot
     )
 
-  lag_fig_soyle_prosent(d_diagnosegrupper, diag_gruppe_navn, prop) +
-    xlab(NULL) +
-    ylab("Andel") +
-    ggtitle("Diagnosefordeling")
+  rapwhale::lag_fig_soyle_prosent(d_diagnosegrupper, diag_gruppe_navn, prop) +
+    ggplot2::xlab(NULL) +
+    ggplot2::ylab("Andel") +
+    ggplot2::ggtitle("Diagnosefordeling")
 }
