@@ -28,9 +28,9 @@ og legger til ekstra kolonner med alder og alderskategori barn/voksen
 }
 \examples{
 \dontrun{
-  hent_skjema("ventreg") \%>\%
-    legg_til_pasientid(mceid) \%>\%
-    legg_til_pasientinfo(patient_id) \%>\%
-    legg_til_alder_og_kategori(birth_date, start_date)
+hent_skjema("ventreg") \%>\%
+  legg_til_pasientid(mceid) \%>\%
+  legg_til_pasientinfo(patient_id) \%>\%
+  legg_til_alder_og_kategori(birth_date, start_date)
 }
 }

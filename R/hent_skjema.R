@@ -28,7 +28,7 @@ NULL
 #'
 #' @examples
 #' \dontrun{
-#'   hent_skjema("ventreg")
+#' hent_skjema("ventreg")
 #' }
 hent_skjema = function(skjemanamn, registernamn = "ltmv") {
   sporring = paste0("SELECT * FROM ", skjemanamn)

@@ -59,7 +59,9 @@ default value.
 }
 \examples{
 ## Make the start page for LTMV
-report_file_path <- report_processor(report = "guide",
-                                     output_type = "html",
-                                     title = "Example report")
+report_file_path = report_processor(
+  report = "guide",
+  output_type = "html",
+  title = "Example report"
+)
 }

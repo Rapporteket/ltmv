@@ -43,14 +43,14 @@ NULL
 #'
 #' @examples
 #' \dontrun{
-#'   lag_antall_skjema_tabell(
-#'     fra = Sys.Date() - 365,
-#'     til = Sys.Date(),
-#'     alderkategori = "voksen",
-#'     aktiv_behandling = TRUE,
-#'     resh_id = 99999,
-#'     user_role = "SC"
-#'   )
+#' lag_antall_skjema_tabell(
+#'   fra = Sys.Date() - 365,
+#'   til = Sys.Date(),
+#'   alderkategori = "voksen",
+#'   aktiv_behandling = TRUE,
+#'   resh_id = 99999,
+#'   user_role = "SC"
+#' )
 #' }
 lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, resh_id, user_role) {
   d_skjemaoversikt = hent_skjema("SkjemaOversikt") %>%
@@ -101,8 +101,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 #'
 #' @examples
 #' \dontrun{
-#'   d_skjemaoversikt = hent_skjema("SkjemaOversikt")
-#'   ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
+#' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+#' ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
 #' }
 aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
   d_antall_skjema = d_skjemaoversikt %>%
@@ -150,9 +150,9 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
 #'
 #' @examples
 #' \dontrun{
-#'   d_skjemaoversikt = hent_skjema("SkjemaOversikt")
-#'   d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
-#'   ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
+#' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+#' d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
+#' ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
 #' }
 formater_antall_skjema_tabell = function(d_antall_skjema) {
   d_antall_skjema %>%
@@ -165,7 +165,8 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
     ) %>%
     kableExtra::add_header_above(
       header = c(
-        "Helseforetak", "Registrering år 0" = 2,
+        "Helseforetak",
+        "Registrering år 0" = 2,
         "Oppfølging år 1" = 2, "Oppfølging år 3" = 2,
         "Videre oppfølging\n(år 5+ og AdHoc)" = 2, "Avslutning" = 2,
         "Totalt" = 2
@@ -226,12 +227,12 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
 #'
 #' @examples
 #' \dontrun{
-#'   d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") %>%
-#'     ltmv:::grupper_skjemaoversikt()
+#' d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") %>%
+#'   ltmv:::grupper_skjemaoversikt()
 #'
-#'   d_skjemaoversikt_gruppert %>%
-#'     head(20) %>%
-#'     dplyr::select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
+#' d_skjemaoversikt_gruppert %>%
+#'   head(20) %>%
+#'   dplyr::select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
 #' }
 grupper_skjemaoversikt = function(d_skjemaoversikt) {
   d_skjema_grupper = tibble::tibble(

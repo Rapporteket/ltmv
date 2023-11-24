@@ -21,8 +21,8 @@ sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }
 \examples{
 \dontrun{
-  d_skjemaoversikt = hent_skjema("SkjemaOversikt")
-  ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
+d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
 }
 }
 \keyword{internal}

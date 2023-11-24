@@ -29,6 +29,6 @@ I utdata frå denne funksjonen er dei gjort om til små bokstavar med
 }
 \examples{
 \dontrun{
-  hent_skjema("ventreg")
+hent_skjema("ventreg")
 }
 }

@@ -5,12 +5,12 @@ skjemanavn = c(
   "Oppfølging år 5", "Oppfølging år 35", "Oppfølging ad-hoc"
 )
 skjemarekkeflg = c(0, 999, 1, 3, 5, 35, 500.253)
-skjemadato = seq(as.POSIXct("2020-01-01 00:00:00"), as.POSIXct("2020-01-14 00:00:00"), by = 60*60*24)
+skjemadato = seq(as.POSIXct("2020-01-01 00:00:00"), as.POSIXct("2020-01-14 00:00:00"), by = 60 * 60 * 24)
 
 d_skjemaoversikt_eksempel = tibble::tibble(
   skjemanavn = rep(!!skjemanavn, each = 2),
   skjemastatus = rep(1:0, length(!!skjemanavn)),
-  forlopsid = 1:(2*length(!!skjemanavn)),
+  forlopsid = 1:(2 * length(!!skjemanavn)),
   opprettetav = "test",
   opprettetdato = !!skjemadato,
   sistlagretav = "test",
