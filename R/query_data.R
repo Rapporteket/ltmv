@@ -20,9 +20,8 @@ NULL
 
 #' @rdname query_data
 #' @export
-query_all_hospitals <- function(registry_name, resh_id, ...) {
-
-  query <- paste0("
+query_all_hospitals = function(registry_name, resh_id, ...) {
+  query = paste0("
 SELECT
   ID AS ReshId,
   CENTRENAME AS Navn,
@@ -32,7 +31,7 @@ FROM
   ")
 
   if ("session" %in% names(list(...))) {
-    msg <- paste0("Query centre data from ", registry_name, ": ", query)
+    msg = paste0("Query centre data from ", registry_name, ": ", query)
     rapbase::repLogger(session = list(...)[["session"]], msg)
   }
 

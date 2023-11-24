@@ -20,9 +20,9 @@ og gjev den ut som HTML-tabell klar til å visast i Rapporteket.
 }
 \examples{
 \dontrun{
-  d_skjemaoversikt = hent_skjema("SkjemaOversikt")
-  d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
-  ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
+d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
+ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
 }
 }
 \keyword{internal}

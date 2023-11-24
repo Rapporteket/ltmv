@@ -3,13 +3,11 @@
 #' @return An shiny app ui object
 #' @export
 
-app_ui <- function() {
-
+app_ui = function() {
   shiny::addResourcePath("rap", system.file("www", package = "rapbase"))
-  app_title <- "LTMV"
+  app_title = "LTMV"
 
   shiny::tagList(
-
     shiny::navbarPage(
       title = shiny::div(
         shiny::a(
@@ -22,7 +20,6 @@ app_ui <- function() {
       windowTitle = app_title,
       theme = "rap/bootstrap.css",
       id = "tabs",
-
       shiny::tabPanel(
         "Start",
         shiny::mainPanel(
@@ -33,24 +30,22 @@ app_ui <- function() {
           rapbase::navbarWidgetInput("ltmv-navbar-widget")
         )
       ),
-
       shiny::tabPanel(
         "Eksempelrapport",
         shiny::sidebarLayout(
           shiny::sidebarPanel(
             shiny::radioButtons("format_report",
-                                "Format for nedlasting",
-                                list(PDF = "pdf", HTML = "html"),
-                                inline = FALSE),
+              "Format for nedlasting",
+              list(PDF = "pdf", HTML = "html"),
+              inline = FALSE
+            ),
             shiny::downloadButton("download_report", "Last ned!")
           ),
           shiny::mainPanel(
             shiny::htmlOutput("ex_report", inline = TRUE)
           )
-
         )
       ),
-
       shiny::tabPanel(
         "Alle sykehus",
         shiny::sidebarLayout(
@@ -60,7 +55,6 @@ app_ui <- function() {
           )
         )
       ),
-
       shiny::navbarMenu(
         "Figurer/tabeller",
         shiny::tabPanel(
@@ -101,7 +95,6 @@ app_ui <- function() {
           )
         )
       ),
-
       shiny::tabPanel(
         "Abonnement",
         shiny::sidebarLayout(
@@ -113,10 +106,8 @@ app_ui <- function() {
           )
         )
       ),
-
       shiny::navbarMenu(
         "Verkt\u00f8y",
-
         shiny::tabPanel(
           "Utsending",
           shiny::sidebarLayout(
@@ -130,7 +121,6 @@ app_ui <- function() {
             )
           )
         ),
-
         shiny::tabPanel(
           "Bruksstatistikk",
           shiny::sidebarLayout(
@@ -143,7 +133,6 @@ app_ui <- function() {
             )
           )
         ),
-
         shiny::tabPanel(
           "Eksport",
           shiny::sidebarLayout(

@@ -19,7 +19,7 @@ Tar inn en dataramme, og legger til en ekstra kolonne med pasient-ID.
 }
 \examples{
 \dontrun{
-  hent_skjema("ventreg") \%>\%
-    legg_til_pasientid(mceid)
+hent_skjema("ventreg") \%>\%
+  legg_til_pasientid(mceid)
 }
 }

@@ -8,7 +8,7 @@
 # Database infrastructure is only guaranteed at Github Actions and our own
 # dev env.
 # Tests running on other environments should be skipped:
-check_db <- function(is_test_that = TRUE) {
+check_db = function(is_test_that = TRUE) {
   if (Sys.getenv("R_RAP_INSTANCE") == "DEV") {
     NULL
   } else if (Sys.getenv("GITHUB_ACTIONS_RUN_DB_UNIT_TESTS") == "true") {
@@ -23,7 +23,7 @@ check_db <- function(is_test_that = TRUE) {
 }
 
 # preserve initial state
-config_path <- Sys.getenv("R_RAP_CONFIG_PATH")
+config_path = Sys.getenv("R_RAP_CONFIG_PATH")
 
 
 test_that("env vars needed for testing is present", {
@@ -35,18 +35,18 @@ test_that("env vars needed for testing is present", {
 
 # prep db for testing
 if (is.null(check_db(is_test_that = FALSE))) {
-  con <- RMariaDB::dbConnect(RMariaDB::MariaDB(),
-                             host = Sys.getenv("DB_HOST"),
-                             user = Sys.getenv("DB_USER"),
-                             password = Sys.getenv("DB_PASS"),
-                             bigint = "integer"
+  con = RMariaDB::dbConnect(RMariaDB::MariaDB(),
+    host = Sys.getenv("DB_HOST"),
+    user = Sys.getenv("DB_USER"),
+    password = Sys.getenv("DB_PASS"),
+    bigint = "integer"
   )
   RMariaDB::dbExecute(con, "CREATE DATABASE testDb;")
   RMariaDB::dbDisconnect(con)
 }
 
 # make temporary config
-test_config <- paste0(
+test_config = paste0(
   "testReg:",
   "\n  host : ", Sys.getenv("DB_HOST"),
   "\n  name : testDb",
@@ -55,35 +55,36 @@ test_config <- paste0(
   "\n  disp : ephemaralUnitTesting\n"
 )
 Sys.setenv(R_RAP_CONFIG_PATH = tempdir())
-cf <- file(file.path(Sys.getenv("R_RAP_CONFIG_PATH"), "dbConfig.yml"))
+cf = file(file.path(Sys.getenv("R_RAP_CONFIG_PATH"), "dbConfig.yml"))
 writeLines(test_config, cf)
 close(cf)
-file.copy(from = system.file("rapbaseConfig.yml", package = "rapbase"),
-          to = file.path(Sys.getenv("R_RAP_CONFIG_PATH"), "rapbaseConfig.yml"))
+file.copy(
+  from = system.file("rapbaseConfig.yml", package = "rapbase"),
+  to = file.path(Sys.getenv("R_RAP_CONFIG_PATH"), "rapbaseConfig.yml")
+)
 
 # make queries for creating tables
-fc <- file(system.file("test_db.sql", package = "ltmv"), "r")
-t <- readLines(fc)
+fc = file(system.file("test_db.sql", package = "ltmv"), "r")
+t = readLines(fc)
 close(fc)
-sql <- paste0(t, collapse = "\n")
-queries <- strsplit(sql, ";")[[1]]
+sql = paste0(t, collapse = "\n")
+queries = strsplit(sql, ";")[[1]]
 
-registry_name <- "testReg"
+registry_name = "testReg"
 
 test_that("relevant test database and tables can be made", {
   check_db()
-  con <- rapbase::rapOpenDbConnection(registry_name)$con
+  con = rapbase::rapOpenDbConnection(registry_name)$con
   for (i in seq_len(length(queries))) {
     expect_equal(class(RMariaDB::dbExecute(con, queries[i])), "integer")
-
   }
   rapbase::rapCloseDbConnection(con)
 })
 
 # onto main testing
-session <- list()
-attr(session, "class") <- "ShinySession"
-resh_id <- 999999
+session = list()
+attr(session, "class") = "ShinySession"
+resh_id = 999999
 ## simply check if data frames are returned
 
 # ADD TEST ON SQL FUNCTIONS HERE
@@ -99,7 +100,7 @@ test_that("data frame is returned", {
 
 # remove test db
 if (is.null(check_db(is_test_that = FALSE))) {
-  con <- rapbase::rapOpenDbConnection(registry_name)$con
+  con = rapbase::rapOpenDbConnection(registry_name)$con
   RMariaDB::dbExecute(con, "DROP DATABASE testDb;")
   rapbase::rapCloseDbConnection(con)
 }

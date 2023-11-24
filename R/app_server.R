@@ -7,20 +7,19 @@
 #' @return A shiny app server object
 #' @export
 
-app_server <- function(input, output, session) {
-
+app_server = function(input, output, session) {
   rapbase::appLogger(session = session, msg = "Starting ltmv application :-)")
 
-  registry_name <- "ltmv"
-  hospital_name <- "Udefinert avdeling/sykehus"
-  user_full_name <- rapbase::getUserFullName(session)
-  user_role <- rapbase::getUserRole(session)
-  user_resh_id <- rapbase::getUserReshId(session)
+  registry_name = "ltmv"
+  hospital_name = "Udefinert avdeling/sykehus"
+  user_full_name = rapbase::getUserFullName(session)
+  user_role = rapbase::getUserRole(session)
+  user_resh_id = rapbase::getUserReshId(session)
 
   rapbase::navbarWidgetServer("ltmv-navbar-widget", "ltmv", caller = "ltmv")
 
   # sample report
-  output$ex_report <- shiny::renderUI({
+  output$ex_report = shiny::renderUI({
     rapbase::renderRmd(
       system.file("sample_report.Rmd", package = "ltmv"),
       outputType = "html_fragment",
@@ -35,13 +34,15 @@ app_server <- function(input, output, session) {
     )
   })
 
-  output$download_report <- shiny::downloadHandler(
+  output$download_report = shiny::downloadHandler(
     filename = function() {
-      basename(tempfile(pattern = "ltmv-sample_report",
-                        fileext = paste0(".", input$format_report)))
+      basename(tempfile(
+        pattern = "ltmv-sample_report",
+        fileext = paste0(".", input$format_report)
+      ))
     },
     content = function(file) {
-      fn <- rapbase::renderRmd(
+      fn = rapbase::renderRmd(
         system.file("sample_report.Rmd", package = "ltmv"),
         outputType = input$format_report,
         params = list(
@@ -59,7 +60,7 @@ app_server <- function(input, output, session) {
   )
 
   # simple table report
-  output$hospital_report <- shiny::renderTable({
+  output$hospital_report = shiny::renderTable({
     query_all_hospitals(registry_name, user_resh_id, session = session)
   })
 
@@ -86,7 +87,7 @@ app_server <- function(input, output, session) {
 
   observeEvent(input$tretti_dager_knapp, {
     updateDateRangeInput(
-          session = session,
+      session = session,
       inputId = "dato_antall_skjema",
       start = dagens_dato - 29,
       end = dagens_dato,
@@ -102,7 +103,7 @@ app_server <- function(input, output, session) {
     )
   })
 
-  output$antall_skjema <- reactive({
+  output$antall_skjema = reactive({
     lag_antall_skjema_tabell(
       fra = input$dato_antall_skjema[1],
       til = input$dato_antall_skjema[2],
@@ -116,10 +117,10 @@ app_server <- function(input, output, session) {
 
 
   # dummy report and orgs to subscribe and dispatch
-  orgs <- list(
+  orgs = list(
     TestOrg = 999999
   )
-  report <- list(
+  report = list(
     Veiledning = list(
       synopsis = "Testrapport kun for illustrasjon",
       fun = "report_processor",
@@ -136,17 +137,19 @@ app_server <- function(input, output, session) {
 
   # subscribe
   rapbase::autoReportServer(
-    "ltmv-subscription", registryName = registry_name, type = "subscription",
+    "ltmv-subscription",
+    registryName = registry_name, type = "subscription",
     reports = report, orgs = orgs
   )
 
   # dispatch
-  org <- rapbase::autoReportOrgServer("ltmv-dispatch-org", orgs)
-  file_format <- rapbase::autoReportFormatServer("ltmv-dispatch-format")
-  param_names <- shiny::reactive(c("output_format"))
-  param_values <- shiny::reactive(c(file_format()))
+  org = rapbase::autoReportOrgServer("ltmv-dispatch-org", orgs)
+  file_format = rapbase::autoReportFormatServer("ltmv-dispatch-format")
+  param_names = shiny::reactive(c("output_format"))
+  param_values = shiny::reactive(c(file_format()))
   rapbase::autoReportServer(
-    "ltmv-dispatch", registryName = registry_name, type = "dispatchment",
+    "ltmv-dispatch",
+    registryName = registry_name, type = "dispatchment",
     org = org$value,
     paramNames = param_names, paramValues = param_values, reports = report,
     orgs = orgs

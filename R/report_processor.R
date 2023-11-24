@@ -33,32 +33,32 @@
 #'
 #' @examples
 #' ## Make the start page for LTMV
-#' report_file_path <- report_processor(report = "guide",
-#'                                      output_type = "html",
-#'                                      title = "Example report")
-
-report_processor <- function(report,
-                             output_type = "pdf",
-                             title = "",
-                             author = "unknown author",
-                             org_name = "unknown organization",
-                             org_id = 999999,
-                             registry_name = "ltmv",
-                             user_full_name = "unknown person name",
-                             user_role = "unknown role") {
-
+#' report_file_path = report_processor(
+#'   report = "guide",
+#'   output_type = "html",
+#'   title = "Example report"
+#' )
+report_processor = function(report,
+                            output_type = "pdf",
+                            title = "",
+                            author = "unknown author",
+                            org_name = "unknown organization",
+                            org_id = 999999,
+                            registry_name = "ltmv",
+                            user_full_name = "unknown person name",
+                            user_role = "unknown role") {
   stopifnot(report %in% c("guide", "sample_report"))
 
   stopifnot(output_type %in% c("html", "pdf"))
 
-  file_path <- NULL
+  file_path = NULL
 
   if (title == "") {
     warning("No title given! Reports should have a title...")
   }
 
   if (report == "guide") {
-    file_path <- rapbase::renderRmd(
+    file_path = rapbase::renderRmd(
       system.file("guide.Rmd", package = "ltmv"),
       outputType = output_type,
       params = list(
@@ -72,7 +72,7 @@ report_processor <- function(report,
   }
 
   if (report == "sample_report") {
-    file_path <- rapbase::renderRmd(
+    file_path = rapbase::renderRmd(
       system.file("sample_report.Rmd", package = "ltmv"),
       outputType = output_type,
       params = list(

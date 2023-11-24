@@ -26,15 +26,15 @@ NULL
 #'
 #' @examples
 #' \dontrun{
-#'   hent_skjema("ventreg") %>%
-#'     legg_til_pasientid(mceid) %>%
-#'     legg_til_pasientinfo(patient_id)
+#' hent_skjema("ventreg") %>%
+#'   legg_til_pasientid(mceid) %>%
+#'   legg_til_pasientinfo(patient_id)
 #' }
 legg_til_pasientinfo = function(d, pasientid_varnavn) {
   d_patient = hent_skjema("patient") %>%
     select(id, registered_date, birth_date, gender, deceased, deceased_date)
 
-  left_join(d, d_patient, by = join_by({{pasientid_varnavn}} == id))
+  left_join(d, d_patient, by = join_by({{ pasientid_varnavn }} == id))
 }
 
 #' Legg til pasientid
@@ -54,14 +54,14 @@ legg_til_pasientinfo = function(d, pasientid_varnavn) {
 #'
 #' @examples
 #' \dontrun{
-#'   hent_skjema("ventreg") %>%
-#'     legg_til_pasientid(mceid)
+#' hent_skjema("ventreg") %>%
+#'   legg_til_pasientid(mceid)
 #' }
 legg_til_pasientid = function(d, skjemaid_varnavn) {
   d_mce = hent_skjema("mce") %>%
     select(patient_id, mceid)
 
-  left_join(d, d_mce, by = join_by({{skjemaid_varnavn}} == mceid))
+  left_join(d, d_mce, by = join_by({{ skjemaid_varnavn }} == mceid))
 }
 
 #' Legg til alder og alderskategori
@@ -89,25 +89,26 @@ legg_til_pasientid = function(d, skjemaid_varnavn) {
 #'
 #' @examples
 #' \dontrun{
-#'   hent_skjema("ventreg") %>%
-#'     legg_til_pasientid(mceid) %>%
-#'     legg_til_pasientinfo(patient_id) %>%
-#'     legg_til_alder_og_kategori(birth_date, start_date)
+#' hent_skjema("ventreg") %>%
+#'   legg_til_pasientid(mceid) %>%
+#'   legg_til_pasientinfo(patient_id) %>%
+#'   legg_til_alder_og_kategori(birth_date, start_date)
 #' }
 legg_til_alder_og_kategori = function(d, fodselsdato_varnavn, hendelsesdato_varnavn) {
-  d %>% mutate(
-    alder = time_length(
-      x = interval(
-        start = {{fodselsdato_varnavn}},
-        end = {{hendelsesdato_varnavn}}
+  d %>%
+    mutate(
+      alder = time_length(
+        x = interval(
+          start = {{ fodselsdato_varnavn }},
+          end = {{ hendelsesdato_varnavn }}
+        ),
+        unit = "years"
       ),
-      unit = "years"
-    ),
-    alderkat = factor(alder >= 18,
-      levels = c(FALSE, TRUE),
-      labels = c("barn", "voksen")
+      alderkat = factor(alder >= 18,
+        levels = c(FALSE, TRUE),
+        labels = c("barn", "voksen")
+      )
     )
-  )
 }
 
 #' Legg til info om behandlingsstopp
@@ -128,8 +129,8 @@ legg_til_alder_og_kategori = function(d, fodselsdato_varnavn, hendelsesdato_varn
 #'
 #' @examples
 #' \dontrun{
-#'   hent_skjema("ventreg") %>%
-#'     legg_til_stoppinfo(mceid)
+#' hent_skjema("ventreg") %>%
+#'   legg_til_stoppinfo(mceid)
 #' }
 legg_til_stoppinfo = function(d, skjemaid_varnavn) {
   d_mce = hent_skjema("mce") %>%
@@ -141,7 +142,7 @@ legg_til_stoppinfo = function(d, skjemaid_varnavn) {
     select(parent_mce, contains("stop"), conclude_status = status)
 
   d %>%
-    left_join(d_mce, by = join_by({{skjemaid_varnavn}} == mceid)) %>%
+    left_join(d_mce, by = join_by({{ skjemaid_varnavn }} == mceid)) %>%
     left_join(d_stoppinfo, by = "parent_mce")
 }
 
@@ -169,14 +170,15 @@ legg_til_stoppinfo = function(d, skjemaid_varnavn) {
 #'
 #' @examples
 #' \dontrun{
-#'   hent_skjema("ventreg") %>%
-#'     legg_til_pasientid(mceid) %>%
-#'     legg_til_pasientinfo(patient_id) %>%
-#'     legg_til_stoppinfo(mceid) %>%
-#'     legg_til_aktiv_behandling()
+#' hent_skjema("ventreg") %>%
+#'   legg_til_pasientid(mceid) %>%
+#'   legg_til_pasientinfo(patient_id) %>%
+#'   legg_til_stoppinfo(mceid) %>%
+#'   legg_til_aktiv_behandling()
 #' }
 legg_til_aktiv_behandling = function(d) {
-  d %>% mutate(
-    aktiv_behandling = (is.na(deceased) | deceased == 0) & is.na(stop_date) & (is.na(conclude_status) | conclude_status != 1)
-  )
+  d %>%
+    mutate(
+      aktiv_behandling = (is.na(deceased) | deceased == 0) & is.na(stop_date) & (is.na(conclude_status) | conclude_status != 1)
+    )
 }
