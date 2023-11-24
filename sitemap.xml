@@ -19,6 +19,9 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/aggreger_antall_skjema_tabell.html</loc>
+  </url>
+  <url>
     <loc>/reference/app_server.html</loc>
   </url>
   <url>
@@ -37,6 +40,15 @@
     <loc>/reference/force_names.html</loc>
   </url>
   <url>
+    <loc>/reference/formater_antall_skjema_tabell.html</loc>
+  </url>
+  <url>
+    <loc>/reference/grupper_skjemaoversikt.html</loc>
+  </url>
+  <url>
+    <loc>/reference/hent_skjema.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -49,6 +61,15 @@
     <loc>/reference/ki_prom.html</loc>
   </url>
   <url>
+    <loc>/reference/lag_antall_skjema_tabell.html</loc>
+  </url>
+  <url>
+    <loc>/reference/legg_til_aktiv_behandling.html</loc>
+  </url>
+  <url>
+    <loc>/reference/legg_til_alder_og_kategori.html</loc>
+  </url>
+  <url>
     <loc>/reference/legg_til_hf_rhf_navn.html</loc>
   </url>
   <url>
@@ -56,6 +77,15 @@
   </url>
   <url>
     <loc>/reference/legg_til_overordnet_diag.html</loc>
+  </url>
+  <url>
+    <loc>/reference/legg_til_pasientid.html</loc>
+  </url>
+  <url>
+    <loc>/reference/legg_til_pasientinfo.html</loc>
+  </url>
+  <url>
+    <loc>/reference/legg_til_stoppinfo.html</loc>
   </url>
   <url>
     <loc>/reference/les_data_ltmv.html</loc>
