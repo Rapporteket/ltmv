@@ -28,16 +28,7 @@
     <loc>/reference/app_ui.html</loc>
   </url>
   <url>
-    <loc>/reference/compound_assignment_pipe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/exposition_pipe.html</loc>
-  </url>
-  <url>
     <loc>/reference/finn_storrelse_diag.html</loc>
-  </url>
-  <url>
-    <loc>/reference/force_names.html</loc>
   </url>
   <url>
     <loc>/reference/formater_antall_skjema_tabell.html</loc>
@@ -91,10 +82,7 @@
     <loc>/reference/les_data_ltmv.html</loc>
   </url>
   <url>
-    <loc>/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pronoun.html</loc>
+    <loc>/reference/ltmv-package.html</loc>
   </url>
   <url>
     <loc>/reference/query_data.html</loc>
