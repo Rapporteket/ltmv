@@ -49,22 +49,6 @@ app_server = function(input, output, session) {
     res = 150
   )
 
-  # sample report
-  output$ex_report = shiny::renderUI({
-    rapbase::renderRmd(
-      system.file("sample_report.Rmd", package = "ltmv"),
-      outputType = "html_fragment",
-      params = list(
-        author = user_full_name,
-        hospital_name = hospital_name,
-        table_format = "html",
-        resh_id = user_resh_id,
-        registry_name = registry_name,
-        user_role = user_role
-      )
-    )
-  })
-
   output$download_report = shiny::downloadHandler(
     filename = function() {
       basename(tempfile(
@@ -89,12 +73,6 @@ app_server = function(input, output, session) {
       file.rename(fn, file)
     }
   )
-
-  # simple table report
-  output$hospital_report = shiny::renderTable({
-    query_all_hospitals(registry_name, user_resh_id, session = session)
-  })
-
 
   dagens_dato = lubridate::today()
 
@@ -151,20 +129,7 @@ app_server = function(input, output, session) {
   orgs = list(
     TestOrg = 999999
   )
-  report = list(
-    Veiledning = list(
-      synopsis = "Testrapport kun for illustrasjon",
-      fun = "report_processor",
-      paramNames = c("report", "output_format", "title"),
-      paramValues = c("guide", "pdf", "Testrapport")
-    ),
-    Eksempelrapport = list(
-      synopsis = "Eksempelrapport med data fra LTMV",
-      fun = "report_processor",
-      paramNames = c("report", "output_format", "title"),
-      paramValues = c("sample_report", "pdf", "Eksempelrapport")
-    )
-  )
+  report = list()
 
   # subscribe
   rapbase::autoReportServer(
