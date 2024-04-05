@@ -6,6 +6,22 @@
 \usage{
 lag_fig_diagnosefordeling(d)
 }
+\arguments{
+\item{d}{Dataramme som må innehalda variablane \code{diag_gruppe} og \code{diag_gruppe_navn}.}
+}
+\value{
+Stolpediagram med andel pasientar i ulike diagnosegrupper.
+}
 \description{
-Lag figur med diagnosefordeling
+Tek inn ei dataramme som minst inneheld variablane \code{diag_gruppe} og
+\code{diag_gruppe_navn},
+og lagar ein figur med oversikt over andel pasientar i dei ulike
+diagnosegruppene.
+}
+\examples{
+\dontrun{
+hent_skjema("ventreg") |>
+  legg_til_overordnet_diag() |>
+  lag_fig_diagnosefordeling()
+}
 }

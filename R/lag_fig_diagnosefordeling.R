@@ -1,13 +1,25 @@
 #' Lag figur med diagnosefordeling
 #'
 #' @description
+#' Tek inn ei dataramme som minst inneheld variablane `diag_gruppe` og
+#' `diag_gruppe_navn`,
+#' og lagar ein figur med oversikt over andel pasientar i dei ulike
+#' diagnosegruppene.
 #'
+#' @param d
+#' Dataramme som må innehalda variablane `diag_gruppe` og `diag_gruppe_navn`.
 #'
 #' @return
+#' Stolpediagram med andel pasientar i ulike diagnosegrupper.
 #'
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' hent_skjema("ventreg") |>
+#'   legg_til_overordnet_diag() |>
+#'   lag_fig_diagnosefordeling()
+#' }
 lag_fig_diagnosefordeling = function(d) {
   d_diagnosegrupper = d %>%
     filter(!is.na(diag_gruppe_navn)) %>%

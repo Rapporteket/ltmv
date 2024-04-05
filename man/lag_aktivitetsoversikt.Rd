@@ -6,9 +6,34 @@
 \usage{
 lag_aktivitetsoversikt(d)
 }
+\arguments{
+\item{d}{Dataramme med minimum variablane \code{aktiv_behandling}, \code{start_date},
+\code{respcon}, \code{alder_no}, \code{gender} og \code{status}.}
+}
 \value{
 HTML-tabell med aktivitetsoversikt per dags dato i registeret.
 }
 \description{
-Lag HTML-tabell med aktivitetsoversikt
+Tek inn ei dataramme og lagar ein HTML-tabell med oversikt over
+ulike nøkkeltal for aktivitet.
+}
+\examples{
+\dontrun{
+d = hent_skjema("ventreg") |>
+legg_til_pasientid(mceid) |>
+  legg_til_pasientinfo(patient_id) |>
+  legg_til_stoppinfo(mceid) |>
+  legg_til_aktiv_behandling() |>
+  mutate(
+    alder_no = lubridate::time_length(
+      x = lubridate::interval(
+        start = birth_date,
+        end = Sys.Date()
+      ),
+      unit = "years"
+    )
+  )
+
+lag_aktivitetsoversikt(d)
+}
 }
