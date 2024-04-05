@@ -50,7 +50,7 @@ app_ui = function() {
               selected = c(1, 2, NA),
               inline = TRUE
             ),
-            width = 3
+            width = 2
           ),
           shiny::mainPanel(
             shiny::fluidRow(
@@ -68,6 +68,7 @@ app_ui = function() {
                 shiny::plotOutput("aldersfordeling")
               )
             ),
+            width = 10
           )
         ),
         rapbase::navbarWidgetInput("ltmv-navbar-widget")
