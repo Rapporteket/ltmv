@@ -1,8 +1,12 @@
 #' Lag HTML-tabell med aktivitetsoversikt
 #'
 #' @description
+#' Tek inn ei dataramme og lagar ein HTML-tabell med oversikt over
+#' ulike nøkkeltal for aktivitet.
 #'
-#' @details
+#' @param d
+#' Dataramme med minimum variablane `aktiv_behandling`, `start_date`,
+#' `respcon`, `alder_no`, `gender` og `status`.
 #'
 #' @return
 #' HTML-tabell med aktivitetsoversikt per dags dato i registeret.
@@ -10,6 +14,24 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' d = hent_skjema("ventreg") |>
+#' legg_til_pasientid(mceid) |>
+#'   legg_til_pasientinfo(patient_id) |>
+#'   legg_til_stoppinfo(mceid) |>
+#'   legg_til_aktiv_behandling() |>
+#'   mutate(
+#'     alder_no = lubridate::time_length(
+#'       x = lubridate::interval(
+#'         start = birth_date,
+#'         end = Sys.Date()
+#'       ),
+#'       unit = "years"
+#'     )
+#'   )
+#'
+#' lag_aktivitetsoversikt(d)
+#' }
 lag_aktivitetsoversikt = function(d) {
   d_aktivitetsoversikt = d %>%
     summarise(
