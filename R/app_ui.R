@@ -21,16 +21,6 @@ app_ui = function() {
       theme = "rap/bootstrap.css",
       id = "tabs",
       shiny::tabPanel(
-        "Start",
-        shiny::mainPanel(
-          rapbase::renderRmd(
-            system.file("guide.Rmd", package = "ltmv"),
-            outputType = "html_fragment"
-          ),
-          rapbase::navbarWidgetInput("ltmv-navbar-widget")
-        )
-      ),
-      shiny::tabPanel(
         "Dashboard",
         shiny::sidebarLayout(
           shiny::sidebarPanel(
@@ -77,34 +67,10 @@ app_ui = function() {
                 width = 4,
                 shiny::plotOutput("aldersfordeling")
               )
-            )
-          )
-        )
-      ),
-      shiny::tabPanel(
-        "Eksempelrapport",
-        shiny::sidebarLayout(
-          shiny::sidebarPanel(
-            shiny::radioButtons("format_report",
-              "Format for nedlasting",
-              list(PDF = "pdf", HTML = "html"),
-              inline = FALSE
             ),
-            shiny::downloadButton("download_report", "Last ned!")
-          ),
-          shiny::mainPanel(
-            shiny::htmlOutput("ex_report", inline = TRUE)
           )
-        )
-      ),
-      shiny::tabPanel(
-        "Alle sykehus",
-        shiny::sidebarLayout(
-          shiny::sidebarPanel(),
-          shiny::mainPanel(
-            shiny::htmlOutput("hospital_report", inline = TRUE)
-          )
-        )
+        ),
+        rapbase::navbarWidgetInput("ltmv-navbar-widget")
       ),
       shiny::navbarMenu(
         "Figurer/tabeller",
