@@ -49,6 +49,15 @@ app_server = function(input, output, session) {
     res = 150
   )
 
+  d_ki = shiny::reactive({
+    d_dashboard() |>
+      filter(lubridate::year(start_date) >= lubridate::year(Sys.Date()) - 5)
+  })
+
+  output$blodgass_for = renderPlot({
+    lag_spcfigur_ki_blodgass(d_ki())
+  })
+
   output$download_report = shiny::downloadHandler(
     filename = function() {
       basename(tempfile(

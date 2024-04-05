@@ -68,6 +68,13 @@ app_ui = function() {
                 shiny::plotOutput("aldersfordeling")
               )
             ),
+            shiny::fluidRow(
+              column(
+                width = 4,
+                "Blodgass målt før behandlingsstart",
+                shiny::plotOutput("blodgass_for")
+              )
+            ),
             width = 10
           )
         ),
