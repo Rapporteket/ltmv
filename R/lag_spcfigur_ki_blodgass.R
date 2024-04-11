@@ -42,6 +42,6 @@ lag_spcfigur_ki_blodgass = function(d_ventreg, tidseining = "month") {
     data = d_ki_blodgass,
     chart = "p"
   ) +
-    ggplot2::theme(plot.title = element_blank()) +
+    ggplot2::theme(plot.title = ggplot2::element_blank()) +
     ggplot2::xlab("Startdato")
 }
