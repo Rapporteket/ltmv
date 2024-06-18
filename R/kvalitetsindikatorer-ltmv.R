@@ -40,10 +40,10 @@ regn_insprev = function(d, var_folk, insidens = TRUE, ...) {
 
   if (insidens) {
     d = d %>%
-      summarise(n_akt = n(), insidens = 100000 * (n_akt / !!var_folk), .groups = "drop")
+      reframe(n_akt = n(), insidens = 100000 * (n_akt / !!var_folk))
   } else {
     d = d %>%
-      summarise(n_reg = n(), prevalens = 100000 * (n_reg / !!var_folk), .groups = "drop")
+      reframe(n_reg = n(), prevalens = 100000 * (n_reg / !!var_folk))
   }
 
   d %>%
