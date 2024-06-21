@@ -1,4 +1,3 @@
-
 #' Kvalitetsindikator for PROM første år
 #'
 #' @description
@@ -47,6 +46,3 @@ ki_prom_forste_aar = function(d_full_reg_forste_aar, rapporteringsdato) {
       ki_krit_teller = ki_krit_nevner & gyldig_prom
     )
 }
-
-
-
