@@ -40,30 +40,30 @@ regn_antall = function(d, alderkat = TRUE) {
   # FIXME alderkat er namnet på både boolsk argument og kolonne i datasettet
   # vi grupperer bare på alderkat hvis ønskelig
   if (alderkat) {
-    d_n_diag = d %>%
-      count(alderkat, diag_gruppe, diag_gruppe_navn) %>%
+    d_n_diag = d |>
+      count(alderkat, diag_gruppe, diag_gruppe_navn) |>
       group_by(alderkat)
   } else {
-    d_n_diag = d %>%
+    d_n_diag = d |>
       count(diag_gruppe, diag_gruppe_navn)
   }
   # regner ut prosent
-  d_n_diag = d_n_diag %>%
+  d_n_diag = d_n_diag |>
     mutate(pro = (n / sum(n)))
 
   # sette rekkefølgen basert på størst til minst.
-  rekkefolge_diag = d %>%
-    arrange(diag_gruppe) %>%
-    distinct(diag_gruppe) %>%
+  rekkefolge_diag = d |>
+    arrange(diag_gruppe) |>
+    distinct(diag_gruppe) |>
     pull("diag_gruppe")
-  rekkefolge_diag_navn = d %>%
-    arrange(diag_gruppe) %>%
-    distinct(diag_gruppe_navn) %>%
+  rekkefolge_diag_navn = d |>
+    arrange(diag_gruppe) |>
+    distinct(diag_gruppe_navn)  |>
     pull("diag_gruppe_navn")
-  d_n_diag = d_n_diag %>%
+  d_n_diag = d_n_diag |>
     mutate(diagnose = factor(diag_gruppe,
-                             levels = rev(rekkefolge_diag),
-                             labels = rev(rekkefolge_diag_navn)
+      levels = rev(rekkefolge_diag),
+      labels = rev(rekkefolge_diag_navn)
     ))
 
   # spytter ut resultat
@@ -86,8 +86,8 @@ regn_antall = function(d, alderkat = TRUE) {
 #'
 regn_n_pas = function(d, ...) {
   var_gruppe = enquos(...) # variabler som er gruppene man ønsker regne antall på
-  d_n_pas = d %>%
-    distinct(patient_id, .keep_all = TRUE) %>%
+  d_n_pas = d |>
+    distinct(patient_id, .keep_all = TRUE) |>
     count(!!!var_gruppe)
   d_n_pas
 }
@@ -110,11 +110,11 @@ regn_n_pas = function(d, ...) {
 #'
 regn_andel_missing = function(d, var) {
   var = enquos(var)
-  d = d %>%
+  d = d |>
     summarise(
       teller = sum(!is.na(!!!var)),
       nevner = n(), .groups = "drop"
-    ) %>%
+    ) |>
     mutate(prop = teller / nevner)
   d
 }
