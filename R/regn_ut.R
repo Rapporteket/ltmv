@@ -58,7 +58,7 @@ regn_antall = function(d, alderkat = TRUE) {
     pull("diag_gruppe")
   rekkefolge_diag_navn = d |>
     arrange(diag_gruppe) |>
-    distinct(diag_gruppe_navn)  |>
+    distinct(diag_gruppe_navn) |>
     pull("diag_gruppe_navn")
   d_n_diag = d_n_diag |>
     mutate(diagnose = factor(diag_gruppe,

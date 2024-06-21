@@ -15,7 +15,7 @@ ki_elektiv = function(d_ventreg) {
       ki_krit_teller = situation_ventilation == 2,
       ki_krit_nevner = !is.na(situation_ventilation) &
         (situation_ventilation == 1 |
-        situation_ventilation == 2 |
-        situation_ventilation == 9)
+          situation_ventilation == 2 |
+          situation_ventilation == 9)
     )
 }
