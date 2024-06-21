@@ -29,7 +29,7 @@
 #' @return KI-datasett egnet for bruk med [rapwhale::aggreger_ki_prop()].
 #'
 #' @export
-ki_blodgass_forste_aar <- function(d_full_reg_forste_aar_ahoc, rapporteringsdato) {
+ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, rapporteringsdato) {
   d_full_reg_forste_aar_ahoc |>
     mutate(
       blodgass = !is.na(f1_pco2_air) |
