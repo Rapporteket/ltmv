@@ -49,4 +49,3 @@ regn_insprev = function(d, var_folk, insidens = TRUE, ...) {
   d |>
     distinct(!!!var_gruppe, .keep_all = TRUE)
 }
-

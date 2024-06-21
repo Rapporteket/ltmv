@@ -158,5 +158,3 @@ finn_storrelse_diag = function(d_n_diaggruppe_akt, alderkat, type, str_orden) {
 
   resultat
 }
-
-
