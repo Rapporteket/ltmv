@@ -10,14 +10,14 @@
 #' @export
 
 ki_blodgass = function(d_ventreg) {
-  d_ventreg %>%
+  d_ventreg |>
     mutate(
       ki_krit_teller = (!is.na(pco2_air) |
-                          !is.na(po2_air) |
-                          !is.na(capillarypo2_air) |
-                          !is.na(capillarypco2_air) |
-                          !is.na(be) |
-                          !is.na(arterialpco2_air)),
+        !is.na(po2_air) |
+        !is.na(capillarypo2_air) |
+        !is.na(capillarypco2_air) |
+        !is.na(be) |
+        !is.na(arterialpco2_air)),
       ki_krit_nevner = TRUE
     )
 }
