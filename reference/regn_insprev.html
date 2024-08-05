@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -31,20 +31,20 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/rapporteket/ltmv/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Funksjon for tilgjengelighet av behandling (insidens og prevalens)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/rapporteket/ltmv/blob/HEAD/R/insidens_og_prevalens.R" class="external-link"><code>R/insidens_og_prevalens.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/rapporteket/ltmv/blob/main/R/insidens_og_prevalens.R" class="external-link"><code>R/insidens_og_prevalens.R</code></a></small>
     <div class="hidden name"><code>regn_insprev.Rd</code></div>
     </div>
 
@@ -58,30 +58,30 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>d</dt>
+
+
+<dl><dt id="arg-d">d<a class="anchor" aria-label="anchor" href="#arg-d"></a></dt>
 <dd><p>Datasett som enten er filtrert på rapporteringsaar
 (til insidens) eller som inneholder data fra hele registeret /
 alle år (for prevalens).</p></dd>
 
 
-<dt>var_folk</dt>
+<dt id="arg-var-folk">var_folk<a class="anchor" aria-label="anchor" href="#arg-var-folk"></a></dt>
 <dd><p>Variabel i <code>d</code> som inneholder folketall.</p></dd>
 
 
-<dt>insidens</dt>
+<dt id="arg-insidens">insidens<a class="anchor" aria-label="anchor" href="#arg-insidens"></a></dt>
 <dd><p>Skal det regnes ut insidens eller prevalens?
 Standard er insidens = TRUE.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Grupperingsvariabler</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>Returnerer en tibble med insidens eller prevalens, samt antall
+    <p>Returnerer en tibble med insidens eller prevalens, samt antall
 registreringer, per gruppe.</p>
     </div>
     <div id="details">
@@ -94,13 +94,13 @@ eller som inneholder data fra hele registeret / alle år (for prevalens).</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># d_pers_folketall_akt er et datasett som inneholder LTMV-pasienter</span></span></span>
 <span class="r-in"><span><span class="co"># som er registrert i rapporteringsåret.</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">ins_akt_rhf</span> <span class="op">=</span> <span class="fu">regn_insprev</span><span class="op">(</span><span class="va">d_pers_folketall_akt</span>,</span></span>
 <span class="r-in"><span>  <span class="va">folketall_rhf</span>,</span></span>
 <span class="r-in"><span>  insidens <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  <span class="va">rhf_kode</span>, <span class="va">rhf_tekst</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -115,15 +115,15 @@ eller som inneholder data fra hele registeret / alle år (for prevalens).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

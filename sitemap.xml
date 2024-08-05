@@ -1,132 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/aggreger_antall_skjema_tabell.html</loc>
-  </url>
-  <url>
-    <loc>/reference/app_server.html</loc>
-  </url>
-  <url>
-    <loc>/reference/app_ui.html</loc>
-  </url>
-  <url>
-    <loc>/reference/finn_storrelse_diag.html</loc>
-  </url>
-  <url>
-    <loc>/reference/formater_antall_skjema_tabell.html</loc>
-  </url>
-  <url>
-    <loc>/reference/grupper_skjemaoversikt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/hent_skjema.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ki_blodgass.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ki_blodgass_forste_aar.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ki_elektiv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ki_prom.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ki_prom_forste_aar.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lag_aktivitetsoversikt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lag_antall_skjema_tabell.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lag_datasett_dashboard.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lag_fig_aldersfordeling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lag_fig_diagnosefordeling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lag_spcfigur_ki_blodgass.html</loc>
-  </url>
-  <url>
-    <loc>/reference/legg_til_aktiv_behandling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/legg_til_alder_og_kategori.html</loc>
-  </url>
-  <url>
-    <loc>/reference/legg_til_hf_rhf_navn.html</loc>
-  </url>
-  <url>
-    <loc>/reference/legg_til_oppdaterte_fylker_og_rekkefolge_helseregion.html</loc>
-  </url>
-  <url>
-    <loc>/reference/legg_til_overordnet_diag.html</loc>
-  </url>
-  <url>
-    <loc>/reference/legg_til_pasientid.html</loc>
-  </url>
-  <url>
-    <loc>/reference/legg_til_pasientinfo.html</loc>
-  </url>
-  <url>
-    <loc>/reference/legg_til_stoppinfo.html</loc>
-  </url>
-  <url>
-    <loc>/reference/les_data_ltmv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ltmv-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/query_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/regn_andel_missing.html</loc>
-  </url>
-  <url>
-    <loc>/reference/regn_antall.html</loc>
-  </url>
-  <url>
-    <loc>/reference/regn_insprev.html</loc>
-  </url>
-  <url>
-    <loc>/reference/regn_n_pas.html</loc>
-  </url>
-  <url>
-    <loc>/reference/regn_ut_gj_trakestomi.html</loc>
-  </url>
-  <url>
-    <loc>/reference/report_processor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/run_app.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/aggreger_antall_skjema_tabell.html</loc></url>
+<url><loc>/reference/app_server.html</loc></url>
+<url><loc>/reference/app_ui.html</loc></url>
+<url><loc>/reference/finn_storrelse_diag.html</loc></url>
+<url><loc>/reference/formater_antall_skjema_tabell.html</loc></url>
+<url><loc>/reference/grupper_skjemaoversikt.html</loc></url>
+<url><loc>/reference/hent_skjema.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/ki_blodgass.html</loc></url>
+<url><loc>/reference/ki_blodgass_forste_aar.html</loc></url>
+<url><loc>/reference/ki_elektiv.html</loc></url>
+<url><loc>/reference/ki_prom.html</loc></url>
+<url><loc>/reference/ki_prom_forste_aar.html</loc></url>
+<url><loc>/reference/lag_aktivitetsoversikt.html</loc></url>
+<url><loc>/reference/lag_antall_skjema_tabell.html</loc></url>
+<url><loc>/reference/lag_datasett_dashboard.html</loc></url>
+<url><loc>/reference/lag_fig_aldersfordeling.html</loc></url>
+<url><loc>/reference/lag_fig_diagnosefordeling.html</loc></url>
+<url><loc>/reference/lag_spcfigur_ki_blodgass.html</loc></url>
+<url><loc>/reference/legg_til_aktiv_behandling.html</loc></url>
+<url><loc>/reference/legg_til_alder_og_kategori.html</loc></url>
+<url><loc>/reference/legg_til_hf_rhf_navn.html</loc></url>
+<url><loc>/reference/legg_til_oppdaterte_fylker_og_rekkefolge_helseregion.html</loc></url>
+<url><loc>/reference/legg_til_overordnet_diag.html</loc></url>
+<url><loc>/reference/legg_til_pasientid.html</loc></url>
+<url><loc>/reference/legg_til_pasientinfo.html</loc></url>
+<url><loc>/reference/legg_til_stoppinfo.html</loc></url>
+<url><loc>/reference/les_data_ltmv.html</loc></url>
+<url><loc>/reference/ltmv-package.html</loc></url>
+<url><loc>/reference/query_data.html</loc></url>
+<url><loc>/reference/regn_andel_missing.html</loc></url>
+<url><loc>/reference/regn_antall.html</loc></url>
+<url><loc>/reference/regn_insprev.html</loc></url>
+<url><loc>/reference/regn_n_pas.html</loc></url>
+<url><loc>/reference/regn_ut_gj_trakestomi.html</loc></url>
+<url><loc>/reference/report_processor.html</loc></url>
+<url><loc>/reference/run_app.html</loc></url>
 </urlset>
+

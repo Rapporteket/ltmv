@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -31,20 +31,20 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/rapporteket/ltmv/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Les inn LTMV-data</h1>
-    <small class="dont-index">Source: <a href="https://github.com/rapporteket/ltmv/blob/HEAD/R/les_data_ltmv.R" class="external-link"><code>R/les_data_ltmv.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/rapporteket/ltmv/blob/main/R/les_data_ltmv.R" class="external-link"><code>R/les_data_ltmv.R</code></a></small>
     <div class="hidden name"><code>les_data_ltmv.Rd</code></div>
     </div>
 
@@ -65,35 +65,37 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>mappe_dd</dt>
+
+
+<dl><dt id="arg-mappe-dd">mappe_dd<a class="anchor" aria-label="anchor" href="#arg-mappe-dd"></a></dt>
 <dd><p>Grunnmappe som datadumpar skal hentast frå. Må ha undermapper
 med datonamn (format: <code>ÅÅÅÅ-MM-DD</code>).</p></dd>
 
 
-<dt>dato</dt>
+<dt id="arg-dato">dato<a class="anchor" aria-label="anchor" href="#arg-dato"></a></dt>
 <dd><p>Datoen for den aktuelle datadumpen (anten tekst på formatet <code>ÅÅÅÅ-MM-DD</code>
 eller eit <a href="https://rdrr.io/r/base/Dates.html" class="external-link">base::Date</a>-objekt). Vert brukt til å velja rett undermappe
 til <code>mappe_dd</code>. Viss <code>NULL</code> (standard), vert nyaste dato brukt.</p></dd>
 
 
-<dt>maksdato</dt>
+<dt id="arg-maksdato">maksdato<a class="anchor" aria-label="anchor" href="#arg-maksdato"></a></dt>
 <dd><p>Dato for siste startdato, oppfølgingsdato og avslutningsdato som skal vera med i datauttrekket (same datoformat
 som for <code>dato</code>). Oppføringar som tilhøyrer seinare datoar,
 vert filtrerte ut frå skjemaa.
 Viss <code>NULL</code> (standard), vert det ikkje noko filtrering på datoane.</p></dd>
 
 
-<dt>status</dt>
+<dt id="arg-status">status<a class="anchor" aria-label="anchor" href="#arg-status"></a></dt>
 <dd><p>Type oppføringar som skal lesast. Sjå <code>rapwhale::les_dd_oqr()</code>
 for informasjon om moglege verdiar. Som standard vert berre ferdigstilte oppføringar lesne.</p></dd>
 
 
-<dt>valider</dt>
+<dt id="arg-valider">valider<a class="anchor" aria-label="anchor" href="#arg-valider"></a></dt>
 <dd><p>Skal dataa validerast, dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
 Omfattar testar ved bruk av kodeboka.</p></dd>
 
 
-<dt>omgjevnad</dt>
+<dt id="arg-omgjevnad">omgjevnad<a class="anchor" aria-label="anchor" href="#arg-omgjevnad"></a></dt>
 <dd><p>Omgjevnad som dataobjekta skal lagrast til. Standard er den globale omgjevnaden.</p></dd>
 
 </dl></div>
@@ -111,10 +113,10 @@ eksisterande objekt med same namn.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># Les inn ferdigstilte skjema (nyaste datadumpar)</span></span></span>
 <span class="r-in"><span><span class="fu">les_data_ltmv</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -129,15 +131,15 @@ eksisterande objekt med same namn.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

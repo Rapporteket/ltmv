@@ -5,7 +5,7 @@ TRUE eller FALSE avhengig av om forløpet er pågående eller avsluttet."><!-- m
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,20 +33,20 @@ TRUE eller FALSE avhengig av om forløpet er pågående eller avsluttet."><!-- m
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/rapporteket/ltmv/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Legg til info aktiv behandling</h1>
-    <small class="dont-index">Source: <a href="https://github.com/rapporteket/ltmv/blob/HEAD/R/legg-til-info.R" class="external-link"><code>R/legg-til-info.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/rapporteket/ltmv/blob/main/R/legg-til-info.R" class="external-link"><code>R/legg-til-info.R</code></a></small>
     <div class="hidden name"><code>legg_til_aktiv_behandling.Rd</code></div>
     </div>
 
@@ -62,16 +62,16 @@ og legger til en ekstra kolonne <code>aktiv_behandling</code> som er
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>d</dt>
+
+
+<dl><dt id="arg-d">d<a class="anchor" aria-label="anchor" href="#arg-d"></a></dt>
 <dd><p>Dataramme.
 Må inneholde kolonnene <code>deceased</code>, <code>stop_date</code> og <code>conclude_status</code>.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>Datarammen <code>d</code>, med en ekstra kolonne <code>aktiv_behandling</code> som er
+    <p>Datarammen <code>d</code>, med en ekstra kolonne <code>aktiv_behandling</code> som er
 <code>TRUE</code> eller <code>FALSE</code> avhengig av om forløpet er pågående eller avsluttet.</p>
     </div>
     <div id="details">
@@ -83,13 +83,13 @@ eller et ferdigstilt tilhørende avslutningsskjema.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="hent_skjema.html">hent_skjema</a></span><span class="op">(</span><span class="st">"ventreg"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="legg_til_pasientid.html">legg_til_pasientid</a></span><span class="op">(</span><span class="va">mceid</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="legg_til_pasientinfo.html">legg_til_pasientinfo</a></span><span class="op">(</span><span class="va">patient_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="legg_til_stoppinfo.html">legg_til_stoppinfo</a></span><span class="op">(</span><span class="va">mceid</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">legg_til_aktiv_behandling</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -104,15 +104,15 @@ eller et ferdigstilt tilhørende avslutningsskjema.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

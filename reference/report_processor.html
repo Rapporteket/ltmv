@@ -10,7 +10,7 @@ default value."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -38,20 +38,20 @@ default value."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/rapporteket/ltmv/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Common report processor for LTMV</h1>
-    <small class="dont-index">Source: <a href="https://github.com/rapporteket/ltmv/blob/HEAD/R/report_processor.R" class="external-link"><code>R/report_processor.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/rapporteket/ltmv/blob/main/R/report_processor.R" class="external-link"><code>R/report_processor.R</code></a></small>
     <div class="hidden name"><code>report_processor.Rd</code></div>
     </div>
 
@@ -82,56 +82,56 @@ default value.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>report</dt>
+
+
+<dl><dt id="arg-report">report<a class="anchor" aria-label="anchor" href="#arg-report"></a></dt>
 <dd><p>Character string identifying the report to be processed by this
 function.</p></dd>
 
 
-<dt>output_type</dt>
+<dt id="arg-output-type">output_type<a class="anchor" aria-label="anchor" href="#arg-output-type"></a></dt>
 <dd><p>Character string with output format. Must be one of
 <code>c("html", "pdf")</code>. Defaults to "pdf".</p></dd>
 
 
-<dt>title</dt>
+<dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
 <dd><p>Character string giving the report title. Empty string by
 default.</p></dd>
 
 
-<dt>author</dt>
+<dt id="arg-author">author<a class="anchor" aria-label="anchor" href="#arg-author"></a></dt>
 <dd><p>Character string providing the report author. Default value is
 "unknown author".</p></dd>
 
 
-<dt>org_name</dt>
+<dt id="arg-org-name">org_name<a class="anchor" aria-label="anchor" href="#arg-org-name"></a></dt>
 <dd><p>Character string with the name of the organization/hospital.
 Default is "unknown organization".</p></dd>
 
 
-<dt>org_id</dt>
+<dt id="arg-org-id">org_id<a class="anchor" aria-label="anchor" href="#arg-org-id"></a></dt>
 <dd><p>Integer (?) with the id of the organization/hospital. Default
 is 999999.</p></dd>
 
 
-<dt>registry_name</dt>
+<dt id="arg-registry-name">registry_name<a class="anchor" aria-label="anchor" href="#arg-registry-name"></a></dt>
 <dd><p>Character string with registry name. Default is
 "ltmv".</p></dd>
 
 
-<dt>user_full_name</dt>
+<dt id="arg-user-full-name">user_full_name<a class="anchor" aria-label="anchor" href="#arg-user-full-name"></a></dt>
 <dd><p>Character string giving the person name, normally the
 user requesting the report. Default is "unknown person name".</p></dd>
 
 
-<dt>user_role</dt>
+<dt id="arg-user-role">user_role<a class="anchor" aria-label="anchor" href="#arg-user-role"></a></dt>
 <dd><p>Character string giving a user role, normally the one of the
 user requesting the report. Default is "unknown role".</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>A character string with a path to where the produced file is located.</p>
+    <p>A character string with a path to where the produced file is located.</p>
     </div>
 
     <div id="ref-examples">
@@ -147,9 +147,9 @@ user requesting the report. Default is "unknown role".</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> processing file: guide.Rmd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1/1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> output file: guide.knit.md</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS guide.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /var/folders/sx/mf6nj_sn1ll2crpml02qjgbr0000gn/T//RtmpLEPe0c/123118362734.html --lua-filter /Users/runner/work/_temp/Library/bookdown/rmarkdown/lua/custom-environment.lua --lua-filter /Users/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /Users/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/latex-div.lua --metadata-file /var/folders/sx/mf6nj_sn1ll2crpml02qjgbr0000gn/T//RtmpLEPe0c/file1231387b1364 --embed-resources --standalone --wrap preserve --variable bs3=TRUE --section-divs --template /Users/runner/work/_temp/Library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --number-sections --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /var/folders/sx/mf6nj_sn1ll2crpml02qjgbr0000gn/T//RtmpLEPe0c/rmarkdown-str12311883fa8a.html </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> /usr/local/bin/pandoc +RTS -K512m -RTS guide.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /var/folders/zn/hj183dg15s713b47j2wlhwzw0000gn/T//Rtmp61Sh6E/166e3cf609ef.html --lua-filter /Users/runner/work/_temp/Library/bookdown/rmarkdown/lua/custom-environment.lua --lua-filter /Users/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /Users/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/latex-div.lua --metadata-file /var/folders/zn/hj183dg15s713b47j2wlhwzw0000gn/T//Rtmp61Sh6E/file166e513dfe1c --embed-resources --standalone --wrap preserve --variable bs3=TRUE --section-divs --template /Users/runner/work/_temp/Library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --number-sections --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /var/folders/zn/hj183dg15s713b47j2wlhwzw0000gn/T//Rtmp61Sh6E/rmarkdown-str166e67ae48a7.html </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Output created: /var/folders/sx/mf6nj_sn1ll2crpml02qjgbr0000gn/T//RtmpLEPe0c/123118362734.html</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Output created: /var/folders/zn/hj183dg15s713b47j2wlhwzw0000gn/T//Rtmp61Sh6E/166e3cf609ef.html</span>
 </code></pre></div>
     </div>
   </div>
@@ -164,15 +164,15 @@ user requesting the report. Default is "unknown role".</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
