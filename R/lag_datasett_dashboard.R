@@ -47,14 +47,14 @@ lag_datasett_dashboard = function(fra,
                                   inkluder_missing,
                                   resh_id,
                                   user_role) {
-  d_dashboard = hent_skjema("ventreg") %>%
-    legg_til_pasientid(mceid) %>%
-    legg_til_pasientinfo(patient_id) %>%
-    legg_til_alder_og_kategori(birth_date, start_date) %>%
-    legg_til_stoppinfo(mceid) %>%
-    legg_til_aktiv_behandling() %>%
-    legg_til_hf_rhf_navn() %>%
-    legg_til_overordnet_diag() %>%
+  d_dashboard = hent_skjema("ventreg") |>
+    legg_til_pasientid(mceid) |>
+    legg_til_pasientinfo(patient_id) |>
+    legg_til_alder_og_kategori(birth_date, start_date) |>
+    legg_til_stoppinfo(mceid) |>
+    legg_til_aktiv_behandling() |>
+    legg_til_hf_rhf_navn() |>
+    legg_til_overordnet_diag() |>
     mutate(
       alder_no = lubridate::time_length(
         x = lubridate::interval(
@@ -63,7 +63,7 @@ lag_datasett_dashboard = function(fra,
         ),
         unit = "years"
       )
-    ) %>%
+    ) |>
     filter(
       start_date >= !!fra | (is.na(start_date) & inkluder_missing),
       start_date <= !!til | (is.na(start_date) & inkluder_missing),

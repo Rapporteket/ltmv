@@ -50,15 +50,15 @@
 #' )
 #' }
 lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, resh_id, user_role) {
-  d_skjemaoversikt = hent_skjema("SkjemaOversikt") %>%
-    mutate(skjema_id = as.integer(forlopsid)) %>%
-    legg_til_pasientid(skjema_id) %>%
-    legg_til_pasientinfo(patient_id) %>%
-    legg_til_alder_og_kategori(birth_date, hoveddato) %>%
-    legg_til_stoppinfo(skjema_id) %>%
-    legg_til_aktiv_behandling() %>%
-    mutate(move_to_centre = avdresh) %>%
-    legg_til_hf_rhf_navn() %>%
+  d_skjemaoversikt = hent_skjema("SkjemaOversikt") |>
+    mutate(skjema_id = as.integer(forlopsid)) |>
+    legg_til_pasientid(skjema_id) |>
+    legg_til_pasientinfo(patient_id) |>
+    legg_til_alder_og_kategori(birth_date, hoveddato) |>
+    legg_til_stoppinfo(skjema_id) |>
+    legg_til_aktiv_behandling() |>
+    mutate(move_to_centre = avdresh) |>
+    legg_til_hf_rhf_navn() |>
     filter(
       lubridate::date(opprettetdato) >= !!fra,
       lubridate::date(opprettetdato) <= !!til,
@@ -110,23 +110,23 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
     d_skjemaoversikt = filter(d_skjemaoversikt, avdresh == !!resh_id)
   }
 
-  d_antall_skjema = d_skjemaoversikt %>%
-    grupper_skjemaoversikt() %>%
-    count(hf_gr, skjema_gruppe, sykehusnavn) %>%
-    select(-hf_gr) %>%
+  d_antall_skjema = d_skjemaoversikt |>
+    grupper_skjemaoversikt() |>
+    count(hf_gr, skjema_gruppe, sykehusnavn) |>
+    select(-hf_gr) |>
     pivot_wider(
       names_from = skjema_gruppe,
       values_from = n,
       values_fill = 0,
       names_expand = TRUE
-    ) %>%
-    janitor::adorn_totals(name = "Totalt") %>%
-    as_tibble() %>%
-    rowwise() %>%
+    ) |>
+    janitor::adorn_totals(name = "Totalt") |>
+    as_tibble() |>
+    rowwise() |>
     mutate(
       Totalt = sum(c_across(!sykehusnavn & !contains("(uferdig)"))),
       `Totalt (uferdig)` = sum(c_across(!sykehusnavn & contains("(uferdig)")))
-    ) %>%
+    ) |>
     ungroup()
 
   # Fjern attributt lagt til av janotor::adorn_totals()
@@ -165,14 +165,14 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
 #' ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
 #' }
 formater_antall_skjema_tabell = function(d_antall_skjema) {
-  d_antall_skjema %>%
-    knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) %>%
+  d_antall_skjema |>
+    knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) |>
     kableExtra::add_header_above(
       header = c("", rep(c("Ferdig", "Uferdig"), 6)),
       color = "grey",
       font_size = 12,
       align = "r"
-    ) %>%
+    ) |>
     kableExtra::add_header_above(
       header = c(
         "Sykehus",
@@ -181,10 +181,10 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
         "Videre oppfølging\n(år 5+ og AdHoc)" = 2, "Avslutning" = 2,
         "Totalt" = 2
       )
-    ) %>%
-    kableExtra::column_spec(seq(3, 13, 2), color = "red") %>%
-    kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
-    kableExtra::row_spec(nrow(d_antall_skjema), bold = TRUE) %>%
+    ) |>
+    kableExtra::column_spec(seq(3, 13, 2), color = "red") |>
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) |>
+    kableExtra::row_spec(nrow(d_antall_skjema), bold = TRUE) |>
     kableExtra::column_spec(12:13, bold = TRUE)
 }
 
@@ -239,11 +239,11 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
 #' \dontrun{
 #' library(dplyr)
 #'
-#' d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") %>%
+#' d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") |>
 #'   ltmv:::grupper_skjemaoversikt()
 #'
-#' d_skjemaoversikt_gruppert %>%
-#'   head(20) %>%
+#' d_skjemaoversikt_gruppert |>
+#'   head(20) |>
 #'   select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
 #' }
 grupper_skjemaoversikt = function(d_skjemaoversikt) {
@@ -259,7 +259,7 @@ grupper_skjemaoversikt = function(d_skjemaoversikt) {
     ))
   )
 
-  d_skjemaoversikt %>%
+  d_skjemaoversikt |>
     mutate(
       # Sett skjema_gruppe_nr til 99 for "Videre oppfølging (år 5+ og AdHoc)"
       skjema_gruppe_nr = if_else(skjemarekkeflg %in% c(0, 1, 3, 999),
@@ -271,6 +271,6 @@ grupper_skjemaoversikt = function(d_skjemaoversikt) {
         true = skjema_gruppe_nr + 0.5,
         false = skjema_gruppe_nr
       )
-    ) %>%
+    ) |>
     left_join(d_skjema_grupper, by = "skjema_gruppe_nr")
 }

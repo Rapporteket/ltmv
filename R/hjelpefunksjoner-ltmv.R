@@ -29,7 +29,7 @@ legg_til_overordnet_diag = function(d_ventreg) {
   # fixme! I rapporten benytter vi oss bare av pasientens hoveddiagnose (DIAGNOSIS1),
   # men det hadde vært mer riktig i opptelling av antall, insidens etc. å se på
   # bidiagnosen (DIAGNOSIS2) også.
-  d_ventreg = d_ventreg %>%
+  d_ventreg = d_ventreg |>
     left_join(kb_diag, by = c("diagnosis1" = "diagnose"))
 
   d_ventreg
@@ -55,22 +55,22 @@ legg_til_hf_rhf_navn = function(d) {
     "s_registerresh_sjukehusinfo.xlsx",
     package = "ltmv"
   )
-  d_sjukehus_info = read_excel(kb_sjukehus_adresse) %>%
+  d_sjukehus_info = read_excel(kb_sjukehus_adresse) |>
     mutate(
       hf_tekst = str_replace_all(hf_tekst, "\\ HF", ""),
       hf_gr_tekst = str_replace_all(hf_gr_tekst, "\\ HF", "")
     )
 
-  hf_akt = d_sjukehus_info %>%
-    distinct(hf_resh, .keep_all = TRUE) %>%
+  hf_akt = d_sjukehus_info |>
+    distinct(hf_resh, .keep_all = TRUE) |>
     select(hf_resh, hf_tekst, hf_gr, hf_gr_tekst) # FIXME Funksjonen legg berre til info om HF, ikkje RHF som funksjonsnamnet seier?
 
   # Gjør om "hf_resh" til en tekstvariabel for at det skal samsvare med registeret
   hf_akt$hf_resh = as.character(hf_akt$hf_resh)
 
   # Legger til foretaksnavnene + helseregionsnavnene
-  d = d %>%
-    left_join(hf_akt, by = c("move_to_centre" = "hf_resh")) %>%
+  d = d |>
+    left_join(hf_akt, by = c("move_to_centre" = "hf_resh")) |>
     rename(hf_resh = move_to_centre)
 
   d
@@ -97,27 +97,27 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
   # Henter inn data på fylkeskoder og helseregion tilhørighet.
   fylke_rhf_adresse = system.file("extdata", "fylke-rhf.xlsx", package = "ltmv")
   d_fylke_til_rhf = read_excel(fylke_rhf_adresse)
-  d_fylker = d_fylke_til_rhf %>%
+  d_fylker = d_fylke_til_rhf |>
     select(starts_with("fylker"))
 
   # Gjør om "fylker_historisk" til en tekstvariabel for at det skal samsvare med registeret
   d_fylker$fylker_historisk = as.character(d_fylker$fylker_historisk)
 
-  d = d %>%
+  d = d |>
     left_join(d_fylker, by = c("kode_fylke" = "fylker_historisk"))
 
   # Vi vil også ha navn på helseregioner.
   # Registeret har en variabel som koder for rekkefølgen
   # som brukes i grafer, fra nord til sør.
-  d_rhf = d_fylke_til_rhf %>%
-    select(starts_with("rhf")) %>%
+  d_rhf = d_fylke_til_rhf |>
+    select(starts_with("rhf")) |>
     distinct(rhf_kode, .keep_all = TRUE)
 
   # Gjør om "hf_resh" til en tekstvariabel for at det skal samsvare med registeret
   d_rhf$rhf_kode = as.character(d_rhf$rhf_kode)
 
-  d = d %>%
-    rename(rhf_kode = move_to_rhf) %>%
+  d = d |>
+    rename(rhf_kode = move_to_rhf) |>
     left_join(d_rhf, by = "rhf_kode")
 
   d
@@ -150,10 +150,10 @@ finn_storrelse_diag = function(d_n_diaggruppe_akt, alderkat, type, str_orden) {
 
   # filtrerer ut aktuell aldergruppe, og henter ut ønsket nivå (største, minste osv.)
   # av ønsket kolonne
-  resultat = d_n_diaggruppe_akt %>%
-    filter(alderkat == !!alderkat) %>%
-    arrange(desc(n)) %>%
-    pull(!!type) %>%
+  resultat = d_n_diaggruppe_akt |>
+    filter(alderkat == !!alderkat) |>
+    arrange(desc(n)) |>
+    pull(!!type) |>
     nth(str_orden)
 
   resultat
