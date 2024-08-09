@@ -40,13 +40,13 @@ app_ui = function() {
             ),
             shiny::checkboxGroupInput("alderkat_dashboard",
               label = "Alder ved start:",
-              choices = c("Barn" = "barn", "Voksen" = "voksen", "Ukjent" = NA),
+              choices = c(Barn = "barn", Voksen = "voksen", Ukjent = NA),
               selected = c("barn", "voksen", NA),
               inline = TRUE
             ),
             shiny::checkboxGroupInput("kjonn",
               label = "Kjønn:",
-              choices = c("Mann" = 1, "Kvinne" = 2, "Ukjent" = NA),
+              choices = c(Mann = 1, Kvinne = 2, Ukjent = NA),
               selected = c(1, 2, NA),
               inline = TRUE
             ),
@@ -102,13 +102,13 @@ app_ui = function() {
               shiny::actionButton("syv_dager_knapp", "Siste 7 dager"),
               shiny::checkboxGroupInput("alderkat",
                 label = "Alder:",
-                choices = c("Barn" = "barn", "Voksen" = "voksen", "Ukjent" = NA),
+                choices = c(Barn = "barn", Voksen = "voksen", Ukjent = NA),
                 selected = c("barn", "voksen", NA),
                 inline = TRUE
               ),
               shiny::checkboxGroupInput("aktiv_behandling",
                 label = "Aktiv behandling per i dag:",
-                choices = c("Ja" = TRUE, "Nei" = FALSE),
+                choices = c(Ja = TRUE, Nei = FALSE),
                 selected = c(TRUE, FALSE),
                 inline = TRUE
               ),

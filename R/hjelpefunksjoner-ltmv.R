@@ -30,7 +30,7 @@ legg_til_overordnet_diag = function(d_ventreg) {
   # men det hadde vært mer riktig i opptelling av antall, insidens etc. å se på
   # bidiagnosen (DIAGNOSIS2) også.
   d_ventreg = d_ventreg |>
-    left_join(kb_diag, by = c("diagnosis1" = "diagnose"))
+    left_join(kb_diag, by = c(diagnosis1 = "diagnose"))
 
   d_ventreg
 }
@@ -70,7 +70,7 @@ legg_til_hf_rhf_navn = function(d) {
 
   # Legger til foretaksnavnene + helseregionsnavnene
   d = d |>
-    left_join(hf_akt, by = c("move_to_centre" = "hf_resh")) |>
+    left_join(hf_akt, by = c(move_to_centre = "hf_resh")) |>
     rename(hf_resh = move_to_centre)
 
   d
@@ -104,7 +104,7 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
   d_fylker$fylker_historisk = as.character(d_fylker$fylker_historisk)
 
   d = d |>
-    left_join(d_fylker, by = c("kode_fylke" = "fylker_historisk"))
+    left_join(d_fylker, by = c(kode_fylke = "fylker_historisk"))
 
   # Vi vil også ha navn på helseregioner.
   # Registeret har en variabel som koder for rekkefølgen
