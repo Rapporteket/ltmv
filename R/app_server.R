@@ -150,7 +150,7 @@ app_server = function(input, output, session) {
   # dispatch
   org = rapbase::autoReportOrgServer("ltmv-dispatch-org", orgs)
   file_format = rapbase::autoReportFormatServer("ltmv-dispatch-format")
-  param_names = shiny::reactive(c("output_format"))
+  param_names = shiny::reactive("output_format")
   param_values = shiny::reactive(c(file_format()))
   rapbase::autoReportServer(
     "ltmv-dispatch",
