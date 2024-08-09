@@ -29,7 +29,7 @@
 #' }
 hent_skjema = function(skjemanamn, registernamn = "ltmv") {
   sporring = paste0("SELECT * FROM ", skjemanamn)
-  rapbase::loadRegData(registernamn, sporring) %>%
-    as_tibble() %>%
+  rapbase::loadRegData(registernamn, sporring) |>
+    as_tibble() |>
     rename_with(str_to_lower)
 }
