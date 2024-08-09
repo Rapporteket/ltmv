@@ -176,10 +176,10 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
     kableExtra::add_header_above(
       header = c(
         "Sykehus",
-        "Registrering år 0" = 2,
-        "Oppfølging år 1" = 2, "Oppfølging år 3" = 2,
-        "Videre oppfølging\n(år 5+ og AdHoc)" = 2, "Avslutning" = 2,
-        "Totalt" = 2
+        `Registrering år 0` = 2,
+        `Oppfølging år 1` = 2, `Oppfølging år 3` = 2,
+        `Videre oppfølging\n(år 5+ og AdHoc)` = 2, Avslutning = 2,
+        Totalt = 2
       )
     ) |>
     kableExtra::column_spec(seq(3, 13, 2), color = "red") |>
