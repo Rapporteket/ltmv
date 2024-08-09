@@ -90,7 +90,7 @@ app_server = function(input, output, session) {
       session = session,
       inputId = "dato_antall_skjema",
       start = "2014-01-01",
-      end = dagens_dato,
+      end = dagens_dato
     )
   })
 
@@ -99,7 +99,7 @@ app_server = function(input, output, session) {
       session = session,
       inputId = "dato_antall_skjema",
       start = paste0(lubridate::year(dagens_dato), "-01-01"),
-      end = dagens_dato,
+      end = dagens_dato
     )
   })
 
@@ -108,7 +108,7 @@ app_server = function(input, output, session) {
       session = session,
       inputId = "dato_antall_skjema",
       start = dagens_dato - 29,
-      end = dagens_dato,
+      end = dagens_dato
     )
   })
 
@@ -117,7 +117,7 @@ app_server = function(input, output, session) {
       session = session,
       inputId = "dato_antall_skjema",
       start = dagens_dato - 6,
-      end = dagens_dato,
+      end = dagens_dato
     )
   })
 
