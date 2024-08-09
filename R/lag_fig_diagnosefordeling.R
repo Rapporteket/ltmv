@@ -21,10 +21,10 @@
 #'   lag_fig_diagnosefordeling()
 #' }
 lag_fig_diagnosefordeling = function(d) {
-  d_diagnosegrupper = d %>%
-    filter(!is.na(diag_gruppe_navn)) %>%
-    count(diag_gruppe, diag_gruppe_navn) %>%
-    arrange(desc(diag_gruppe)) %>%
+  d_diagnosegrupper = d |>
+    filter(!is.na(diag_gruppe_navn)) |>
+    count(diag_gruppe, diag_gruppe_navn) |>
+    arrange(desc(diag_gruppe)) |>
     mutate(
       diag_gruppe_navn = forcats::fct_inorder(diag_gruppe_navn),
       n_tot = sum(n),

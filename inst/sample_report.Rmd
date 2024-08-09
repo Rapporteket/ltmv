@@ -61,14 +61,14 @@ automatisk tilsent av abonnementstjenesten til Rapporteket.
 
 # Totalt antall biltyper fordelt på antall sylindre
 Datagrunnlaget og består av totalt `r dim(df)[1]` biltyper for i alt
-`r dplyr::distinct(df, cyl) %>% dplyr::count()` ulike antall sylindre.
+`r dplyr::distinct(df, cyl) |> dplyr::count()` ulike antall sylindre.
 
 Antall biltyper for ulike sylinderantall er gitt i Figur \@ref(fig:typeSylFig) og i Tabell \@ref(tab:typeSylTab).
 
 ```{r processForlopPerYear}
-syl <- df %>%
-  dplyr::group_by(cyl) %>%
-  dplyr::summarise(n = dplyr::n()) %>%
+syl <- df |>
+  dplyr::group_by(cyl) |>
+  dplyr::summarise(n = dplyr::n()) |>
   dplyr::select(cyl, n)
 ```
 

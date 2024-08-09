@@ -102,7 +102,7 @@ test_that("formater_antall_skjema_tabell() gjev ut ein «kable»", {
 # Testar for grupper_skjemaoversikt()
 
 test_that("grupper_skjemaoversikt() gjev ut forventa resultat", {
-  d_skjemaoversikt_gruppert = d_skjemaoversikt_eksempel %>%
+  d_skjemaoversikt_gruppert = d_skjemaoversikt_eksempel |>
     mutate(
       skjema_gruppe_nr = c(
         0, 0.5, 999, 999.5, 1, 1.5, 3, 3.5, 99, 99.5, 99, 99.5, 99, 99.5
