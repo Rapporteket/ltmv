@@ -40,7 +40,6 @@ Imports:
     dplyr (>= 1.1.0),
     ggplot2,
     lubridate,
-    magrittr,
     shiny,
     rapbase,
     rapwhale,
