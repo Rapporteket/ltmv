@@ -18,7 +18,7 @@ registry_name = "rapbase"
 # by dummy class test of auto report list
 test_that("server can run", {
   shiny::testServer(app = app_server, {
-    expect_equal(class(report), "list")
+    expect_type(report, "list")
   })
 })
 

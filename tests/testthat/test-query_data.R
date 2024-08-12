@@ -76,7 +76,7 @@ test_that("relevant test database and tables can be made", {
   check_db()
   con = rapbase::rapOpenDbConnection(registry_name)$con
   for (i in seq_len(length(queries))) {
-    expect_equal(class(RMariaDB::dbExecute(con, queries[i])), "integer")
+    expect_type(RMariaDB::dbExecute(con, queries[i]), "integer")
   }
   rapbase::rapCloseDbConnection(con)
 })
@@ -91,10 +91,9 @@ resh_id = 999999
 ## simply check if data frames are returned
 test_that("data frame is returned", {
   check_db()
-  expect_true(
-    class(
-      query_all_hospitals(registry_name, resh_id, session = session)
-    ) == "data.frame"
+  expect_s3_class(
+    object = query_all_hospitals(registry_name, resh_id, session = session),
+    class = "data.frame"
   )
 })
 
