@@ -16,3 +16,9 @@ linters: linters_with_tags(
         op = list("<-" = "Use =, not <-, for assignment.")
     )
   )
+exclusions: list(
+    "tests/testthat.R" = list(
+        undesirable_function_linter = Inf,
+        unused_import_linter = Inf
+    )
+  )

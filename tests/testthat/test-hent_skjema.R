@@ -54,7 +54,7 @@ test_config = paste0(
   "\n  pass : ", Sys.getenv("DB_PASS"),
   "\n  disp : ephemaralUnitTesting\n"
 )
-Sys.setenv(R_RAP_CONFIG_PATH = tempdir())
+Sys.setenv(R_RAP_CONFIG_PATH = tempdir()) # nolint: undesirable_function_linter.
 cf = file(file.path(Sys.getenv("R_RAP_CONFIG_PATH"), "dbConfig.yml"))
 writeLines(test_config, cf)
 close(cf)
@@ -104,4 +104,4 @@ if (is.null(check_db(is_test_that = FALSE))) {
 }
 
 # restore initial state
-Sys.setenv(R_RAP_CONFIG_PATH = config_path)
+Sys.setenv(R_RAP_CONFIG_PATH = config_path) # nolint: undesirable_function_linter.
