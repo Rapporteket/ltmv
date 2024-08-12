@@ -45,7 +45,7 @@ d_antall_skjema_fasit = tibble(
 
 test_that("aggreger_antall_skjema_tabell() gjev ut forventa tal på kolonner", {
   # 11 kolonner: sjukehusnamn + ferdig/uferdig for 5 skjemagrupper
-  expect_true(ncol(d_antall_skjema) == 13)
+  expect_identical(ncol(d_antall_skjema), 13L)
 })
 
 test_that("aggreger_antall_skjema_tabell() gjev ut rette kolonner i rett rekkjefylgje", {
