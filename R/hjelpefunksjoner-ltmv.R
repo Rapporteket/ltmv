@@ -63,7 +63,8 @@ legg_til_hf_rhf_navn = function(d) {
 
   hf_akt = d_sjukehus_info |>
     distinct(hf_resh, .keep_all = TRUE) |>
-    select(hf_resh, hf_tekst, hf_gr, hf_gr_tekst) # FIXME Funksjonen legg berre til info om HF, ikkje RHF som funksjonsnamnet seier?
+    # FIXME Funksjonen legg berre til info om HF, ikkje RHF som funksjonsnamnet seier?
+    select(hf_resh, hf_tekst, hf_gr, hf_gr_tekst)
 
   # Gjør om "hf_resh" til en tekstvariabel for at det skal samsvare med registeret
   hf_akt$hf_resh = as.character(hf_akt$hf_resh)
