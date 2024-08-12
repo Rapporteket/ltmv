@@ -90,11 +90,7 @@ legg_til_hf_rhf_navn = function(d) {
 #'
 #' @export
 #'
-legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
-  # FIXME Anna namn på funksjonen, den legg ikkje til rekkefølge, men RHF-namn og resh? (I tillegg til info om fylke)
-
-  # Legger til navn på fylker, omkoding til nye fylkesnummer,
-  # og kode for rekkefølgen som skal brukes for helseregioner.
+legg_til_fylke_rhf_og_resh_info = function(d) {
   # Henter inn data på fylkeskoder og helseregion tilhørighet.
   fylke_rhf_adresse = system.file("extdata", "fylke-rhf.xlsx", package = "ltmv")
   d_fylke_til_rhf = read_excel(fylke_rhf_adresse)
@@ -104,6 +100,7 @@ legg_til_oppdaterte_fylker_og_rekkefolge_helseregion = function(d) {
   # Gjør om "fylker_historisk" til en tekstvariabel for at det skal samsvare med registeret
   d_fylker$fylker_historisk = as.character(d_fylker$fylker_historisk)
 
+  # Legger til navn på fylker
   d = d |>
     left_join(d_fylker, by = c(kode_fylke = "fylker_historisk"))
 
