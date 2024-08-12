@@ -22,7 +22,6 @@
 #' @importFrom dplyr summarise
 #' @importFrom dplyr ungroup
 #' @importFrom forcats fct_inorder
-#' @importFrom magrittr %>%
 #' @importFrom purrr walk
 #' @importFrom readxl read_excel
 #' @importFrom stringr str_replace_all
