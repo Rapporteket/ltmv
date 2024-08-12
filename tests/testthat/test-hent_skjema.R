@@ -68,7 +68,7 @@ fc = file(system.file("test_db.sql", package = "ltmv"), "r")
 t = readLines(fc)
 close(fc)
 sql = paste0(t, collapse = "\n")
-queries = strsplit(sql, ";")[[1]]
+queries = strsplit(sql, ";", fixed = TRUE)[[1]]
 
 registry_name = "testReg"
 
