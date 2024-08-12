@@ -76,7 +76,7 @@ test_that("relevant test database and tables can be made", {
   check_db()
   con = rapbase::rapOpenDbConnection(registry_name)$con
   for (i in seq_len(length(queries))) {
-    expect_equal(class(RMariaDB::dbExecute(con, queries[i])), "integer")
+    expect_type(RMariaDB::dbExecute(con, queries[i]), "integer")
   }
   rapbase::rapCloseDbConnection(con)
 })
