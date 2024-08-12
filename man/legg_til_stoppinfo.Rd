@@ -20,7 +20,7 @@ og legger til ekstra kolonner med info om behandlingsstopp.
 }
 \examples{
 \dontrun{
-hent_skjema("ventreg") \%>\%
+hent_skjema("ventreg") |>
   legg_til_stoppinfo(mceid)
 }
 }
