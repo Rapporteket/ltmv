@@ -57,8 +57,8 @@ legg_til_hf_rhf_navn = function(d) {
   )
   d_sjukehus_info = read_excel(kb_sjukehus_adresse) |>
     mutate(
-      hf_tekst = str_replace_all(hf_tekst, "\\ HF", ""),
-      hf_gr_tekst = str_replace_all(hf_gr_tekst, "\\ HF", "")
+      hf_tekst = str_replace_all(hf_tekst, stringr::fixed(" HF"), ""),
+      hf_gr_tekst = str_replace_all(hf_gr_tekst, stringr::fixed(" HF"), "")
     )
 
   hf_akt = d_sjukehus_info |>
