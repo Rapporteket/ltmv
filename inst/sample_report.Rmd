@@ -21,10 +21,12 @@ output:
 
 
 ```{r knitrOptions, include=FALSE}
+# nolint start: undesirable_function_linter.
 options(knitr.table.format = params$tableFormat)
 knitr::opts_chunk$set(warnings = FALSE, echo = FALSE)
 options(stringsAsFactors = FALSE)
 Sys.setlocale("LC_TIME", "nb_NO.UTF-8")
+# nolint end
 ```
 
 
