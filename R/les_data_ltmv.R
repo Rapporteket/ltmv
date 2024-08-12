@@ -1,32 +1,46 @@
 #' Les inn LTMV-data
 #'
 #' @description
-#' Les inn LTMV-datadumpar og lagra dei som objekt, eventuelt med automatisk validering.
+#' Les inn LTMV-datadumpar og lagra dei som objekt,
+#' eventuelt med automatisk validering.
 #'
-#' @param mappe_dd Grunnmappe som datadumpar skal hentast frå. Må ha undermapper
-#'     med datonamn (format: `ÅÅÅÅ-MM-DD`).
-#' @param dato Datoen for den aktuelle datadumpen (anten tekst på formatet `ÅÅÅÅ-MM-DD`
-#'     eller eit [base::Date]-objekt). Vert brukt til å velja rett undermappe
-#'     til `mappe_dd`. Viss `NULL` (standard), vert nyaste dato brukt.
-#' @param maksdato Dato for siste startdato, oppfølgingsdato og avslutningsdato som skal vera med i datauttrekket (same datoformat
-#'     som for `dato`). Oppføringar som tilhøyrer seinare datoar,
-#'     vert filtrerte ut frå skjemaa.
-#'     Viss `NULL` (standard), vert det ikkje noko filtrering på datoane.
-#' @param status Type oppføringar som skal lesast. Sjå [rapwhale::les_dd_oqr()]
-#'     for informasjon om moglege verdiar. Som standard vert berre ferdigstilte oppføringar lesne.
-#' @param valider Skal dataa validerast, dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
-#'     Omfattar testar ved bruk av kodeboka.
-#' @param omgjevnad Omgjevnad som dataobjekta skal lagrast til. Standard er den globale omgjevnaden.
+#' @param mappe_dd
+#' Grunnmappe som datadumpar skal hentast frå.
+#' Må ha undermapper med datonamn (format: `ÅÅÅÅ-MM-DD`).
+#' @param dato
+#' Datoen for den aktuelle datadumpen (anten tekst på formatet `ÅÅÅÅ-MM-DD`
+#' eller eit [base::Date]-objekt). Vert brukt til å velja rett undermappe
+#' til `mappe_dd`. Viss `NULL` (standard), vert nyaste dato brukt.
+#' @param maksdato
+#' Dato for siste startdato,
+#' oppfølgingsdato og avslutningsdato som skal vera med i datauttrekket
+#' (same datoformat som for `dato`).
+#' Oppføringar som tilhøyrer seinare datoar,
+#' vert filtrerte ut frå skjemaa.
+#' Viss `NULL` (standard), vert det ikkje noko filtrering på datoane.
+#' @param status
+#' Type oppføringar som skal lesast.
+#' Sjå [rapwhale::les_dd_oqr()] for informasjon om moglege verdiar.
+#' Som standard vert berre ferdigstilte oppføringar lesne.
+#' @param valider
+#' Skal dataa validerast,
+#' dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
+#' Omfattar testar ved bruk av kodeboka.
+#' @param omgjevnad
+#' Omgjevnad som dataobjekta skal lagrast til.
+#' Standard er den globale omgjevnaden.
 #'
 #' @details
 #' Alle standard datafiler til registeret vert lesne inn, eventuelt validerte,
-#' filtrerte (sjå nedanfor) og så lagra som R-objekt. Dei får namna `d_full_skjemanamn`, der `skjemanamn`
-#' er namnet på det aktuelle skjemaet (for eksempel `d_full_ventfol` for oppfølgingskjemaet).
-#' Som standard vert dei lagra i den globale omgjevnaden, og dei vil overskriva eventuelle
-#' eksisterande objekt med same namn.
+#' filtrerte (sjå nedanfor) og så lagra som R-objekt.
+#' Dei får namna `d_full_skjemanamn`,
+#' der `skjemanamn` er namnet på det aktuelle skjemaet
+#' (for eksempel `d_full_ventfol` for oppfølgingskjemaet).
+#' Som standard vert dei lagra i den globale omgjevnaden,
+#' og dei vil overskriva eventuelle eksisterande objekt med same namn.
 #'
-#' I tillegg til alle standardskjemaa som er nemnde i kodeboka, vert datasett for
-#' `mce`- og `patientlist`-filene òg lagra.
+#' I tillegg til alle standardskjemaa som er nemnde i kodeboka,
+#' vert datasett for `mce`- og `patientlist`-filene òg lagra.
 #'
 #' Kodeboka for registeret vert òg lagra, med namnet `kb`.
 #'
