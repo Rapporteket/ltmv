@@ -2,7 +2,7 @@
 current_config_path = Sys.getenv("R_RAP_CONFIG_PATH")
 
 # make pristine and dedicated config to avoid interference with other tests
-Sys.setenv(R_RAP_CONFIG_PATH = file.path(tempdir(), "autoReportTesting"))
+Sys.setenv(R_RAP_CONFIG_PATH = file.path(tempdir(), "autoReportTesting")) # nolint: undesirable_function_linter.
 dir.create(Sys.getenv("R_RAP_CONFIG_PATH"))
 file.copy(
   system.file(c("rapbaseConfig.yml", "dbConfig.yml", "autoReport.yml"),
@@ -38,4 +38,4 @@ test_that("server can run", {
 
 
 # Restore instance
-Sys.setenv(R_RAP_CONFIG_PATH = current_config_path)
+Sys.setenv(R_RAP_CONFIG_PATH = current_config_path) # nolint: undesirable_function_linter.
