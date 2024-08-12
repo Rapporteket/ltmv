@@ -14,38 +14,46 @@ les_data_ltmv(
 )
 }
 \arguments{
-\item{mappe_dd}{Grunnmappe som datadumpar skal hentast frå. Må ha undermapper
-med datonamn (format: \code{ÅÅÅÅ-MM-DD}).}
+\item{mappe_dd}{Grunnmappe som datadumpar skal hentast frå.
+Må ha undermapper med datonamn (format: \code{ÅÅÅÅ-MM-DD}).}
 
 \item{dato}{Datoen for den aktuelle datadumpen (anten tekst på formatet \code{ÅÅÅÅ-MM-DD}
 eller eit \link[base:Dates]{base::Date}-objekt). Vert brukt til å velja rett undermappe
 til \code{mappe_dd}. Viss \code{NULL} (standard), vert nyaste dato brukt.}
 
-\item{maksdato}{Dato for siste startdato, oppfølgingsdato og avslutningsdato som skal vera med i datauttrekket (same datoformat
-som for \code{dato}). Oppføringar som tilhøyrer seinare datoar,
+\item{maksdato}{Dato for siste startdato,
+oppfølgingsdato og avslutningsdato som skal vera med i datauttrekket
+(same datoformat som for \code{dato}).
+Oppføringar som tilhøyrer seinare datoar,
 vert filtrerte ut frå skjemaa.
 Viss \code{NULL} (standard), vert det ikkje noko filtrering på datoane.}
 
-\item{status}{Type oppføringar som skal lesast. Sjå \code{\link[rapwhale:les_dd_oqr]{rapwhale::les_dd_oqr()}}
-for informasjon om moglege verdiar. Som standard vert berre ferdigstilte oppføringar lesne.}
+\item{status}{Type oppføringar som skal lesast.
+Sjå \code{\link[rapwhale:les_dd_oqr]{rapwhale::les_dd_oqr()}} for informasjon om moglege verdiar.
+Som standard vert berre ferdigstilte oppføringar lesne.}
 
-\item{valider}{Skal dataa validerast, dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
+\item{valider}{Skal dataa validerast,
+dvs. sjekkast for feilverdiar før innlesing? (Standard: ja.)
 Omfattar testar ved bruk av kodeboka.}
 
-\item{omgjevnad}{Omgjevnad som dataobjekta skal lagrast til. Standard er den globale omgjevnaden.}
+\item{omgjevnad}{Omgjevnad som dataobjekta skal lagrast til.
+Standard er den globale omgjevnaden.}
 }
 \description{
-Les inn LTMV-datadumpar og lagra dei som objekt, eventuelt med automatisk validering.
+Les inn LTMV-datadumpar og lagra dei som objekt,
+eventuelt med automatisk validering.
 }
 \details{
 Alle standard datafiler til registeret vert lesne inn, eventuelt validerte,
-filtrerte (sjå nedanfor) og så lagra som R-objekt. Dei får namna \code{d_full_skjemanamn}, der \code{skjemanamn}
-er namnet på det aktuelle skjemaet (for eksempel \code{d_full_ventfol} for oppfølgingskjemaet).
-Som standard vert dei lagra i den globale omgjevnaden, og dei vil overskriva eventuelle
-eksisterande objekt med same namn.
+filtrerte (sjå nedanfor) og så lagra som R-objekt.
+Dei får namna \code{d_full_skjemanamn},
+der \code{skjemanamn} er namnet på det aktuelle skjemaet
+(for eksempel \code{d_full_ventfol} for oppfølgingskjemaet).
+Som standard vert dei lagra i den globale omgjevnaden,
+og dei vil overskriva eventuelle eksisterande objekt med same namn.
 
-I tillegg til alle standardskjemaa som er nemnde i kodeboka, vert datasett for
-\code{mce}- og \code{patientlist}-filene òg lagra.
+I tillegg til alle standardskjemaa som er nemnde i kodeboka,
+vert datasett for \code{mce}- og \code{patientlist}-filene òg lagra.
 
 Kodeboka for registeret vert òg lagra, med namnet \code{kb}.
 }

@@ -53,11 +53,11 @@ tabelloversikt over ferdige og uferdige skjema.
 \dontrun{
 library(dplyr)
 
-d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") \%>\%
+d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") |>
   ltmv:::grupper_skjemaoversikt()
 
-d_skjemaoversikt_gruppert \%>\%
-  head(20) \%>\%
+d_skjemaoversikt_gruppert |>
+  head(20) |>
   select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
 }
 }
