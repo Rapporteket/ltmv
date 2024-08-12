@@ -47,9 +47,10 @@ report_processor = function(report,
                             registry_name = "ltmv",
                             user_full_name = "unknown person name",
                             user_role = "unknown role") {
-  stopifnot(report %in% c("guide", "sample_report"))
-
-  stopifnot(output_type %in% c("html", "pdf"))
+  stopifnot(
+    report %in% c("guide", "sample_report"),
+    output_type %in% c("html", "pdf")
+  )
 
   file_path = NULL
 
