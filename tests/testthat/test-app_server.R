@@ -22,6 +22,8 @@ test_that("server can run", {
   })
 })
 
+# Mellombels utkommentert kode, før det finst rapportar i appen
+# nolint start: commented_code_linter.
 # test_that("example report can be provided for ui", {
 #   shiny::testServer(app = app_server, {
 #     expect_true("list" %in% class(output$ex_report))
@@ -35,6 +37,7 @@ test_that("server can run", {
 #     expect_true(file.exists(output$download_report))
 #   })
 # })
+# nolint end
 
 
 # Restore instance
