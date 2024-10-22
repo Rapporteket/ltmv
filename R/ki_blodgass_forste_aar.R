@@ -30,7 +30,7 @@
 #'
 #' @export
 ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, rapporteringsdato) {
-  d_full_reg_forste_aar_ahoc |>
+  d_full_reg_forste_aar_ahoc %>%
     mutate(
       blodgass = !is.na(f1_pco2_air) |
         !is.na(f1_po2_air) |

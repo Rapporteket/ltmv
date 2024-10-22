@@ -20,8 +20,8 @@ diagnosegruppene.
 }
 \examples{
 \dontrun{
-hent_skjema("ventreg") |>
-  legg_til_overordnet_diag() |>
+hent_skjema("ventreg") \%>\%
+  legg_til_overordnet_diag() \%>\%
   lag_fig_diagnosefordeling()
 }
 }

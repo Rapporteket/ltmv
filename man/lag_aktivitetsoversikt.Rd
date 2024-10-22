@@ -19,11 +19,11 @@ ulike nøkkeltal for aktivitet.
 }
 \examples{
 \dontrun{
-d = hent_skjema("ventreg") |>
-  legg_til_pasientid(mceid) |>
-  legg_til_pasientinfo(patient_id) |>
-  legg_til_stoppinfo(mceid) |>
-  legg_til_aktiv_behandling() |>
+d = hent_skjema("ventreg") \%>\%
+  legg_til_pasientid(mceid) \%>\%
+  legg_til_pasientinfo(patient_id) \%>\%
+  legg_til_stoppinfo(mceid) \%>\%
+  legg_til_aktiv_behandling() \%>\%
   mutate(
     alder_no = lubridate::time_length(
       x = lubridate::interval(

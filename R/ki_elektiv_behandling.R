@@ -10,7 +10,7 @@
 #' @export
 
 ki_elektiv = function(d_ventreg) {
-  d_ventreg |>
+  d_ventreg %>%
     mutate(
       ki_krit_teller = situation_ventilation == 2,
       ki_krit_nevner = !is.na(situation_ventilation) &

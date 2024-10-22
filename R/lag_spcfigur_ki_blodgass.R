@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' d_ventreg = hent_skjema("ventreg") |>
+#' d_ventreg = hent_skjema("ventreg") %>%
 #'   dplyr::filter(lubridate::year(start_date) >= 2019)
 #'
 #' lag_spcfigur_ki_blodgass(d_ventreg)
@@ -28,11 +28,11 @@
 #' lag_spcfigur_ki_blodgass(d_ventreg, tidseining = "year")
 #' }
 lag_spcfigur_ki_blodgass = function(d_ventreg, tidseining = "month") {
-  d_ki_blodgass = d_ventreg |>
-    ki_blodgass() |>
+  d_ki_blodgass = d_ventreg %>%
+    ki_blodgass() %>%
     group_by(
       start_tid = lubridate::floor_date(start_date, unit = tidseining)
-    ) |>
+    ) %>%
     rapwhale::aggreger_ki_prop()
 
   qicharts2::qic(

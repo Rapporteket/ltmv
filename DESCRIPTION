@@ -55,7 +55,8 @@ Imports:
     janitor,
     stringr,
     forcats,
-    qicharts2
+    qicharts2,
+    magrittr
 Remotes:
     Rapporteket/rapbase@*release,
     Rapporteket/rapwhale

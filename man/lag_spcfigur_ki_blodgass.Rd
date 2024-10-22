@@ -24,7 +24,7 @@ blodgass per \code{tidseining}.
 }
 \examples{
 \dontrun{
-d_ventreg = hent_skjema("ventreg") |>
+d_ventreg = hent_skjema("ventreg") \%>\%
   dplyr::filter(lubridate::year(start_date) >= 2019)
 
 lag_spcfigur_ki_blodgass(d_ventreg)
