@@ -59,7 +59,7 @@ Imports:
     magrittr
 Remotes:
     Rapporteket/rapbase@*release,
-    Rapporteket/rapwhale
+    Rapporteket/rapwhale@v0.5.0
 Suggests: 
     covr,
     lintr,
