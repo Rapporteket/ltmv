@@ -21,7 +21,7 @@
 #'
 #' @export
 ki_prom_forste_aar = function(d_full_reg_forste_aar, rapporteringsdato) {
-  d_full_reg_forste_aar |>
+  d_full_reg_forste_aar %>%
     mutate(
       gyldig_prom = !is.na(f1_qlwakeup) |
         !is.na(f1_qlheadache) |

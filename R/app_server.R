@@ -50,7 +50,7 @@ app_server = function(input, output, session) {
   )
 
   d_ki = shiny::reactive({
-    d_dashboard() |>
+    d_dashboard() %>%
       filter(lubridate::year(start_date) >= lubridate::year(Sys.Date()) - 5)
   })
 
