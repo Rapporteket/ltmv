@@ -73,7 +73,7 @@ lag_datasett_dashboard = function(fra,
     )
 
   if (user_role != "SC") {
-    d_dashboard = filter(d_dashboard, avdresh == !!resh_id)
+    d_dashboard = filter(d_dashboard, centreid == !!resh_id)
   }
 
   d_dashboard
