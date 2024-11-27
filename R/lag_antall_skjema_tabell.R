@@ -66,11 +66,10 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
       aktiv_behandling %in% !!aktiv_behandling
     )
 
-  if (user_role != "SC") {
-    d_skjemaoversikt = filter(d_skjemaoversikt, avdresh == !!resh_id)
-  }
-
-  d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt)
+  d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt,
+    user_role = user_role,
+    resh_id = resh_id
+  )
 
   if (nrow(d_antall_skjema) != 0) {
     formater_antall_skjema_tabell(d_antall_skjema)
@@ -89,6 +88,11 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 #' @param d_skjemaoversikt
 #' Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
 #' Eventuelt filtrert på t.d. sjukehus.
+#' @param user_role
+#' Tekststreng med rolla til innlogga brukar.
+#' Til dømes "SC" (system coordinator) eller "LU" (local user).
+#' @param resh_id
+#' Tekststreng med RESH-ID til eininga til innlogga brukar.
 #'
 #' @return
 #' Dataramme med talet på ferdige og uferdige skjema på sjukehusnivå
@@ -101,7 +105,11 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 #' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
 #' ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
 #' }
-aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
+aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
+  if (user_role != "SC") {
+    d_skjemaoversikt = filter(d_skjemaoversikt, avdresh == !!resh_id)
+  }
+
   d_antall_skjema = d_skjemaoversikt %>%
     grupper_skjemaoversikt() %>%
     count(hf_gr, skjema_gruppe, sykehusnavn) %>%
@@ -125,6 +133,11 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt) {
   attr(d_antall_skjema, "totals") = NULL
   attr(d_antall_skjema, "tabyl_type") = NULL
   attr(d_antall_skjema, "core") = NULL
+
+  # Fjern totalrad viss ikkje brukarrolle er systemkoordinator
+  if (user_role != "SC") {
+    d_antall_skjema = filter(d_antall_skjema, sykehusnavn != "Totalt")
+  }
 
   d_antall_skjema
 }

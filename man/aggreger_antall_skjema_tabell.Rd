@@ -4,11 +4,16 @@
 \alias{aggreger_antall_skjema_tabell}
 \title{Lag dataramme med oversikt over ferdige og uferdige skjema på sjukehusnivå}
 \usage{
-aggreger_antall_skjema_tabell(d_skjemaoversikt)
+aggreger_antall_skjema_tabell(d_skjemaoversikt, user_role, resh_id)
 }
 \arguments{
 \item{d_skjemaoversikt}{Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
 Eventuelt filtrert på t.d. sjukehus.}
+
+\item{user_role}{Tekststreng med rolla til innlogga brukar.
+Til dømes "SC" (system coordinator) eller "LU" (local user).}
+
+\item{resh_id}{Tekststreng med RESH-ID til eininga til innlogga brukar.}
 }
 \value{
 Dataramme med talet på ferdige og uferdige skjema på sjukehusnivå

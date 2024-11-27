@@ -17,13 +17,15 @@ d_skjemaoversikt_eksempel = tibble(
   sistlagretdato = opprettetdato,
   hoveddato = as.Date(opprettetdato),
   sykehusnavn = rep(c("OSLO UNIVERSITETSSYKEHUS HF", "HELSE BERGEN HF"), each = 7),
-  avdelingsresh = rep(c("4001031", "100082"), each = 7),
+  avdresh = rep(c("4001031", "100082"), each = 7),
   hf_gr = rep(c(14, 6), each = 7),
   skjemarekkeflg = rep(!!skjemarekkeflg, each = 2)
 )
 
 # Testar for aggreger_antall_skjema_tabell()
-d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel)
+d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
+  user_role = "SC"
+)
 
 d_antall_skjema_fasit = tibble(
   sykehusnavn = c("HELSE BERGEN HF", "OSLO UNIVERSITETSSYKEHUS HF", "Totalt"),
@@ -63,6 +65,31 @@ test_that("aggreger_antall_skjema_tabell() gjev ut rette kolonner i rett rekkjef
 
 test_that("aggreger_antall_skjema_tabell() gjev ut forventa resultat", {
   expect_identical(d_antall_skjema, d_antall_skjema_fasit)
+})
+
+d_antall_skjema_lokal = aggreger_antall_skjema_tabell(d_skjemaoversikt_eksempel,
+  user_role = "LU",
+  resh_id = "100082"
+)
+
+d_antall_skjema_fasit_lokal = tibble(
+  sykehusnavn = "HELSE BERGEN HF",
+  `Registrering år 0` = 0L,
+  `Registrering år 0 (uferdig)` = 0L,
+  `Oppfølging år 1` = 0L,
+  `Oppfølging år 1 (uferdig)` = 0L,
+  `Oppfølging år 3` = 0L,
+  `Oppfølging år 3 (uferdig)` = 1L,
+  `Videre oppfølging (år 5+ og AdHoc)` = 3L,
+  `Videre oppfølging (år 5+ og AdHoc) (uferdig)` = 3L,
+  Avslutning = 0L,
+  `Avslutning (uferdig)` = 0L,
+  Totalt = 3L,
+  `Totalt (uferdig)` = 4L
+)
+
+test_that("aggreger_antall_skjema_tabell() gjev ut forventa resultat med user_role = LU", {
+  expect_identical(d_antall_skjema_lokal, d_antall_skjema_fasit_lokal)
 })
 
 # Testar for formater_antall_skjema_tabell()
