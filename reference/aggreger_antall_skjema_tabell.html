@@ -57,7 +57,7 @@ sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aggreger_antall_skjema_tabell</span><span class="op">(</span><span class="va">d_skjemaoversikt</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aggreger_antall_skjema_tabell</span><span class="op">(</span><span class="va">d_skjemaoversikt</span>, <span class="va">user_role</span>, <span class="va">resh_id</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -67,6 +67,15 @@ sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.</p>
 <dl><dt id="arg-d-skjemaoversikt">d_skjemaoversikt<a class="anchor" aria-label="anchor" href="#arg-d-skjemaoversikt"></a></dt>
 <dd><p>Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
 Eventuelt filtrert på t.d. sjukehus.</p></dd>
+
+
+<dt id="arg-user-role">user_role<a class="anchor" aria-label="anchor" href="#arg-user-role"></a></dt>
+<dd><p>Tekststreng med rolla til innlogga brukar.
+Til dømes "SC" (system coordinator) eller "LU" (local user).</p></dd>
+
+
+<dt id="arg-resh-id">resh_id<a class="anchor" aria-label="anchor" href="#arg-resh-id"></a></dt>
+<dd><p>Tekststreng med RESH-ID til eininga til innlogga brukar.</p></dd>
 
 </dl></div>
     <div id="value">
