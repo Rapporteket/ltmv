@@ -57,7 +57,7 @@ Imports:
     forcats,
     qicharts2
 Remotes:
-    Rapporteket/rapbase@*release,
+    Rapporteket/rapbase@main,
     Rapporteket/rapwhale
 Suggests: 
     covr,

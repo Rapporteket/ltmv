@@ -7,17 +7,20 @@
 #' @return A shiny app server object
 #' @export
 app_server = function(input, output, session) {
+  rapbase::logShinyInputChanges(input)
   rapwhale::aktiver_kvalregtema()
 
   rapbase::appLogger(session = session, msg = "Starting ltmv application :-)")
 
-  registry_name = "ltmv"
+  registry_name = "data"
   hospital_name = "Udefinert avdeling/sykehus"
-  user_full_name = rapbase::getUserFullName(session)
-  user_role = rapbase::getUserRole(session)
-  user_resh_id = rapbase::getUserReshId(session)
+  # user_full_name = rapbase::getUserFullName(session)
+  # user_role = rapbase::getUserRole(session)
+  # user_resh_id = rapbase::getUserReshId(session)
 
-  rapbase::navbarWidgetServer("ltmv-navbar-widget", "ltmv", caller = "ltmv")
+  map_orgname = ltmv::hent_skjema("centre") |>
+    select(UnitId = id, orgname = centrename)
+  user = rapbase::navbarWidgetServer2("ltmv-navbar-widget", "ltmv", caller = "ltmv", map_orgname = map_orgname)
 
   d_dashboard = shiny::reactive({
     lag_datasett_dashboard(
@@ -26,8 +29,8 @@ app_server = function(input, output, session) {
       alderkat = input$alderkat_dashboard,
       kjonn = input$kjonn,
       inkluder_missing = input$inkluder_missing,
-      resh_id = user_resh_id,
-      user_role = user_role
+      resh_id = user$unit(),
+      user_role = user$role()
     )
   })
 
@@ -70,13 +73,13 @@ app_server = function(input, output, session) {
         system.file("sample_report.Rmd", package = "ltmv"),
         outputType = input$format_report,
         params = list(
-          author = user_full_name,
+          author = user$fullName(),
           hospital_name = hospital_name,
           table_format = input$format_report,
-          resh_id = user_resh_id,
+          resh_id = user$unit(),
           registry_name = registry_name,
-          user_full_name = user_full_name,
-          user_role = user_role
+          user_full_name = user$fullName(),
+          user_role = user$role()
         )
       )
       file.rename(fn, file)
@@ -127,8 +130,8 @@ app_server = function(input, output, session) {
       til = input$dato_antall_skjema[2],
       alderkat = input$alderkat,
       aktiv_behandling = input$aktiv_behandling,
-      resh_id = user_resh_id,
-      user_role = user_role
+      resh_id = user$unit(),
+      user_role = user$role()
     )
   })
 
@@ -144,7 +147,8 @@ app_server = function(input, output, session) {
   rapbase::autoReportServer(
     "ltmv-subscription",
     registryName = registry_name, type = "subscription",
-    reports = report, orgs = orgs
+    reports = report, orgs = orgs,
+    user = user
   )
 
   # dispatch
@@ -157,7 +161,8 @@ app_server = function(input, output, session) {
     registryName = registry_name, type = "dispatchment",
     org = org$value,
     paramNames = param_names, paramValues = param_values, reports = report,
-    orgs = orgs
+    orgs = orgs,
+    user = user
   )
 
   # use stats

@@ -1,5 +1,5 @@
 # Eksempeldata for skjemaoversikt
-# Slik kan data frå hent_skjema("SkjemaOversikt") sjå ut
+# Slik kan data frå hent_skjema("skjemaoversikt") sjå ut
 skjemanavn = c(
   "Registrering år 0", "Avslutning", "Oppfølging år 1", "Oppfølging år 3",
   "Oppfølging år 5", "Oppfølging år 35", "Oppfølging ad-hoc"

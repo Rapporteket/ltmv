@@ -27,7 +27,7 @@
 #' \dontrun{
 #' hent_skjema("ventreg")
 #' }
-hent_skjema = function(skjemanamn, registernamn = "ltmv") {
+hent_skjema = function(skjemanamn, registernamn = "data") {
   sporring = paste0("SELECT * FROM ", skjemanamn)
   rapbase::loadRegData(registernamn, sporring) |>
     as_tibble() |>

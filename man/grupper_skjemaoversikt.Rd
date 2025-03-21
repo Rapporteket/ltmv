@@ -7,7 +7,7 @@
 grupper_skjemaoversikt(d_skjemaoversikt)
 }
 \arguments{
-\item{d_skjemaoversikt}{Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.}
+\item{d_skjemaoversikt}{Skjemaet «skjemaoversikt» frå LTMV-databasen, som ei dataramme.}
 }
 \value{
 Dataramma \code{d_skjemaoversikt} med to ekstra kolonner,
@@ -20,8 +20,8 @@ og slår saman ad hoc oppfylgjing og oppfylgjingskjema frå og med år 5
 til kategorien «Videre oppfølging».
 }
 \details{
-Tak inn skjemaet «SkjemaOversikt» frå LTMV-databasen,
-som kan hentast med \code{hent_skjema("SkjemaOversikt")},
+Tak inn skjemaet «skjemaoversikt» frå LTMV-databasen,
+som kan hentast med \code{hent_skjema("skjemaoversikt")},
 og legg til to nye kolonner, \code{skjema_gruppe_nr} og \code{skjema_gruppe}.
 
 \code{skjema_gruppe} er lik \code{skjemanavn} for alle skjema utanom oppfylgjing
@@ -53,7 +53,7 @@ tabelloversikt over ferdige og uferdige skjema.
 \dontrun{
 library(dplyr)
 
-d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") |>
+d_skjemaoversikt_gruppert = hent_skjema("skjemaoversikt") |>
   ltmv:::grupper_skjemaoversikt()
 
 d_skjemaoversikt_gruppert |>
