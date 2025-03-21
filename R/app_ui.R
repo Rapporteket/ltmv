@@ -78,7 +78,7 @@ app_ui = function() {
             width = 10
           )
         ),
-        rapbase::navbarWidgetInput("ltmv-navbar-widget")
+        rapbase::navbarWidgetInput("ltmv-navbar-widget", selectOrganization = TRUE)
       ),
       shiny::navbarMenu(
         "Figurer/tabeller",
