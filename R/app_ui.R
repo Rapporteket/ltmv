@@ -48,7 +48,7 @@ app_ui = function() {
               label = "Kjønn:",
               choices = c(Mann = 1, Kvinne = 2, Ukjent = NA),
               selected = c(1, 2, NA),
-              inline = TRUE
+              inline = FALSE
             ),
             width = 2
           ),
@@ -73,6 +73,11 @@ app_ui = function() {
                 width = 4,
                 "Blodgass målt før behandlingsstart",
                 shiny::plotOutput("blodgass_for")
+              ),
+              column(
+                width = 4,
+                "Blodgass målt første år",
+                shiny::plotOutput("blodgass_forste_aar")
               )
             ),
             width = 10
