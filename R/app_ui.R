@@ -49,7 +49,7 @@ app_ui = function() {
               label = "Kjønn:",
               choices = c(Mann = 1, Kvinne = 2, Ukjent = NA),
               selected = c(1, 2, NA),
-              inline = TRUE
+              inline = FALSE
             ),
             shiny::uiOutput("enhet_dashboard"),
             shiny::uiOutput("rhf_dashboard"),
@@ -84,6 +84,11 @@ app_ui = function() {
                   style = "font-size: 22px;"
                 ),
                 shiny::plotOutput("blodgass_for")
+              ),
+              column(
+                width = 4,
+                "Blodgass målt første år",
+                shiny::plotOutput("blodgass_forste_aar")
               )
             ),
             width = 10
