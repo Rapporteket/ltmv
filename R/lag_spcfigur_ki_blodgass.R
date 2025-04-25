@@ -35,13 +35,15 @@ lag_spcfigur_ki_blodgass = function(d_ventreg, tidseining = "month") {
     ) |>
     rapwhale::aggreger_ki_prop()
 
-  qicharts2::qic(
+ p<- qicharts2::qic(
     x = start_tid,
     y = ki_teller,
     n = ki_nevner,
     data = d_ki_blodgass,
     chart = "p"
-  ) +
-    ggplot2::theme(plot.title = ggplot2::element_blank()) +
-    ggplot2::xlab("Startdato")
+  )
+
+ p+ggplot2::labs(caption = "tekst her")+
+   ggplot2::theme(plot.title = ggplot2::element_blank()) +
+   ggplot2::xlab("Startdato")
 }
