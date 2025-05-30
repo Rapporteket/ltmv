@@ -7,7 +7,7 @@
 aggreger_antall_skjema_tabell(d_skjemaoversikt, user_role, resh_id)
 }
 \arguments{
-\item{d_skjemaoversikt}{Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
+\item{d_skjemaoversikt}{Skjemaet «skjemaoversikt» frå LTMV-databasen, som ei dataramme.
 Eventuelt filtrert på t.d. sjukehus.}
 
 \item{user_role}{Tekststreng med rolla til innlogga brukar.
@@ -26,7 +26,7 @@ sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 }
 \examples{
 \dontrun{
-d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+d_skjemaoversikt = hent_skjema("skjemaoversikt")
 ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
 }
 }

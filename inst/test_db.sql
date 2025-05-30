@@ -1436,8 +1436,8 @@ CREATE TABLE `postnr` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci;
 
 
-DROP TABLE IF EXISTS `SkjemaOversikt`;
-CREATE TABLE `SkjemaOversikt` (
+DROP TABLE IF EXISTS `skjemaOversikt`;
+CREATE TABLE `skjemaoversikt` (
   `Skjemanavn` varchar(18) COLLATE utf8_danish_ci NOT NULL,
   `SkjemaStatus` varchar(3) COLLATE utf8_danish_ci DEFAULT NULL,
   `ForlopsID` varchar(10) COLLATE utf8_danish_ci NOT NULL,

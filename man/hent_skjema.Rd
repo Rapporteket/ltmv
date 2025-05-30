@@ -4,7 +4,7 @@
 \alias{hent_skjema}
 \title{Hent skjema}
 \usage{
-hent_skjema(skjemanamn, registernamn = "ltmv")
+hent_skjema(skjemanamn, registernamn = "data")
 }
 \arguments{
 \item{skjemanamn}{Tekststreng med namn på skjemaet som skal hentast.}

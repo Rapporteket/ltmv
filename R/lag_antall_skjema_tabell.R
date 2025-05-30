@@ -50,7 +50,7 @@
 #' )
 #' }
 lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, resh_id, user_role) {
-  d_skjemaoversikt = hent_skjema("SkjemaOversikt") |>
+  d_skjemaoversikt = hent_skjema("skjemaoversikt") |>
     mutate(skjema_id = as.integer(forlopsid)) |>
     legg_til_pasientid(skjema_id) |>
     legg_til_pasientinfo(patient_id) |>
@@ -86,7 +86,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 #' sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
 #'
 #' @param d_skjemaoversikt
-#' Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
+#' Skjemaet «skjemaoversikt» frå LTMV-databasen, som ei dataramme.
 #' Eventuelt filtrert på t.d. sjukehus.
 #' @param user_role
 #' Tekststreng med rolla til innlogga brukar.
@@ -102,7 +102,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 #'
 #' @examples
 #' \dontrun{
-#' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+#' d_skjemaoversikt = hent_skjema("skjemaoversikt")
 #' ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
 #' }
 aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
@@ -160,7 +160,7 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
 #'
 #' @examples
 #' \dontrun{
-#' d_skjemaoversikt = hent_skjema("SkjemaOversikt")
+#' d_skjemaoversikt = hent_skjema("skjemaoversikt")
 #' d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
 #' ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
 #' }
@@ -197,11 +197,11 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
 #' til kategorien «Videre oppfølging».
 #'
 #' @param d_skjemaoversikt
-#' Skjemaet «SkjemaOversikt» frå LTMV-databasen, som ei dataramme.
+#' Skjemaet «skjemaoversikt» frå LTMV-databasen, som ei dataramme.
 #'
 #' @details
-#' Tak inn skjemaet «SkjemaOversikt» frå LTMV-databasen,
-#' som kan hentast med `hent_skjema("SkjemaOversikt")`,
+#' Tak inn skjemaet «skjemaoversikt» frå LTMV-databasen,
+#' som kan hentast med `hent_skjema("skjemaoversikt")`,
 #' og legg til to nye kolonner, `skjema_gruppe_nr` og `skjema_gruppe`.
 #'
 #' `skjema_gruppe` er lik `skjemanavn` for alle skjema utanom oppfylgjing
@@ -239,7 +239,7 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
 #' \dontrun{
 #' library(dplyr)
 #'
-#' d_skjemaoversikt_gruppert = hent_skjema("SkjemaOversikt") |>
+#' d_skjemaoversikt_gruppert = hent_skjema("skjemaoversikt") |>
 #'   ltmv:::grupper_skjemaoversikt()
 #'
 #' d_skjemaoversikt_gruppert |>
