@@ -54,22 +54,22 @@ app_ui = function() {
           ),
           shiny::mainPanel(
             shiny::fluidRow(
-              column(
+              shiny::column(
                 width = 4,
                 "Aktivitetsoversikt",
                 shiny::tableOutput("aktivitetsoversikt")
               ),
-              column(
+              shiny::column(
                 width = 4,
                 shiny::plotOutput("diagnosefordeling")
               ),
-              column(
+              shiny::column(
                 width = 4,
                 shiny::plotOutput("aldersfordeling")
               )
             ),
             shiny::fluidRow(
-              column(
+              shiny::column(
                 width = 4,
                 "Blodgass målt før behandlingsstart",
                 shiny::plotOutput("blodgass_for")
