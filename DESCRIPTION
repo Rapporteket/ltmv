@@ -1,6 +1,6 @@
 Package: ltmv
 Title: LTMV at Rapporteket
-Version: 0.0.2
+Version: 0.0.2.9000
 Authors@R: c(
     person(given = "Per Erik",
            family = "Haugedal",
