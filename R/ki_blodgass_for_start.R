@@ -17,7 +17,8 @@ ki_blodgass = function(d_ventreg) {
         !is.na(capillarypo2_air) |
         !is.na(capillarypco2_air) |
         !is.na(be) |
-        !is.na(arterialpco2_air)),
+        !is.na(arterialpco2_air) |
+        !is.na(transcutaneous_co2_air)),
       ki_krit_nevner = TRUE
     )
 }

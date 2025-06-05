@@ -37,14 +37,16 @@ ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, rapporteringsdato)
         !is.na(f1_capillarypo2_air) |
         !is.na(f1_capillarypco2_air) |
         !is.na(f1_be) |
-        !is.na(f1_arterialpco2_air),
+        !is.na(f1_arterialpco2_air) |
+        !is.na(f1_transcutaneous_co2_air),
       diff_start_fah = difftime(fah_followup_date, dato_start, unit = "days"),
       fah_blodgass = diff_start_fah <= 730.5 & (!is.na(fah_pco2_air) |
         !is.na(fah_po2_air) |
         !is.na(fah_capillarypo2_air) |
         !is.na(fah_capillarypco2_air) |
         !is.na(fah_be) |
-        !is.na(fah_arterialpco2_air)),
+        !is.na(fah_arterialpco2_air) |
+        !is.na(fah_transcutaneous_co2_air)),
       diff_start_stopp = case_when(
         !is.na(dato_stopp) & is.na(deceased_date) ~ dato_stopp - dato_start,
         is.na(dato_stopp) & !is.na(deceased_date) ~ deceased_date - dato_start,
