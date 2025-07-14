@@ -7,10 +7,8 @@ linters: linters_with_tags(
     line_length_linter(120),
     pipe_consistency_linter("|>"),
     object_length_linter(40),
-    extraction_operator_linter = NULL,
     implicit_integer_linter = NULL,
     nonportable_path_linter = NULL,
-    unnecessary_nested_if_linter = NULL,
     todo_comment_linter = NULL,
     condition_call_linter = NULL,
     undesirable_operator_linter(
