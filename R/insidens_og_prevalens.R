@@ -35,8 +35,7 @@ regn_insprev = function(d, var_folk, insidens = TRUE, ...) {
   var_gruppe = rlang::enquos(...)
   var_folk = rlang::enquo(var_folk)
 
-  d = d |>
-    group_by(!!!var_gruppe)
+  d = group_by(d, !!!var_gruppe)
 
   if (insidens) {
     d = d |>
@@ -46,6 +45,5 @@ regn_insprev = function(d, var_folk, insidens = TRUE, ...) {
       reframe(n_reg = n(), prevalens = 100000 * (n_reg / !!var_folk))
   }
 
-  d |>
-    distinct(!!!var_gruppe, .keep_all = TRUE)
+  distinct(d, !!!var_gruppe, .keep_all = TRUE)
 }
