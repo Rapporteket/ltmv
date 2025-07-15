@@ -44,8 +44,7 @@ regn_antall = function(d, alderkat = TRUE) {
       count(alderkat, diag_gruppe, diag_gruppe_navn) |>
       group_by(alderkat)
   } else {
-    d_n_diag = d |>
-      count(diag_gruppe, diag_gruppe_navn)
+    d_n_diag = count(d, diag_gruppe, diag_gruppe_navn)
   }
   # regner ut prosent
   d_n_diag = d_n_diag |>
