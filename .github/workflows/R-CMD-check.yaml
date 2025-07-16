@@ -58,6 +58,17 @@ jobs:
           sudo /etc/init.d/mysql start
           mysql -e 'CREATE DATABASE IF NOT EXISTS testdb;' -uroot -proot
 
+      - name: Fix issue with libicui18n.so.66, ubuntu only
+        if: runner.os == 'Linux'
+        run: |
+          cd /usr/lib/x86_64-linux-gnu/
+          sudo ln -s libicudata.so.74.2 libicudata.so.66
+          sudo ln -s libicui18n.so.74.2 libicui18n.so.66
+          sudo ln -s libicuio.so.74.2 libicuio.so.66
+          sudo ln -s libicutest.so.74.2 libicutest.so.66
+          sudo ln -s libicutu.so.74.2 libicutu.so.66
+          sudo ln -s libicuuc.so.74.2 libicuuc.so.66
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, any::remotes
