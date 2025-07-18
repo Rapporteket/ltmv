@@ -85,7 +85,7 @@ app_ui = function() {
                 ),
                 shiny::plotOutput("blodgass_for")
               ),
-              column(
+              shiny::column(
                 width = 4,
                 "Blodgass målt første år",
                 shiny::plotOutput("blodgass_forste_aar")
