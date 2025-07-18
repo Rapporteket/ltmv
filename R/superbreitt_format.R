@@ -1,20 +1,23 @@
-superbreitt_format= function(d_full_patientlist,
-                  d_full_mce,
-                  d_full_ventreg,
-                  d_full_ventfol,
-                  d_full_conclude){
+superbreitt_format = function(d_full_patientlist,
+                              d_full_mce,
+                              d_full_ventreg,
+                              d_full_ventfol,
+                              d_full_conclude) {
   # Pasientdata
-  if (length(names(d_full_patientlist))==33){
-    d_full_patientlist=d_full_patientlist %>% dplyr::select("pasientid"="id",
-                                         "RegistreringsDato"="registered_date",
-                                         "Fodselsdato"="birth_date",
-                                         "Kjonn"= "gender",
-                                         "Avdod"= "deceased",
-                                         "Dodsdato"= "deceased_date",
-                                         "Postnummer"="zipcode",
-                                         "Poststed"= "town",
-                                         "Kommune"= "county",
-                                         "Fylke"= "municipality_name")
+  if (length(names(d_full_patientlist)) == 33) {
+    d_full_patientlist = d_full_patientlist %>%
+      dplyr::select(
+        "pasientid" = "id",
+        "RegistreringsDato" = "registered_date",
+        "Fodselsdato" = "birth_date",
+        "Kjonn" = "gender",
+        "Avdod" = "deceased",
+        "Dodsdato" = "deceased_date",
+        "Postnummer" = "zipcode",
+        "Poststed" = "town",
+        "Kommune" = "county",
+        "Fylke" = "municipality_name"
+      )
   }
 
   d_p = d_full_patientlist %>%
@@ -74,30 +77,29 @@ superbreitt_format= function(d_full_patientlist,
 
   d_superbrei = d_r %>%
     left_join(d_p,
-              by = join_by(patient_id == p_pasientid)
-              #relationship = "many-to-one"
+      by = join_by(patient_id == p_pasientid),
+      relationship = "many-to-one"
     ) %>%
     left_join(d_f1,
-              by = join_by(r_mceid == parent_mce, patient_id)
-              #relationship = "one-to-one"
+      by = join_by(r_mceid == parent_mce, patient_id),
+      relationship = "one-to-one"
     ) %>%
     left_join(d_f3,
-              by = join_by(r_mceid == parent_mce, patient_id)
-              #relationship = "one-to-one"
+      by = join_by(r_mceid == parent_mce, patient_id),
+      relationship = "one-to-one"
     ) %>%
     left_join(d_fah,
-              by = join_by(r_mceid == parent_mce, patient_id)
-              #relationship = "one-to-one"
+      by = join_by(r_mceid == parent_mce, patient_id),
+      relationship = "one-to-one"
     ) %>%
     left_join(d_lf,
-              by = join_by(r_mceid == parent_mce, patient_id)
-              #relationship = "one-to-one"
+      by = join_by(r_mceid == parent_mce, patient_id),
+      relationship = "one-to-one"
     ) %>%
     left_join(d_c,
-              by = join_by(r_mceid == parent_mce, patient_id)
-              #relationship = "one-to-one"
+      by = join_by(r_mceid == parent_mce, patient_id),
+      relationship = "one-to-one"
     ) %>%
     select(-parent_mce) %>%
     relocate(patient_id, starts_with("p_"))
-
 }
