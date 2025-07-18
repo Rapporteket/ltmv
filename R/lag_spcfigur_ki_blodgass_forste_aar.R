@@ -28,7 +28,7 @@
 #' lag_spcfigur_ki_blodgass(d_ventreg, tidseining = "year")
 #' }
 lag_spcfigur_ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, tidseining = "month") {
-  ki_blodgass_forste_aar = d_full_reg_forste_aar_ahoc|>
+  ki_blodgass_forste_aar = d_full_reg_forste_aar_ahoc |>
     ki_blodgass_forste_aar(rapporteringsdato = Sys.Date()) |>
     group_by(
       start_tid = lubridate::floor_date(start_date, unit = tidseining)
@@ -43,7 +43,7 @@ lag_spcfigur_ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, tidse
     chart = "p"
   )
 
-  p+ggplot2::labs(caption = "tekst her")+
+  p + ggplot2::labs(caption = "tekst her") +
     ggplot2::theme(plot.title = ggplot2::element_blank()) +
     ggplot2::xlab("Startdato")
 }
