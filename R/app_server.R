@@ -167,7 +167,7 @@ app_server = function(input, output, session) {
 
   # use stats
   rapbase::statsGuideServer("ltmv-stats", registryName = registry_name)
-  rapbase::statsServer("ltmv-stats", registryName = registry_name)
+  rapbase::statsServer("ltmv-stats", registryName = registry_name, app_id = Sys.getenv("FALK_APP_ID"))
 
   # export
   rapbase::exportGuideServer("ltmv-export", registry_name)
