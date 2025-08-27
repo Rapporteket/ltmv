@@ -12,7 +12,7 @@ app_server = function(input, output, session) {
 
   rapbase::appLogger(session = session, msg = "Starting ltmv application :-)")
 
-  registry_name = "data"
+  registry_name = "ltmv"
   hospital_name = "Udefinert avdeling/sykehus"
   # user_full_name = rapbase::getUserFullName(session)
   # user_role = rapbase::getUserRole(session)
@@ -134,7 +134,6 @@ app_server = function(input, output, session) {
       user_role = user$role()
     )
   })
-
 
 
   # dummy report and orgs to subscribe and dispatch
