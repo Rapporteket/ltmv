@@ -87,7 +87,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
   kb_mce = tibble(
     skjema_id = "mce",
     variabel_id = tolower(c(
-      "MCEID", "CENTREID", "PATIENT_ID",
+      "MCEID", "CENTREID", "PATIENT_ID", "OLD_CENTREID",
       "MCETYPE", "HISTORICAL", "PARENT_MCE",
       "END_DATE", "MCE_TOTAL_STATUS",
       "REGISTRATION_DATE", "LAST_FOLLOWUP_YEAR",
@@ -96,7 +96,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
       "TSCREATED", "TSUPDATED"
     )),
     variabeltype = c(
-      "numerisk", "tekst", "numerisk", # CENTREID kan vera "TEST001"
+      "numerisk", "tekst", "numerisk", "tekst", # CENTREID kan vera "TEST001"
       "numerisk", "numerisk", "numerisk",
       "dato", "numerisk",
       "dato", "numerisk",
@@ -107,7 +107,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
     verdi = NA_character_, verditekst = NA_character_,
     desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
     obligatorisk = c(
-      TRUE, TRUE, TRUE, # fixme: må sjekke hvilke variabler som er obligatoriske
+      TRUE, TRUE, TRUE, TRUE, # fixme: må sjekke hvilke variabler som er obligatoriske
       TRUE, FALSE, FALSE,
       FALSE, FALSE,
       FALSE, FALSE,
