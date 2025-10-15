@@ -56,7 +56,7 @@ ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, rapporteringsdato)
       ),
       ki_krit_nevner = case_when(
         r_ventilation_method == 3 ~ FALSE,
-        year(r_start_date) < 2002 ~ FALSE,
+        lubridate::year(r_start_date) < 2002 ~ FALSE,
         blodgass ~ TRUE,
         fah_blodgass ~ TRUE,
         r_start_date > !!rapporteringsdato - 730.5 ~ FALSE,
