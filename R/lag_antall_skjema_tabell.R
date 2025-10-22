@@ -137,6 +137,11 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     bind_rows(d_privat) |>
     select(-rhf) |>
     bind_rows(d_totalt)
+
+  if (user_role != "SC") {
+    d_antall_skjema = d_antall_skjema |> filter(!sykehusnavn %in% (d_centretype |> pull(name)))
+  }
+
   if (nrow(d_antall_skjema) != 0) {
     formater_antall_skjema_tabell(d_antall_skjema)
   } else {
