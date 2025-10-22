@@ -129,7 +129,7 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
     ) |>
     ungroup()
 
-  # Fjern attributt lagt til av janotor::adorn_totals()
+  # Fjern attributt lagt til av janitor::adorn_totals()
   attr(d_antall_skjema, "totals") = NULL
   attr(d_antall_skjema, "tabyl_type") = NULL
   attr(d_antall_skjema, "core") = NULL
