@@ -67,6 +67,22 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     )
 
   d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt,
+  d_centretype = hent_skjema("centretype") |> select (id,name)
+
+  d_centre = hent_skjema("centre") |> select(id,typeid) |>
+    mutate(id = as.integer(id))
+
+
+  d_sykehus_rhf = hent_skjema("skjemaoversikt") |>
+    mutate(avdresh = as.integer(avdresh)) |>
+    left_join(d_centre,
+              by = c("avdresh" = "id")) |>
+    left_join(d_centretype,
+              by = c("typeid" = "id"),
+              relationship = "many-to-one") |>
+    rename(rhf = name) |>
+    select(sykehusnavn, rhf) |>
+    distinct()
     user_role = user_role,
     resh_id = resh_id
   )
