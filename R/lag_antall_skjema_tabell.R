@@ -66,7 +66,6 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
       aktiv_behandling %in% !!aktiv_behandling
     )
 
-  d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt,
   d_centretype = hent_skjema("centretype") |> select (id,name)
 
   d_centre = hent_skjema("centre") |> select(id,typeid) |>
