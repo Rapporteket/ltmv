@@ -90,6 +90,53 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     left_join(d_sykehus_rhf,
               by = "sykehusnavn")
 
+  d_totalt = d_aggregert |>
+    filter(sykehusnavn == 'Totalt') |>
+    select(-rhf)
+
+  d_hmn = d_aggregert |>
+      filter(rhf == (d_centretype |> filter(id == 3) |> pull(name))) |>
+      janitor::adorn_totals(where = 'row',name=(d_centretype |> filter(id == 3) |> pull(name))) |>
+      mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 3) |> pull(name)),0,1)) |>
+      arrange(prioritet, sykehusnavn) |>
+      select(-prioritet)
+
+
+  d_hn = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 4) |> pull(name))) |>
+    janitor::adorn_totals(where = 'row',name=(d_centretype |> filter(id == 4) |> pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 4) |> pull(name)),0,1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+  d_hso = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 1) |> pull(name))) |>
+    janitor::adorn_totals(where = 'row',name=(d_centretype |> filter(id == 1) |> pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 1) |> pull(name)),0,1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+  d_hv = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 2) |> pull(name))) |>
+    janitor::adorn_totals(where = 'row',name=(d_centretype |> filter(id == 2) |> pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 2) |> pull(name)),0,1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+  d_privat = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 7) |> pull(name))) |>
+    janitor::adorn_totals(where = 'row',name=(d_centretype |> filter(id == 7) |> pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 7) |> pull(name)),0,1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+  d_antall_skjema = d_hmn |>
+    bind_rows(d_hn) |>
+    bind_rows(d_hso) |>
+    bind_rows(d_hv) |>
+    bind_rows(d_privat) |>
+    select(-rhf) |>
+    bind_rows(d_totalt)
   if (nrow(d_antall_skjema) != 0) {
     formater_antall_skjema_tabell(d_antall_skjema)
   } else {
