@@ -83,9 +83,12 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     rename(rhf = name) |>
     select(sykehusnavn, rhf) |>
     distinct()
+
+  d_aggregert = aggreger_antall_skjema_tabell(d_skjemaoversikt,
     user_role = user_role,
-    resh_id = resh_id
-  )
+    resh_id = resh_id)|>
+    left_join(d_sykehus_rhf,
+              by = "sykehusnavn")
 
   if (nrow(d_antall_skjema) != 0) {
     formater_antall_skjema_tabell(d_antall_skjema)
