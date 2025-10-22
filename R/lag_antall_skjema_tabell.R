@@ -254,7 +254,9 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
     ) |>
     kableExtra::column_spec(seq(3, 13, 2), color = "red") |>
     kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) |>
-    kableExtra::row_spec(nrow(d_antall_skjema), bold = TRUE) |>
+    kableExtra::row_spec(c(nrow(d_antall_skjema),which(d_antall_skjema$sykehusnavn %in% (d_centretype |> pull(name)))),
+                         bold = TRUE,
+                         background = "#D5E0E9") |>
     kableExtra::column_spec(12:13, bold = TRUE)
 }
 
