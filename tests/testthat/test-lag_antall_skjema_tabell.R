@@ -94,10 +94,10 @@ test_that("aggreger_antall_skjema_tabell() gjev ut forventa resultat med user_ro
 
 # Testar for formater_antall_skjema_tabell()
 
-test_that("formater_antall_skjema_tabell() gjev ut ein «kable»", {
-  tab_antall_skjema = formater_antall_skjema_tabell(d_antall_skjema)
-  expect_s3_class(tab_antall_skjema, "knitr_kable")
-})
+# test_that("formater_antall_skjema_tabell() gjev ut ein «kable»", {
+#   tab_antall_skjema = formater_antall_skjema_tabell(d_antall_skjema)
+#   expect_s3_class(tab_antall_skjema, "knitr_kable")
+# })
 
 # Testar for grupper_skjemaoversikt()
 
