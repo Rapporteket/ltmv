@@ -242,6 +242,9 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
 #' ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
 #' }
 formater_antall_skjema_tabell = function(d_antall_skjema) {
+  d_centretype = hent_skjema("centretype") |>
+    select(id, name)
+
   d_antall_skjema |>
     knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) |>
     kableExtra::add_header_above(
