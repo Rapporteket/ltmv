@@ -100,38 +100,38 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     select(-rhf)
 
   d_hmn = d_aggregert |>
-    filter(rhf == (d_centretype |> filter(id == 3) |> pull(name))) |>
-    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 3) |> pull(name))) |>
-    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 3) |> pull(name)), 0, 1)) |>
+    filter(rhf == (d_centretype |> filter(id == 3) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 3) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 3) |> dplyr::pull(name)), 0, 1)) |>
     arrange(prioritet, sykehusnavn) |>
     select(-prioritet)
 
 
   d_hn = d_aggregert |>
-    filter(rhf == (d_centretype |> filter(id == 4) |> pull(name))) |>
-    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 4) |> pull(name))) |>
-    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 4) |> pull(name)), 0, 1)) |>
+    filter(rhf == (d_centretype |> filter(id == 4) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 4) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 4) |> dplyr::pull(name)), 0, 1)) |>
     arrange(prioritet, sykehusnavn) |>
     select(-prioritet)
 
   d_hso = d_aggregert |>
-    filter(rhf == (d_centretype |> filter(id == 1) |> pull(name))) |>
-    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 1) |> pull(name))) |>
-    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 1) |> pull(name)), 0, 1)) |>
+    filter(rhf == (d_centretype |> filter(id == 1) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 1) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 1) |> dplyr::pull(name)), 0, 1)) |>
     arrange(prioritet, sykehusnavn) |>
     select(-prioritet)
 
   d_hv = d_aggregert |>
-    filter(rhf == (d_centretype |> filter(id == 2) |> pull(name))) |>
-    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 2) |> pull(name))) |>
-    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 2) |> pull(name)), 0, 1)) |>
+    filter(rhf == (d_centretype |> filter(id == 2) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 2) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 2) |> dplyr::pull(name)), 0, 1)) |>
     arrange(prioritet, sykehusnavn) |>
     select(-prioritet)
 
   d_privat = d_aggregert |>
-    filter(rhf == (d_centretype |> filter(id == 7) |> pull(name))) |>
-    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 7) |> pull(name))) |>
-    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 7) |> pull(name)), 0, 1)) |>
+    filter(rhf == (d_centretype |> filter(id == 7) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 7) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 7) |> dplyr::pull(name)), 0, 1)) |>
     arrange(prioritet, sykehusnavn) |>
     select(-prioritet)
 
@@ -145,7 +145,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 
   if (user_role != "SC") {
     d_antall_skjema = d_antall_skjema |>
-      filter(!sykehusnavn %in% (d_centretype |> pull(name)))
+      filter(!sykehusnavn %in% (d_centretype |> dplyr::pull(name)))
   }
 
   if (nrow(d_antall_skjema) != 0) {
