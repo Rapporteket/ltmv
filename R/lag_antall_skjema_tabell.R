@@ -143,13 +143,17 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     select(-rhf) |>
     bind_rows(d_totalt)
 
+  nyenv = new.env()
+  lagre_rhf = function(env){ env$v_rhf <- d_centretype |> dplyr::pull(name)}
+  lagre_rhf(nyenv)
+
   if (user_role != "SC") {
     d_antall_skjema = d_antall_skjema |>
       filter(!sykehusnavn %in% (d_centretype |> dplyr::pull(name)))
   }
 
   if (nrow(d_antall_skjema) != 0) {
-    formater_antall_skjema_tabell(d_antall_skjema)
+    formater_antall_skjema_tabell(d_antall_skjema, nyenv)
   } else {
     htmltools::HTML("Ingen skjema for valgt datointervall.")
   }
@@ -241,9 +245,9 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
 #' d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
 #' ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
 #' }
-formater_antall_skjema_tabell = function(d_antall_skjema) {
-  d_centretype = hent_skjema("centretype") |>
-    select(id, name)
+formater_antall_skjema_tabell <- function(d_antall_skjema, env) {
+  # d_centretype <- hent_skjema("centretype") |>
+  #   select(id, name)
 
   d_antall_skjema |>
     knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) |>
@@ -264,7 +268,7 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
     ) |>
     kableExtra::column_spec(seq(3, 13, 2), color = "red") |>
     kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) |>
-    kableExtra::row_spec(c(nrow(d_antall_skjema), which(d_antall_skjema$sykehusnavn %in% (d_centretype |> dplyr::pull(name)))),
+    kableExtra::row_spec(c(nrow(d_antall_skjema), which(d_antall_skjema$sykehusnavn %in% env$v_rhf)),
       bold = TRUE,
       background = "#D5E0E9"
     ) |>
