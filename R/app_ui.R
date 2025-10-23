@@ -4,21 +4,13 @@
 #' @export
 
 app_ui = function() {
-  shiny::addResourcePath("rap", system.file("www", package = "rapbase"))
   app_title = "LTMV"
 
   shiny::tagList(
     shiny::navbarPage(
-      title = shiny::div(
-        shiny::a(
-          shiny::includeHTML(
-            system.file("www/logo.svg", package = "rapbase")
-          )
-        ),
-        app_title
-      ),
+      title = rapbase::title(app_title),
       windowTitle = app_title,
-      theme = "rap/bootstrap.css",
+      theme = rapbase::theme(),
       id = "tabs",
       shiny::tabPanel(
         "Dashboard",
