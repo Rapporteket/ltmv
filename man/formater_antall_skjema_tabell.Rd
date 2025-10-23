@@ -4,7 +4,7 @@
 \alias{formater_antall_skjema_tabell}
 \title{Formater antall skjema-tabell}
 \usage{
-formater_antall_skjema_tabell(d_antall_skjema)
+formater_antall_skjema_tabell(d_antall_skjema, env)
 }
 \arguments{
 \item{d_antall_skjema}{Dataramme frå \code{\link[=aggreger_antall_skjema_tabell]{aggreger_antall_skjema_tabell()}}.}
