@@ -3,7 +3,7 @@
 
 <!-- badges: start -->
 [![Version](https://img.shields.io/github/v/release/rapporteket/ltmv?sort=semver)](https://github.com/rapporteket/ltmv/releases)
-[![R build status](https://github.com/rapporteket/ltmv/workflows/R-CMD-check/badge.svg)](https://github.com/rapporteket/ltmv/actions)
+[![R-CMD-check](https://github.com/Rapporteket/ltmv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Rapporteket/ltmv/actions/workflows/R-CMD-check.yaml?query=branch%3Amain)
 [![Codecov test coverage](https://codecov.io/gh/Rapporteket/ltmv/branch/main/graph/badge.svg)](https://codecov.io/gh/Rapporteket/ltmv?branch=main)
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
