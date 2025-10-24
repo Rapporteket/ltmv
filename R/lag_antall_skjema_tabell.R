@@ -137,7 +137,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 
   if (user_role != "SC") {
     d_antall_skjema = d_antall_skjema |>
-      filter(!sykehusnavn %in% (d_centretype |> dplyr::pull(name)))
+      filter(!sykehusnavn %in% (d_centretype |> pull(name)))
   }
 
   if (nrow(d_antall_skjema) != 0) {
