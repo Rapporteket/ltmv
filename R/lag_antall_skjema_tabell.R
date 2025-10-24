@@ -130,8 +130,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
 
   nyenv = new.env()
   lagre_rhf = function(env) {
-    env$v_rhf = d_centretype |>
-      dplyr::pull(name)
+    env[["v_rhf"]] = d_centretype |>
+      pull(name)
   }
   lagre_rhf(nyenv)
 
@@ -146,7 +146,6 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     htmltools::HTML("Ingen skjema for valgt datointervall.")
   }
 }
-
 #' Lag dataramme med oversikt over ferdige og uferdige skjema på sjukehusnivå
 #'
 #' @description
@@ -210,7 +209,6 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
 
   d_antall_skjema
 }
-
 #' Formater antall skjema-tabell
 #'
 #' @description
@@ -253,13 +251,12 @@ formater_antall_skjema_tabell = function(d_antall_skjema, env) {
     ) |>
     kableExtra::column_spec(seq(3, 13, 2), color = "red") |>
     kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) |>
-    kableExtra::row_spec(c(nrow(d_antall_skjema), which(d_antall_skjema$sykehusnavn %in% env$v_rhf)),
+    kableExtra::row_spec(c(nrow(d_antall_skjema), which(d_antall_skjema[["sykehusnavn"]] %in% env[["v_rhf"]])),
       bold = TRUE,
       background = "#D5E0E9"
     ) |>
     kableExtra::column_spec(12:13, bold = TRUE)
 }
-
 #' Grupper skjemaoversikt
 #'
 #' @description
