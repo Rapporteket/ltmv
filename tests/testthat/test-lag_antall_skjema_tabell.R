@@ -95,7 +95,16 @@ test_that("aggreger_antall_skjema_tabell() gjev ut forventa resultat med user_ro
 # Testar for formater_antall_skjema_tabell()
 
 test_that("formater_antall_skjema_tabell() gjev ut ein «kable»", {
-  tab_antall_skjema = formater_antall_skjema_tabell(d_antall_skjema, env)
+  d_centretype <- hent_skjema("centretype") |>
+    select(id, name)
+
+  nyenv <- new.env()
+  lagre_rhf <- function(env) {
+    env$v_rhf <- d_centretype |> dplyr::pull(name)
+  }
+  lagre_rhf(nyenv)
+
+  tab_antall_skjema <- formater_antall_skjema_tabell(d_antall_skjema, nyenv)
   expect_s3_class(tab_antall_skjema, "knitr_kable")
 })
 
