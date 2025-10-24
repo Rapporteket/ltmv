@@ -102,14 +102,14 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
   sykehus_i_rhf = function(rhf_id) {
     d_aggregert |>
       filter(rhf == (d_centretype |>
-                       filter(id == rhf_id) |>
-                       pull(name))) |>
+        filter(id == rhf_id) |>
+        pull(name))) |>
       janitor::adorn_totals(where = "row", name = (d_centretype |>
-                                                     filter(id == rhf_id) |>
-                                                     pull(name))) |>
+        filter(id == rhf_id) |>
+        pull(name))) |>
       mutate(prioritet = if_else(sykehusnavn == (d_centretype |>
-                                                   filter(id == rhf_id) |>
-                                                   pull(name)), 0, 1)) |>
+        filter(id == rhf_id) |>
+        pull(name)), 0, 1)) |>
       arrange(prioritet, sykehusnavn) |>
       select(-prioritet)
   }
