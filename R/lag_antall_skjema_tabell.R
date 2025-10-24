@@ -66,13 +66,97 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
       aktiv_behandling %in% !!aktiv_behandling
     )
 
-  d_antall_skjema = aggreger_antall_skjema_tabell(d_skjemaoversikt,
+  d_centretype = hent_skjema("centretype") |>
+    select(id, name)
+
+  d_centre = hent_skjema("centre") |>
+    select(id, typeid) |>
+    mutate(id = as.integer(id))
+
+
+  d_sykehus_rhf = hent_skjema("skjemaoversikt") |>
+    mutate(avdresh = as.integer(avdresh)) |>
+    left_join(d_centre,
+      by = c("avdresh" = "id")
+    ) |>
+    left_join(d_centretype,
+      by = c("typeid" = "id"),
+      relationship = "many-to-one"
+    ) |>
+    rename(rhf = name) |>
+    select(sykehusnavn, rhf) |>
+    distinct()
+
+  d_aggregert = aggreger_antall_skjema_tabell(d_skjemaoversikt,
     user_role = user_role,
     resh_id = resh_id
-  )
+  ) |>
+    left_join(d_sykehus_rhf,
+      by = "sykehusnavn"
+    )
+
+  d_totalt = d_aggregert |>
+    filter(sykehusnavn == "Totalt") |>
+    select(-rhf)
+
+  d_hmn = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 3) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 3) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 3) |> dplyr::pull(name)), 0, 1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+
+  d_hn = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 4) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 4) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 4) |> dplyr::pull(name)), 0, 1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+  d_hso = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 1) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 1) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 1) |> dplyr::pull(name)), 0, 1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+  d_hv = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 2) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 2) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 2) |> dplyr::pull(name)), 0, 1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+  d_privat = d_aggregert |>
+    filter(rhf == (d_centretype |> filter(id == 7) |> dplyr::pull(name))) |>
+    janitor::adorn_totals(where = "row", name = (d_centretype |> filter(id == 7) |> dplyr::pull(name))) |>
+    mutate(prioritet = if_else(sykehusnavn == (d_centretype |> filter(id == 7) |> dplyr::pull(name)), 0, 1)) |>
+    arrange(prioritet, sykehusnavn) |>
+    select(-prioritet)
+
+  d_antall_skjema = d_hmn |>
+    bind_rows(d_hn) |>
+    bind_rows(d_hso) |>
+    bind_rows(d_hv) |>
+    bind_rows(d_privat) |>
+    select(-rhf) |>
+    bind_rows(d_totalt)
+
+  nyenv = new.env()
+  lagre_rhf = function(env) {
+    env$v_rhf = d_centretype |>
+      dplyr::pull(name)
+  }
+  lagre_rhf(nyenv)
+
+  if (user_role != "SC") {
+    d_antall_skjema = d_antall_skjema |>
+      filter(!sykehusnavn %in% (d_centretype |> dplyr::pull(name)))
+  }
 
   if (nrow(d_antall_skjema) != 0) {
-    formater_antall_skjema_tabell(d_antall_skjema)
+    formater_antall_skjema_tabell(d_antall_skjema, nyenv)
   } else {
     htmltools::HTML("Ingen skjema for valgt datointervall.")
   }
@@ -129,7 +213,7 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
     ) |>
     ungroup()
 
-  # Fjern attributt lagt til av janotor::adorn_totals()
+  # Fjern attributt lagt til av janitor::adorn_totals()
   attr(d_antall_skjema, "totals") = NULL
   attr(d_antall_skjema, "tabyl_type") = NULL
   attr(d_antall_skjema, "core") = NULL
@@ -164,7 +248,7 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
 #' d_antall_skjema = ltmv:::aggreger_antall_skjema_tabell(d_skjemaoversikt)
 #' ltmv:::formater_antall_skjema_tabell(d_antall_skjema)
 #' }
-formater_antall_skjema_tabell = function(d_antall_skjema) {
+formater_antall_skjema_tabell = function(d_antall_skjema, env) {
   d_antall_skjema |>
     knitr::kable("html", col.names = NULL, format.args = list(big.mark = " ")) |>
     kableExtra::add_header_above(
@@ -175,7 +259,7 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
     ) |>
     kableExtra::add_header_above(
       header = c(
-        "Sykehus",
+        "RHF/Sykehus",
         `Registrering år 0` = 2,
         `Oppfølging år 1` = 2, `Oppfølging år 3` = 2,
         `Videre oppfølging\n(år 5+ og AdHoc)` = 2, Avslutning = 2,
@@ -184,7 +268,10 @@ formater_antall_skjema_tabell = function(d_antall_skjema) {
     ) |>
     kableExtra::column_spec(seq(3, 13, 2), color = "red") |>
     kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) |>
-    kableExtra::row_spec(nrow(d_antall_skjema), bold = TRUE) |>
+    kableExtra::row_spec(c(nrow(d_antall_skjema), which(d_antall_skjema$sykehusnavn %in% env$v_rhf)),
+      bold = TRUE,
+      background = "#D5E0E9"
+    ) |>
     kableExtra::column_spec(12:13, bold = TRUE)
 }
 
