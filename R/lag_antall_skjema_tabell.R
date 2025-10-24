@@ -215,6 +215,10 @@ aggreger_antall_skjema_tabell = function(d_skjemaoversikt, user_role, resh_id) {
 #' @param d_antall_skjema
 #' Dataramme frå [aggreger_antall_skjema_tabell()].
 #'
+#' @param v_rhf
+#' Karakter vektor med navn til RHF-ene som de står i tabellen "centretype" fra
+#' ltmv-database.
+#'
 #' @return
 #' `d_antall_skjema` formatert som HTML-tabell,
 #' med samlande overskrifter, hover-effekt og så vidare.
