@@ -93,21 +93,16 @@ test_that("aggreger_antall_skjema_tabell() gjev ut forventa resultat med user_ro
 })
 
 # Testar for formater_antall_skjema_tabell()
-
 test_that("formater_antall_skjema_tabell() gjev ut ein «kable»", {
+  v_rhf = c(
+    "HELSE SØR-ØST RHF",
+    "HELSE VEST RHF",
+    "HELSE MIDT-NORGE RHF",
+    "HELSE NORD RHF",
+    "PRIVAT/IDEELL ORGANISASJON"
+  )
 
-
-  nyenv = new.env()
-  lagre_rhf = function(env) {
-    env$v_rhf = c("HELSE SØR-ØST RHF",
-                  "HELSE VEST RHF",
-                  "HELSE MIDT-NORGE RHF",
-                  "HELSE NORD RHF",
-                  "PRIVAT/IDEELL ORGANISASJON")
-  }
-  lagre_rhf(nyenv)
-
-  tab_antall_skjema = formater_antall_skjema_tabell(d_antall_skjema, nyenv)
+  tab_antall_skjema = formater_antall_skjema_tabell(d_antall_skjema, v_rhf)
   expect_s3_class(tab_antall_skjema, "knitr_kable")
 })
 
