@@ -8,6 +8,9 @@ formater_antall_skjema_tabell(d_antall_skjema, v_rhf)
 }
 \arguments{
 \item{d_antall_skjema}{Dataramme frå \code{\link[=aggreger_antall_skjema_tabell]{aggreger_antall_skjema_tabell()}}.}
+
+\item{v_rhf}{Karakter vektor med navn til RHF-ene som de står i tabellen "centretype" fra
+ltmv-database.}
 }
 \value{
 \code{d_antall_skjema} formatert som HTML-tabell,
