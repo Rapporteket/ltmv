@@ -100,19 +100,18 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     select(-rhf)
 
   sykehus_i_rhf = function(rhf_id) {
+    rhf_et = d_centretype |>
+      filter(id == rhf_id) |>
+      dplyr::pull(name)
+
     d_aggregert |>
-      filter(rhf == (d_centretype |>
-        filter(id == rhf_id) |>
-        pull(name))) |>
-      janitor::adorn_totals(where = "row", name = (d_centretype |>
-        filter(id == rhf_id) |>
-        pull(name))) |>
-      mutate(prioritet = if_else(sykehusnavn == (d_centretype |>
-        filter(id == rhf_id) |>
-        pull(name)), 0, 1)) |>
-      arrange(prioritet, sykehusnavn) |>
+      filter(rhf == !!rhf_et) |>
+      janitor::adorn_totals(where = "row", name = rhf_et) |>
+      mutate(prioritet = sykehusnavn == !!rhf_et) |>
+      arrange(desc(prioritet), sykehusnavn) |>
       select(-prioritet)
   }
+
 
   d_hmn = sykehus_i_rhf(3)
   d_hn = sykehus_i_rhf(4)
