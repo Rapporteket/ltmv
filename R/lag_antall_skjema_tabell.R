@@ -77,10 +77,10 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
   d_sykehus_rhf = hent_skjema("skjemaoversikt") |>
     mutate(avdresh = as.integer(avdresh)) |>
     left_join(d_centre,
-      by = c("avdresh" = "id")
+      by = join_by(avdresh == id)
     ) |>
     left_join(d_centretype,
-      by = c("typeid" = "id"),
+      by = join_by(typeid == id),
       relationship = "many-to-one"
     ) |>
     rename(rhf = name) |>
@@ -92,7 +92,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
     resh_id = resh_id
   ) |>
     left_join(d_sykehus_rhf,
-      by = "sykehusnavn"
+      by = join_by(sykehusnavn)
     )
 
   d_totalt = d_aggregert |>
@@ -341,5 +341,5 @@ grupper_skjemaoversikt = function(d_skjemaoversikt) {
         false = skjema_gruppe_nr
       )
     ) |>
-    left_join(d_skjema_grupper, by = "skjema_gruppe_nr")
+    left_join(d_skjema_grupper, by = join_by(skjema_gruppe_nr))
 }
