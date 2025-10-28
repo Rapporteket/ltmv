@@ -9,7 +9,9 @@
 #' @param til
 #' Dato. Skjema til og med denne datoen skal inkluderast.
 #' @param alderkategori
-#' Tekstvektor. Éin eller fleire av verdiane "barn", "voksen" og NA_character.
+#' Tekstvektor for alderkategori ved start. Éin eller fleire av verdiane "barn", "voksen" og NA_character.
+#' @param alderkategori_naa
+#' Tekstvektor for alderkategori nå. Éin eller fleire av verdiane "barn", "voksen" og NA_character.
 #' @param kjonn
 #' Numerisk vektor. Éin eller fleire av verdiane 1, 2, NA_real_.
 #' 1 er mann, 2 er kvinne.
@@ -33,7 +35,8 @@
 #' lag_datasett_dashboard(
 #'   fra = "2020-01-01",
 #'   til = "2023-01-01",
-#'   alderkategori = "voksen",
+#'   alderkategori = "barn"
+#'   alderkategori_naa = "voksen",
 #'   kjonn = c(1, 2, NA_real_),
 #'   inkluder_missing = TRUE,
 #'   resh_id = 99999,
