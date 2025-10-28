@@ -26,7 +26,7 @@ app_server = function(input, output, session) {
     lag_datasett_dashboard(
       fra = input$dato_dashboard[1],
       til = input$dato_dashboard[2],
-      alderkat = input$alderkat_dashboard,
+      alderkategori = input$alderkat_dashboard,
       alderkategori_naa = input$alderkat_naa_dashboard,
       kjonn = input$kjonn,
       inkluder_missing = input$inkluder_missing,
