@@ -46,6 +46,7 @@
 lag_datasett_dashboard = function(fra,
                                   til,
                                   alderkategori,
+                                  alderkategori_naa,
                                   kjonn,
                                   inkluder_missing,
                                   resh_id,
