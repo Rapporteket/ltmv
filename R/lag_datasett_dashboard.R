@@ -67,11 +67,6 @@ lag_datasett_dashboard = function(fra,
         ),
         unit = "years"
       ),
-      alderkat_no = dplyr::case_when(
-        alder_no >= 18 ~ "voksen",
-        alder_no < 18 ~ "barn",
-        TRUE ~ "NA"
-      )
     ) |>
     filter(
       start_date >= !!fra | (is.na(start_date) & inkluder_missing),
@@ -80,6 +75,10 @@ lag_datasett_dashboard = function(fra,
         alderkat_no %in% !!alderkategori_naa |
         (is.na(alderkat) & "" %in% !!alderkategori),
       gender %in% !!kjonn | (is.na(gender) & "" %in% !!kjonn)
+    alderkat_no = case_when(
+      alder_no >= 18 ~ "voksen",
+      alder_no < 18 ~ "barn",
+      TRUE ~ "NA"
     )
 
   if (user_role != "SC") {
