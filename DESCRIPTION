@@ -58,7 +58,7 @@ Imports:
     qicharts2
 Remotes:
     Rapporteket/rapbase@main,
-    Rapporteket/rapwhale
+    Rapporteket/rapwhale@main
 Suggests: 
     covr,
     lintr,
