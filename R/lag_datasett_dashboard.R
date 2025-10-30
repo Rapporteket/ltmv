@@ -51,35 +51,37 @@ lag_datasett_dashboard = function(fra,
                                   inkluder_missing,
                                   resh_id,
                                   user_role) {
-  d_dashboard = hent_skjema("ventreg") |>
-    legg_til_pasientid(mceid) |>
-    legg_til_pasientinfo(patient_id) |>
-    legg_til_alder_og_kategori(birth_date, start_date) |>
-    legg_til_stoppinfo(mceid) |>
-    legg_til_aktiv_behandling() |>
-    legg_til_hf_rhf_navn() |>
-    legg_til_overordnet_diag() |>
-    mutate(
-      alder_no = lubridate::time_length(
-        x = lubridate::interval(
-          start = birth_date,
-          end = Sys.Date()
-        ),
-        unit = "years"
+  d_dashboard <- hent_skjema("ventreg") |>
+  legg_til_pasientid(mceid) |>
+  legg_til_pasientinfo(patient_id) |>
+  legg_til_alder_og_kategori(birth_date, start_date) |>
+  legg_til_stoppinfo(mceid) |>
+  legg_til_aktiv_behandling() |>
+  legg_til_hf_rhf_navn() |>
+  legg_til_overordnet_diag() |>
+  mutate(
+    alder_no = lubridate::time_length(
+      x = lubridate::interval(
+        start = birth_date,
+        end = Sys.Date()
       ),
-    ) |>
-    filter(
-      start_date >= !!fra | (is.na(start_date) & inkluder_missing),
-      start_date <= !!til | (is.na(start_date) & inkluder_missing),
-      alderkat %in% !!alderkategori &
-        alderkat_no %in% !!alderkategori_naa |
-        (is.na(alderkat) & "" %in% !!alderkategori),
-      gender %in% !!kjonn | (is.na(gender) & "" %in% !!kjonn)
+      unit = "years"
+    ),
     alderkat_no = case_when(
       alder_no >= 18 ~ "voksen",
       alder_no < 18 ~ "barn",
       TRUE ~ "NA"
     )
+  ) |>
+  filter(
+    start_date >= !!fra | (is.na(start_date) & inkluder_missing),
+    start_date <= !!til | (is.na(start_date) & inkluder_missing),
+    alderkat %in% !!alderkategori |
+      (is.na(alderkat) & "" %in% !!alderkategori),
+    alderkat_no %in% !!alderkategori_naa |
+      (is.na(alderkat_no) & "" %in% !!alderkategori_naa),
+    gender %in% !!kjonn | (is.na(gender) & "" %in% !!kjonn)
+  )
 
   if (user_role != "SC") {
     d_dashboard = filter(d_dashboard, centreid == !!resh_id)
