@@ -8,6 +8,7 @@ lag_datasett_dashboard(
   fra,
   til,
   alderkategori,
+  alderkategori_naa,
   kjonn,
   inkluder_missing,
   resh_id,
@@ -19,7 +20,9 @@ lag_datasett_dashboard(
 
 \item{til}{Dato. Skjema til og med denne datoen skal inkluderast.}
 
-\item{alderkategori}{Tekstvektor. Éin eller fleire av verdiane "barn", "voksen" og NA_character.}
+\item{alderkategori}{Tekstvektor for alderkategori ved start. Éin eller fleire av verdiane "barn", "voksen" og NA_character.}
+
+\item{alderkategori_naa}{Tekstvektor for alderkategori nå. Éin eller fleire av verdiane "barn", "voksen" og NA_character.}
 
 \item{kjonn}{Numerisk vektor. Éin eller fleire av verdiane 1, 2, NA_real_.
 1 er mann, 2 er kvinne.}
@@ -45,7 +48,8 @@ til kvar rad, og gjer datasettet klart til bruk i dashboardet.
 lag_datasett_dashboard(
   fra = "2020-01-01",
   til = "2023-01-01",
-  alderkategori = "voksen",
+  alderkategori = "barn"
+  alderkategori_naa = "voksen",
   kjonn = c(1, 2, NA_real_),
   inkluder_missing = TRUE,
   resh_id = 99999,

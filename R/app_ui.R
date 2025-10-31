@@ -36,6 +36,12 @@ app_ui = function() {
               selected = c("barn", "voksen", NA),
               inline = TRUE
             ),
+            shiny::checkboxGroupInput("alderkat_naa_dashboard",
+              label = "Alder nå:",
+              choices = c(Barn = "barn", Voksen = "voksen", Ukjent = NA),
+              selected = c("barn", "voksen", NA),
+              inline = TRUE
+            ),
             shiny::checkboxGroupInput("kjonn",
               label = "Kjønn:",
               choices = c(Mann = 1, Kvinne = 2, Ukjent = NA),

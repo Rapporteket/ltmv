@@ -9,7 +9,9 @@
 #' @param til
 #' Dato. Skjema til og med denne datoen skal inkluderast.
 #' @param alderkategori
-#' Tekstvektor. Éin eller fleire av verdiane "barn", "voksen" og NA_character.
+#' Tekstvektor for alderkategori ved start. Éin eller fleire av verdiane "barn", "voksen" og NA_character.
+#' @param alderkategori_naa
+#' Tekstvektor for alderkategori nå. Éin eller fleire av verdiane "barn", "voksen" og NA_character.
 #' @param kjonn
 #' Numerisk vektor. Éin eller fleire av verdiane 1, 2, NA_real_.
 #' 1 er mann, 2 er kvinne.
@@ -33,7 +35,8 @@
 #' lag_datasett_dashboard(
 #'   fra = "2020-01-01",
 #'   til = "2023-01-01",
-#'   alderkategori = "voksen",
+#'   alderkategori = "barn",
+#'   alderkategori_naa = "voksen",
 #'   kjonn = c(1, 2, NA_real_),
 #'   inkluder_missing = TRUE,
 #'   resh_id = 99999,
@@ -43,6 +46,7 @@
 lag_datasett_dashboard = function(fra,
                                   til,
                                   alderkategori,
+                                  alderkategori_naa,
                                   kjonn,
                                   inkluder_missing,
                                   resh_id,
@@ -62,6 +66,11 @@ lag_datasett_dashboard = function(fra,
           end = Sys.Date()
         ),
         unit = "years"
+      ),
+      alderkat_no = case_when(
+        alder_no >= 18 ~ "voksen",
+        alder_no < 18 ~ "barn",
+        TRUE ~ "NA"
       )
     ) |>
     filter(
@@ -69,6 +78,8 @@ lag_datasett_dashboard = function(fra,
       start_date <= !!til | (is.na(start_date) & inkluder_missing),
       alderkat %in% !!alderkategori |
         (is.na(alderkat) & "" %in% !!alderkategori),
+      alderkat_no %in% !!alderkategori_naa |
+        (is.na(alderkat_no) & "" %in% !!alderkategori_naa),
       gender %in% !!kjonn | (is.na(gender) & "" %in% !!kjonn)
     )
 
