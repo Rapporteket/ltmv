@@ -97,6 +97,15 @@ app_server = function(input, output, session) {
     )
   })
 
+  observeEvent(input$forste_aar_knapp, {
+    updateDateRangeInput(
+      session = session,
+      inputId = "dato_antall_skjema",
+      start = "2014-01-01",
+      end = lubridate::today() - lubridate::years(1)
+    )
+  })
+
   observeEvent(input$innevarende_aar_knapp, {
     updateDateRangeInput(
       session = session,
