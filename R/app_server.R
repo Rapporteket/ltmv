@@ -103,7 +103,7 @@ app_server = function(input, output, session) {
       session = session,
       inputId = "dato_antall_skjema",
       start = "2014-01-01",
-      end = lubridate::today() - lubridate::years(1)
+      end = dagens_dato - lubridate::years(1)
     )
   })
 
