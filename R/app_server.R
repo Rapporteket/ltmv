@@ -97,7 +97,7 @@ app_server = function(input, output, session) {
     )
   })
 
-  observeEvent(input$forste_aar_knapp, {
+  observeEvent(input$eldre_enn_ett_aar, {
     updateDateRangeInput(
       session = session,
       inputId = "dato_antall_skjema",
