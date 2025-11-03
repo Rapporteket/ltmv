@@ -48,7 +48,7 @@ til kvar rad, og gjer datasettet klart til bruk i dashboardet.
 lag_datasett_dashboard(
   fra = "2020-01-01",
   til = "2023-01-01",
-  alderkategori = "barn"
+  alderkategori = "barn",
   alderkategori_naa = "voksen",
   kjonn = c(1, 2, NA_real_),
   inkluder_missing = TRUE,
