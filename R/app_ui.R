@@ -95,7 +95,7 @@ app_ui = function() {
                 separator = " til "
               ),
               shiny::actionButton("alle_datoer_knapp", "Alt"),
-              shiny::actionButton("forste_aar_knapp", "> 1 år"),
+              shiny::actionButton("eldre_enn_ett_aar", "> 1 år"),
               shiny::actionButton("innevarende_aar_knapp", "Inneværende år"),
               htmltools::br(), htmltools::br(),
               shiny::actionButton("tretti_dager_knapp", "Siste 30 dager"),
