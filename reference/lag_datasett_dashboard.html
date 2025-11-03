@@ -59,6 +59,7 @@ til kvar rad, og gjer datasettet klart til bruk i dashboardet.</p>
 <span>  <span class="va">fra</span>,</span>
 <span>  <span class="va">til</span>,</span>
 <span>  <span class="va">alderkategori</span>,</span>
+<span>  <span class="va">alderkategori_naa</span>,</span>
 <span>  <span class="va">kjonn</span>,</span>
 <span>  <span class="va">inkluder_missing</span>,</span>
 <span>  <span class="va">resh_id</span>,</span>
@@ -79,7 +80,11 @@ til kvar rad, og gjer datasettet klart til bruk i dashboardet.</p>
 
 
 <dt id="arg-alderkategori">alderkategori<a class="anchor" aria-label="anchor" href="#arg-alderkategori"></a></dt>
-<dd><p>Tekstvektor. Éin eller fleire av verdiane "barn", "voksen" og NA_character.</p></dd>
+<dd><p>Tekstvektor for alderkategori ved start. Éin eller fleire av verdiane "barn", "voksen" og NA_character.</p></dd>
+
+
+<dt id="arg-alderkategori-naa">alderkategori_naa<a class="anchor" aria-label="anchor" href="#arg-alderkategori-naa"></a></dt>
+<dd><p>Tekstvektor for alderkategori nå. Éin eller fleire av verdiane "barn", "voksen" og NA_character.</p></dd>
 
 
 <dt id="arg-kjonn">kjonn<a class="anchor" aria-label="anchor" href="#arg-kjonn"></a></dt>
@@ -113,7 +118,8 @@ til bruk i dashboardvisinga.</p>
 <span class="r-in"><span><span class="fu">lag_datasett_dashboard</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  fra <span class="op">=</span> <span class="st">"2020-01-01"</span>,</span></span>
 <span class="r-in"><span>  til <span class="op">=</span> <span class="st">"2023-01-01"</span>,</span></span>
-<span class="r-in"><span>  alderkategori <span class="op">=</span> <span class="st">"voksen"</span>,</span></span>
+<span class="r-in"><span>  alderkategori <span class="op">=</span> <span class="st">"barn"</span>,</span></span>
+<span class="r-in"><span>  alderkategori_naa <span class="op">=</span> <span class="st">"voksen"</span>,</span></span>
 <span class="r-in"><span>  kjonn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="cn">NA_real_</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  inkluder_missing <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  resh_id <span class="op">=</span> <span class="fl">99999</span>,</span></span>
