@@ -26,6 +26,8 @@ app_ui = function() {
               weekstart = 1,
               separator = " til "
             ),
+            shiny::actionButton("to_aar_knapp", "Siste 2 år"),
+            shiny::actionButton("fem_aar_knapp", "Siste 5 år"),
             shiny::checkboxInput("inkluder_missing",
               label = "Inkluder manglende startdato",
               value = TRUE

@@ -88,6 +88,23 @@ app_server = function(input, output, session) {
 
   dagens_dato = lubridate::today()
 
+  observeEvent(input$to_aar_knapp, {
+    updateDateRangeInput(
+      session = session,
+      inputId = "dato_dashboard",
+      start = lubridate::today() - lubridate::years(2),
+      end = dagens_dato
+    )
+  })
+
+  observeEvent(input$fem_aar_knapp, {
+    updateDateRangeInput(
+      session = session,
+      inputId = "dato_dashboard",
+      start = lubridate::today() - lubridate::years(5),
+      end = dagens_dato
+    )
+  })
   observeEvent(input$alle_datoer_knapp, {
     updateDateRangeInput(
       session = session,
