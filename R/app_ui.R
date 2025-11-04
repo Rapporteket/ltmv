@@ -97,7 +97,6 @@ app_ui = function() {
               shiny::actionButton("alle_datoer_knapp", "Alt"),
               shiny::actionButton("eldre_enn_ett_aar", "> 1 år"),
               shiny::actionButton("innevarende_aar_knapp", "Inneværende år"),
-              htmltools::br(), htmltools::br(),
               shiny::actionButton("tretti_dager_knapp", "Siste 30 dager"),
               shiny::actionButton("syv_dager_knapp", "Siste 7 dager"),
               shiny::checkboxGroupInput("alderkat",
