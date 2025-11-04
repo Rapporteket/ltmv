@@ -104,3 +104,13 @@ superbreitt_format = function(d_full_patientlist,
     select(-parent_mce) |>
     relocate(patient_id, starts_with("p_"))
 }
+
+sjekk_duplikat = function(d, aar) {
+  if (n_distinct(d$parent_mce) < nrow(d)) {
+    warning("Det finst registreringsskjema med fleire ", aar, "-års-oppfølgingsskjema")
+    # Øvste skjema når det finst fleire
+    distinct(d, parent_mce, .keep_all = TRUE)
+  } else {
+    d
+  }
+}
