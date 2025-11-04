@@ -28,7 +28,6 @@ app_ui = function() {
             ),
             shiny::actionButton("vise_alt", "Alt"),
             shiny::actionButton("to_aar_knapp", "Siste 2 år"),
-            htmltools::br(), htmltools::br(),
             shiny::actionButton("fem_aar_knapp", "Siste 5 år"),
             shiny::checkboxInput("inkluder_missing",
               label = "Inkluder manglende startdato",
