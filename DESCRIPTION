@@ -42,7 +42,7 @@ Imports:
     lubridate,
     shiny,
     rapbase (>= 2.4.0),
-    rapwhale,
+    rapwhale (>= 0.5.1),
     rlang,
     readxl,
     tibble,
