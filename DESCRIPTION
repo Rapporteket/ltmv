@@ -41,7 +41,7 @@ Imports:
     ggplot2,
     lubridate,
     shiny,
-    rapbase,
+    rapbase (>= 2.4.0),
     rapwhale,
     rlang,
     readxl,
