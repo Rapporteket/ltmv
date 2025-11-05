@@ -5,8 +5,9 @@
 #' og lagar eit P-diagram med andel pasientar som har fått målt
 #' blodgass per `tidseining`.
 #'
-#' @param d_ventreg
-#' Dataramme med oppstartsskjema.
+#' @param d_ki_superbreitt
+#' Dataramme på superbredt format som inneholder oppstartsskjema (ventreg)
+#' med variabelnavn r_{variabel}, og oppfølingsskjema.
 #' @param tidseining
 #' Tekstring med tidseining for SPC-diagrammet som vert laga.
 #' Sjå argumentet `unit` i [lubridate::floor_date()] for detaljar om
@@ -20,12 +21,20 @@
 #'
 #' @examples
 #' \dontrun{
-#' d_ventreg = hent_skjema("ventreg") |>
-#'   dplyr::filter(lubridate::year(start_date) >= 2019)
+#' d_superbreitt = superbreitt_format(
+#'   d_full_patientlist = hent_skjema("patient"),
+#'   d_full_mce = hent_skjema("mce"),
+#'   d_full_ventreg = hent_skjema("ventreg"),
+#'   d_full_ventfol = hent_skjema("ventfol"),
+#'   d_full_conclude = hent_skjema("conclude")
+#' ) |>
+#'   dplyr::filter(
+#'     lubridate::year(start_date) >= format(Sys.Date() - years(6), "%Y")
+#'   )
 #'
-#' lag_spcfigur_ki_blodgass(d_ventreg)
+#' lag_spcfigur_ki_blodgass(d_superbreitt)
 #'
-#' lag_spcfigur_ki_blodgass(d_ventreg, tidseining = "year")
+#' lag_spcfigur_ki_blodgass(d_superbreitt, tidseining = "year")
 #' }
 lag_spcfigur_ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, tidseining = "month") {
   ki_blodgass_forste_aar = d_full_reg_forste_aar_ahoc |>
