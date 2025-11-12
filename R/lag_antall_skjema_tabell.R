@@ -113,16 +113,16 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, r
   }
 
 
-  d_hmn = sykehus_i_rhf(3)
   d_hn = sykehus_i_rhf(4)
-  d_hso = sykehus_i_rhf(1)
+  d_hmn = sykehus_i_rhf(3)
   d_hv = sykehus_i_rhf(2)
+  d_hso = sykehus_i_rhf(1)
   d_privat = sykehus_i_rhf(7)
 
-  d_antall_skjema = d_hmn |>
-    bind_rows(d_hn) |>
-    bind_rows(d_hso) |>
+  d_antall_skjema = d_hn |>
+    bind_rows(d_hmn) |>
     bind_rows(d_hv) |>
+    bind_rows(d_hso) |>
     bind_rows(d_privat) |>
     select(-rhf) |>
     bind_rows(d_totalt)
