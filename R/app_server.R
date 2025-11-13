@@ -207,5 +207,5 @@ app_server = function(input, output, session) {
 
   # export
   rapbase::exportGuideServer("ltmv-export", registry_name)
-  rapbase::exportUCServer("ltmv-export", registryName = "data", repoName = "ltmv")
+  rapbase::exportUCServer("ltmv-export", dbName = "data", teamName = "ltmv")
 }
