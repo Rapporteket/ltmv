@@ -22,6 +22,9 @@ app_server = function(input, output, session) {
     select(UnitId = id, orgname = centrename)
   user = rapbase::navbarWidgetServer2("ltmv-navbar-widget", "ltmv", caller = "ltmv", map_orgname = map_orgname)
 
+  v_rhf = hent_skjema("centretype") |>
+    pull(name)
+
   d_dashboard = shiny::reactive({
     lag_datasett_dashboard(
       fra = input$dato_dashboard[1],
