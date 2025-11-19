@@ -152,6 +152,24 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
   v_rhf = d_centretype |>
     pull(name)
 
+  if (user_role == "SC") {
+    for (reg_foretak in v_rhf) {
+      if (!reg_foretak %in% rhf_utvalg) {
+        d_antall_skjema =  filter(d_antall_skjema, rhf != reg_foretak)
+      }
+    }
+    d_totalt = d_aggregert |>
+      filter(rhf %in% rhf_utvalg) |>
+      janitor::adorn_totals(where = "row", name = "Totalt") |>
+      filter(sykehusnavn == "Totalt") |>
+      select(-rhf) |>
+      mutate(across(all_of(colnames(select(d_aggregert, -rhf, -sykehusnavn))), as.numeric))
+
+    d_antall_skjema = d_antall_skjema |>
+      select(-rhf) |>
+      bind_rows(d_totalt)
+  }
+
   if (user_role != "SC") {
     d_antall_skjema = d_antall_skjema |>
       filter(!sykehusnavn %in% (d_centretype |> pull(name)))
