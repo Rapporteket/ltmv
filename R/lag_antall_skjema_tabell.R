@@ -332,7 +332,7 @@ formater_antall_skjema_tabell = function(d_antall_skjema, v_rhf) {
     ) |>
     kableExtra::add_header_above(
       header = c(
-        "RHF/Sykehus",
+        "Enhet",
         `Registrering år 0` = 2,
         `Oppfølging år 1` = 2, `Oppfølging år 3` = 2,
         `Videre oppfølging\n(år 5+ og AdHoc)` = 2, Avslutning = 2,
@@ -341,7 +341,7 @@ formater_antall_skjema_tabell = function(d_antall_skjema, v_rhf) {
     ) |>
     kableExtra::column_spec(seq(3, 13, 2), color = "red") |>
     kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) |>
-    kableExtra::row_spec(c(nrow(d_antall_skjema), which(d_antall_skjema[["sykehusnavn"]] %in% v_rhf)),
+    kableExtra::row_spec(c(nrow(d_antall_skjema), which(d_antall_skjema[["enhet"]] %in% v_rhf)),
       bold = TRUE,
       background = "#D5E0E9"
     ) |>
