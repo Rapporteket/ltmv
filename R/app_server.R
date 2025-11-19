@@ -175,6 +175,40 @@ app_server = function(input, output, session) {
     )
   })
 
+  output$utvalgte_rhf = renderUI({
+    if (user$role() == "SC") {
+      shiny::checkboxGroupInput("rhf_utvalgt",
+        label = "Utvalgte RHF:",
+        choices = v_rhf,
+        selected = v_rhf
+      )
+    } else {
+      NULL
+    }
+  })
+
+  output$rhf = renderUI({
+    if (user$role() == "SC") {
+      shiny::checkboxInput("kun_rhf",
+        label = tags$strong("Vis kun RHF"),
+        value = FALSE
+      )
+    } else {
+      NULL
+    }
+  })
+
+  output$hf = renderUI({
+    if (user$role() == "SC") {
+      shiny::checkboxInput("kun_hf",
+        label = tags$strong("Vis per HF"),
+        value = FALSE
+      )
+    } else {
+      NULL
+    }
+  })
+
 
   # dummy report and orgs to subscribe and dispatch
   orgs = list(
