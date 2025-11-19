@@ -209,6 +209,18 @@ app_server = function(input, output, session) {
     }
   })
 
+  observeEvent(input$kun_rhf, {
+    if (isTRUE(input$kun_rhf)) {
+      updateCheckboxInput(session, "kun_hf", value = FALSE)
+    }
+  })
+
+  observeEvent(input$kun_hf, {
+    if (isTRUE(input$kun_hf)) {
+      updateCheckboxInput(session, "kun_rhf", value = FALSE)
+    }
+  })
+
 
   # dummy report and orgs to subscribe and dispatch
   orgs = list(
