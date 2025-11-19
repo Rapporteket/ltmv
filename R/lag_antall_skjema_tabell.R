@@ -56,8 +56,10 @@
 #'   user_role = "SC",
 #'   vis_hf = FALSE,
 #'   vis_rhf = FALSE,
-#'   rhf_utvalg = c ("HELSE SØR-ØST RHF", "HELSE VEST RHF", "HELSE MIDT-NORGE RHF",
-#'          "HELSE NORD RHF", "PRIVAT/IDEELL ORGANISASJON")
+#'   rhf_utvalg = c(
+#'     "HELSE SØR-ØST RHF", "HELSE VEST RHF", "HELSE MIDT-NORGE RHF",
+#'     "HELSE NORD RHF", "PRIVAT/IDEELL ORGANISASJON"
+#'   )
 #' )
 #' }
 lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
@@ -91,8 +93,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
     mutate(belongsto = if_else(is.na(belongsto), id, belongsto))
 
   d_hf_id = d_belongsto_fylt |>
-        select(-belongsto) |>
-        rename(hf = centrename)
+    select(-belongsto) |>
+    rename(hf = centrename)
 
   d_centre_hf = d_belongsto_fylt |>
     left_join(d_hf_id,
@@ -153,7 +155,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
   if (user_role == "SC") {
     for (reg_foretak in v_rhf) {
       if (!reg_foretak %in% rhf_utvalg) {
-        d_antall_skjema =  filter(d_antall_skjema, rhf != reg_foretak)
+        d_antall_skjema = filter(d_antall_skjema, rhf != reg_foretak)
       }
     }
     d_totalt = d_aggregert |>
