@@ -173,9 +173,14 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
   d_hf_rhf = d_centre_hf |>
     left_join(d_sykehus_rhf, by = join_by(centrename == sykehusnavn)) |>
     drop_na()
+
   if (user_role != "SC") {
     d_antall_skjema = d_antall_skjema |>
-      filter(!sykehusnavn %in% (d_centretype |> pull(name)))
+      select(-rhf) |>
+      filter(!sykehusnavn %in% (pull(d_centretype, name))) |>
+      rename(enhet = sykehusnavn)
+  }
+
   hf_per_rhf = function(v_rhf_indx) {
     d_hf_rhf |>
       filter(rhf == v_rhf[v_rhf_indx]) |>
