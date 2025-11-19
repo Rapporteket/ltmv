@@ -115,9 +115,9 @@ app_ui = function() {
                                         inline = TRUE
               ),
 
-              uiOutput("utvalgte_rhf"),
-              uiOutput("rhf"),
-              uiOutput("hf"),
+              shiny::uiOutput("utvalgte_rhf"),
+              shiny::uiOutput("rhf"),
+              shiny::uiOutput("hf"),
 
               width = 3
             ),
