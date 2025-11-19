@@ -147,9 +147,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
     bind_rows(d_hmn) |>
     bind_rows(d_hv) |>
     bind_rows(d_hso) |>
-    bind_rows(d_privat) |>
-    select(-rhf) |>
-    bind_rows(d_totalt)
+    bind_rows(d_privat)
 
   v_rhf = d_centretype |>
     pull(name)
