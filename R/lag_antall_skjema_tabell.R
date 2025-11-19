@@ -215,6 +215,17 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
   } else if (user_role == "SC" && !vis_hf) {
     d_antall_skjema = rename(d_antall_skjema, enhet = sykehusnavn)
   }
+
+  if (user_role == "SC" && !vis_hf && vis_rhf) {
+    attr(d_antall_skjema, "totals") = NULL
+
+    d_antall_skjema = d_antall_skjema |>
+      filter(grepl("RHF", enhet, fixed = TRUE)) |>
+      filter(enhet != "Totalt") |>
+      janitor::adorn_totals(where = "row", name = "Totalt")
+  }
+
+
   if (nrow(d_antall_skjema) != 0) {
     formater_antall_skjema_tabell(d_antall_skjema, v_rhf)
   } else {
