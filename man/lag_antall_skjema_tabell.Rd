@@ -10,7 +10,10 @@ lag_antall_skjema_tabell(
   alderkategori,
   aktiv_behandling,
   resh_id,
-  user_role
+  user_role,
+  vis_hf,
+  vis_rhf,
+  rhf_utvalg
 )
 }
 \arguments{
@@ -28,6 +31,13 @@ Skjema oppretta til og med denne datoen vert inkludert.}
 
 \item{user_role}{Tekststreng med rolla til innlogga brukar.
 Til dømes "SC" (system coordinator) eller "LU" (local user).}
+
+\item{vis_hf}{Viser til \code{checkboxInput()} med etiketten "kun_hf" i ui som skal vise sykehusene gruppert per HF}
+
+\item{vis_rhf}{Viser til \code{checkboxInput()} med etiketten "kun_rhf" i ui som skal vise data kun for RHF-ene}
+
+\item{rhf_utvalg}{Viser til \code{checkboxGroupInput()} med etiketten "rhf_utvalgt" i ui som skal si
+hvilke RHF-er det vises data for.}
 }
 \value{
 HTML-tabell med talet på ferdige og uferdige skjema på sjukehusnivå
@@ -58,7 +68,11 @@ lag_antall_skjema_tabell(
   alderkategori = "voksen",
   aktiv_behandling = TRUE,
   resh_id = 99999,
-  user_role = "SC"
+  user_role = "SC",
+  vis_hf = FALSE,
+  vis_rhf = FALSE,
+  rhf_utvalg = c ("HELSE SØR-ØST RHF", "HELSE VEST RHF", "HELSE MIDT-NORGE RHF",
+         "HELSE NORD RHF", "PRIVAT/IDEELL ORGANISASJON")
 )
 }
 }
