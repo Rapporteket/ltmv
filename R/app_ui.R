@@ -114,6 +114,9 @@ app_ui = function() {
                 selected = c(TRUE, FALSE),
                 inline = TRUE
               ),
+              uiOutput("utvalgte_rhf"),
+              uiOutput("rhf"),
+              uiOutput("hf"),
               width = 3
             ),
             shiny::mainPanel(
