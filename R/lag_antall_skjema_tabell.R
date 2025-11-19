@@ -149,8 +149,6 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
     bind_rows(d_hso) |>
     bind_rows(d_privat)
 
-  v_rhf = d_centretype |>
-    pull(name)
 
   if (user_role == "SC") {
     for (reg_foretak in v_rhf) {
@@ -169,6 +167,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
       select(-rhf) |>
       bind_rows(d_totalt)
   }
+
+  v_rhf = pull(d_centretype, name)
 
   d_hf_rhf = d_centre_hf |>
     left_join(d_sykehus_rhf, by = join_by(centrename == sykehusnavn)) |>
