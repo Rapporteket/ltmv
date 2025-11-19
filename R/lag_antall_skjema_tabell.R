@@ -22,6 +22,13 @@
 #' @param user_role
 #' Tekststreng med rolla til innlogga brukar.
 #' Til dømes "SC" (system coordinator) eller "LU" (local user).
+#' @param vis_hf
+#' Viser til `checkboxInput()` med etiketten "kun_hf" i ui som skal vise sykehusene gruppert per HF
+#' @param vis_rhf
+#' Viser til `checkboxInput()` med etiketten "kun_rhf" i ui som skal vise data kun for RHF-ene
+#' @param rhf_utvalg
+#' Viser til `checkboxGroupInput()` med etiketten "rhf_utvalgt" i ui som skal si
+#' hvilke RHF-er det vises data for.
 #'
 #' @details
 #' Funksjonen tek inn datoar `fra` og `til`,
