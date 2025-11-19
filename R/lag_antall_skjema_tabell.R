@@ -176,6 +176,12 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
   if (user_role != "SC") {
     d_antall_skjema = d_antall_skjema |>
       filter(!sykehusnavn %in% (d_centretype |> pull(name)))
+  hf_per_rhf = function(v_rhf_indx) {
+    d_hf_rhf |>
+      filter(rhf == v_rhf[v_rhf_indx]) |>
+      pull(hf) |>
+      unique() |>
+      sort()
   }
 
   if (nrow(d_antall_skjema) != 0) {
