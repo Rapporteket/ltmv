@@ -121,9 +121,6 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
       by = join_by(sykehusnavn)
     )
 
-  d_totalt = d_aggregert |>
-    filter(sykehusnavn == "Totalt") |>
-    select(-rhf)
 
   sykehus_i_rhf = function(rhf_id) {
     rhf_et = d_centretype |>
