@@ -86,6 +86,19 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
     select(id, typeid) |>
     mutate(id = as.integer(id))
 
+  d_belongsto_fylt = hent_skjema("centre") |>
+    select(id, centrename, belongsto) |>
+    mutate(belongsto = if_else(is.na(belongsto), id, belongsto))
+
+  d_hf_id = d_belongsto_fylt |>
+        select(-belongsto) |>
+        rename(hf = centrename)
+
+  d_centre_hf = d_belongsto_fylt |>
+    left_join(d_hf_id,
+      by = join_by(belongsto == id),
+      relationship = "many-to-one"
+    )
 
   d_sykehus_rhf = hent_skjema("skjemaoversikt") |>
     mutate(avdresh = as.integer(avdresh)) |>
