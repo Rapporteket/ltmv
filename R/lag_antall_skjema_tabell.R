@@ -53,10 +53,16 @@
 #'   alderkategori = "voksen",
 #'   aktiv_behandling = TRUE,
 #'   resh_id = 99999,
-#'   user_role = "SC"
+#'   user_role = "SC",
+#'   vis_hf = FALSE,
+#'   vis_rhf = FALSE,
+#'   rhf_utvalg = c ("HELSE SØR-ØST RHF", "HELSE VEST RHF", "HELSE MIDT-NORGE RHF",
+#'          "HELSE NORD RHF", "PRIVAT/IDEELL ORGANISASJON")
 #' )
 #' }
-lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling, resh_id, user_role) {
+lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
+                                    resh_id, user_role, vis_hf, vis_rhf,
+                                    rhf_utvalg) {
   d_skjemaoversikt = hent_skjema("skjemaoversikt") |>
     mutate(skjema_id = as.integer(forlopsid)) |>
     legg_til_pasientid(skjema_id) |>
