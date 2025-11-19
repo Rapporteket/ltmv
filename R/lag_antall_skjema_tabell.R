@@ -184,6 +184,37 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
       sort()
   }
 
+  rekkefolge = c(
+    v_rhf[4],
+    hf_per_rhf(4),
+    v_rhf[3],
+    hf_per_rhf(3),
+    v_rhf[2],
+    hf_per_rhf(2),
+    v_rhf[1],
+    hf_per_rhf(1),
+    v_rhf[5],
+    hf_per_rhf(5),
+    "Totalt"
+  )
+
+  if (user_role == "SC" && !vis_rhf && vis_hf) {
+    d_antall_skjema = d_antall_skjema |>
+      left_join(
+        select(d_centre_hf, centrename, hf),
+        by = join_by(sykehusnavn == centrename)
+      ) |>
+      mutate(hf = if_else(is.na(hf), sykehusnavn, hf)) |>
+      select(-sykehusnavn) |>
+      group_by(hf) |>
+      summarise(across(everything(), sum), .groups = "drop") |>
+      rename(enhet = hf) |>
+      mutate(enhet = factor(enhet, levels = rekkefolge)) |>
+      arrange(enhet) |>
+      relocate(enhet)
+  } else if (user_role == "SC" && !vis_hf) {
+    d_antall_skjema = rename(d_antall_skjema, enhet = sykehusnavn)
+  }
   if (nrow(d_antall_skjema) != 0) {
     formater_antall_skjema_tabell(d_antall_skjema, v_rhf)
   } else {
