@@ -132,7 +132,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
       janitor::adorn_totals(where = "row", name = rhf_et) |>
       mutate(prioritet = sykehusnavn == !!rhf_et) |>
       arrange(desc(prioritet), sykehusnavn) |>
-      select(-prioritet)
+      select(-prioritet) |>
+      mutate(rhf = rhf_et)
   }
 
 
