@@ -142,3 +142,22 @@ test_that("grupper_skjemaoversikt() gjev ut forventa resultat", {
     expected = d_skjemaoversikt_gruppert
   )
 })
+
+# Testar for lag_antall_skjema_tabell()
+# test_that("lag_antall_skjema_tabell() gir ut en 'kable' tabell", {
+#
+#   tab_antall_skjema_tabell = lag_antall_skjema_tabell(
+#     fra = "2014-01-01",
+#     til = "2025-01-01",
+#     alderkategori = c("barn", "voksen"),
+#     aktiv_behandling = c(TRUE, FALSE),
+#     resh_id = 107709,
+#     user_role = "SC",
+#     vis_hf = FALSE,
+#     vis_rhf = FALSE,
+#     rhf_utvalg = c("HELSE SØR-ØST RHF", "HELSE VEST RHF", "HELSE MIDT-NORGE RHF",
+#                    "HELSE NORD RHF", "PRIVAT/IDEELL ORGANISASJON")
+#   )
+#
+#   expect_s3_class(tab_antall_skjema_tabell, "knitr_kable")
+# })
