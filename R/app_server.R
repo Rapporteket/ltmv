@@ -168,7 +168,10 @@ app_server = function(input, output, session) {
       alderkat = input$alderkat,
       aktiv_behandling = input$aktiv_behandling,
       resh_id = user$unit(),
-      user_role = user$role()
+      user_role = user$role(),
+      vis_hf = input$kun_hf,
+      vis_rhf = input$kun_rhf,
+      rhf_utvalg = input$rhf_utvalgt
     )
   })
 
