@@ -136,5 +136,27 @@ lag_datasett_dashboard = function(fra,
     rename(rhf = name, sykehusnavn = centrename) |>
     select(id, sykehusnavn, hf, rhf) |>
     distinct()
+
+  if (user_role == "SC" && enhetstype == "RHF") {
+    d_dashboard = d_dashboard |>
+      filter(centreid %in% (d_id_sykehus_hf_rhf |>
+        filter(rhf %in% per_rhf) |>
+        pull(id)))
+  }
+
+  if (user_role == "SC" && enhetstype == "HF") {
+    d_dashboard = d_dashboard |>
+      filter(centreid %in% (d_id_sykehus_hf_rhf |>
+        filter(hf %in% per_hf) |>
+        pull(id)))
+  }
+
+  if (user_role == "SC" && enhetstype == "Sykehus") {
+    d_dashboard = d_dashboard |>
+      filter(centreid %in% (d_id_sykehus_hf_rhf |>
+        filter(sykehusnavn %in% per_sykehus) |>
+        pull(id)))
+  }
+
   d_dashboard
 }
