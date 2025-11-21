@@ -115,6 +115,8 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
     select(sykehusnavn, rhf) |>
     distinct()
 
+  v_rhf = pull(d_centretype, name)
+
   d_aggregert = aggreger_antall_skjema_tabell(d_skjemaoversikt,
     user_role = user_role,
     resh_id = resh_id
@@ -170,7 +172,6 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
       bind_rows(d_totalt)
   }
 
-  v_rhf = pull(d_centretype, name)
 
   d_hf_rhf = d_centre_hf |>
     left_join(d_sykehus_rhf, by = join_by(centrename == sykehusnavn)) |>
