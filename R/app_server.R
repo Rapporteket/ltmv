@@ -48,10 +48,10 @@ app_server = function(input, output, session) {
   d_id_sykehus_hf_rhf = d_centre_hf |>
     mutate(id = as.numeric(id)) |>
     left_join(d_centre,
-              by = join_by(id == id)
+      by = join_by(id == id)
     ) |>
     left_join(d_centretype,
-              by = join_by(typeid == id)
+      by = join_by(typeid == id)
     ) |>
     rename(rhf = name, sykehusnavn = centrename) |>
     select(id, sykehusnavn, hf, rhf) |>
