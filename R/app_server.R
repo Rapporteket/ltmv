@@ -68,7 +68,11 @@ app_server = function(input, output, session) {
       kjonn = input$kjonn,
       inkluder_missing = input$inkluder_missing,
       resh_id = user$unit(),
-      user_role = user$role()
+      user_role = user$role(),
+      enhetstype = input$enhet_type,
+      per_rhf = input$rhf_utvalg_dashboard,
+      per_hf = input$hf_utvalg_dashboard,
+      per_sykehus = input$sykehus_utvalg_dashboard
     )
   })
 
