@@ -61,7 +61,11 @@ lag_datasett_dashboard = function(fra,
                                   kjonn,
                                   inkluder_missing,
                                   resh_id,
-                                  user_role) {
+                                  user_role,
+                                  enhetstype,
+                                  per_rhf,
+                                  per_hf,
+                                  per_sykehus) {
   d_dashboard = hent_skjema("ventreg") |>
     legg_til_pasientid(mceid) |>
     legg_til_pasientinfo(patient_id) |>
