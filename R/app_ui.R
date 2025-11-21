@@ -51,6 +51,10 @@ app_ui = function() {
               selected = c(1, 2, NA),
               inline = TRUE
             ),
+            uiOutput("enhet_dashboard"),
+            uiOutput("rhf_dashboard"),
+            uiOutput("hf_dashboard"),
+            uiOutput("sykehus_dashboard"),
             width = 2
           ),
           shiny::mainPanel(
