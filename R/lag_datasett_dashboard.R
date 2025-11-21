@@ -23,7 +23,18 @@
 #' @param user_role
 #' Tekstvektor med brukarrolle som avgjer om datasettet skal filtrerast eller
 #' ikkje.
-#'
+#' @param enhetstype
+#' Tekstvektor med enhetstypene ("RHF", "HF", eller "Sykehus") data kan filtreres
+#' ut mot. Hentes fra `shiny::radioButtons()` med `id = enhet_type` i app_server.R.
+#' @param per_rhf
+#' Teksvektor med de ulike RHF-ene data kan filtreres ut mot.  Hentes fra
+#' `shiny::checkboxGroupInput()` med `id = rhf_utvalg_dashboard` i app_server.R.
+#' @param per_hf
+#' Teksvektor med de ulike HF-ene data kan filtreres ut mot.  Hentes fra
+#' `shiny::selectInput()` med `id = hf_utvalg_dashboard` i app_server.R.
+#' @param per_sykehus
+#' Teksvektor med de ulike sykehusene data kan filtreres ut mot.  Hentes fra
+#' `shiny::selectInput()` med `id = sykehus_utvalg_dashboard` i app_server.R.
 #' @return
 #' Skjemaet ventreg med ekstra informasjon per rad,
 #' til bruk i dashboardvisinga.
