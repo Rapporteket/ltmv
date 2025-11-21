@@ -157,6 +157,55 @@ app_server = function(input, output, session) {
     )
   })
 
+  output$enhet_dashboard = renderUI(
+    if (user$role() == "SC") {
+      shiny::radioButtons("enhet_type",
+        label = "Enhetstype:",
+        choices = c("RHF", "HF", "Sykehus"),
+        selected = "RHF",
+        inline = TRUE
+      )
+    } else {
+      NULL
+    }
+  )
+
+  output$rhf_dashboard = renderUI(
+    if (user$role() == "SC" && input$enhet_type == "RHF") {
+      shiny::checkboxGroupInput("rhf_utvalg_dashboard",
+        label = "",
+        choices = v_rhf,
+        selected = v_rhf
+      )
+    } else {
+      NULL
+    }
+  )
+
+  output$hf_dashboard = renderUI(
+    if (user$role() == "SC" && input$enhet_type == "HF") {
+      shiny::selectInput("hf_utvalg_dashboard",
+        label = "",
+        choices = sort(d_id_sykehus_hf_rhf$hf),
+        multiple = TRUE
+      )
+    } else {
+      NULL
+    }
+  )
+
+  output$sykehus_dashboard = renderUI(
+    if (user$role() == "SC" && input$enhet_type == "Sykehus") {
+      shiny::selectInput("sykehus_utvalg_dashboard",
+        label = "",
+        choices = sort(d_id_sykehus_hf_rhf$sykehusnavn[!grepl("HF|IKT", d_id_sykehus_hf_rhf$sykehusnavn)]),
+        multiple = TRUE
+      )
+    } else {
+      NULL
+    }
+  )
+
   observeEvent(input$alle_datoer_knapp, {
     updateDateRangeInput(
       session = session,
