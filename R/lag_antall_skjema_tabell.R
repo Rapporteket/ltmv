@@ -192,6 +192,7 @@ lag_antall_skjema_tabell = function(fra, til, alderkategori, aktiv_behandling,
       sort()
   }
 
+  # Ønsket rekkefølge: HN, HMN, HV, HSØ
   rekkefolge = c(
     v_rhf[4],
     hf_per_rhf(4),
