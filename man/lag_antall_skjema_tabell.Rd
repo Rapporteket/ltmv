@@ -71,8 +71,10 @@ lag_antall_skjema_tabell(
   user_role = "SC",
   vis_hf = FALSE,
   vis_rhf = FALSE,
-  rhf_utvalg = c ("HELSE SØR-ØST RHF", "HELSE VEST RHF", "HELSE MIDT-NORGE RHF",
-         "HELSE NORD RHF", "PRIVAT/IDEELL ORGANISASJON")
+  rhf_utvalg = c(
+    "HELSE SØR-ØST RHF", "HELSE VEST RHF", "HELSE MIDT-NORGE RHF",
+    "HELSE NORD RHF", "PRIVAT/IDEELL ORGANISASJON"
+  )
 )
 }
 }
