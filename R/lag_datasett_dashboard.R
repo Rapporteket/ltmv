@@ -23,7 +23,18 @@
 #' @param user_role
 #' Tekstvektor med brukarrolle som avgjer om datasettet skal filtrerast eller
 #' ikkje.
-#'
+#' @param enhetstype
+#' Tekstvektor med enhetstypene ("RHF", "HF", eller "Sykehus") data kan filtreres
+#' ut mot. Hentes fra `shiny::radioButtons()` med `id = enhet_type` i app_server.R.
+#' @param per_rhf
+#' Teksvektor med de ulike RHF-ene data kan filtreres ut mot.  Hentes fra
+#' `shiny::checkboxGroupInput()` med `id = rhf_utvalg_dashboard` i app_server.R.
+#' @param per_hf
+#' Teksvektor med de ulike HF-ene data kan filtreres ut mot.  Hentes fra
+#' `shiny::selectInput()` med `id = hf_utvalg_dashboard` i app_server.R.
+#' @param per_sykehus
+#' Teksvektor med de ulike sykehusene data kan filtreres ut mot.  Hentes fra
+#' `shiny::selectInput()` med `id = sykehus_utvalg_dashboard` i app_server.R.
 #' @return
 #' Skjemaet ventreg med ekstra informasjon per rad,
 #' til bruk i dashboardvisinga.
@@ -50,7 +61,11 @@ lag_datasett_dashboard = function(fra,
                                   kjonn,
                                   inkluder_missing,
                                   resh_id,
-                                  user_role) {
+                                  user_role,
+                                  enhetstype,
+                                  per_rhf,
+                                  per_hf,
+                                  per_sykehus) {
   d_dashboard = hent_skjema("ventreg") |>
     legg_til_pasientid(mceid) |>
     legg_til_pasientinfo(patient_id) |>
@@ -85,6 +100,62 @@ lag_datasett_dashboard = function(fra,
 
   if (user_role != "SC") {
     d_dashboard = filter(d_dashboard, centreid == !!resh_id)
+  }
+
+  d_centretype = hent_skjema("centretype") |>
+    select(id, name)
+
+  d_centre = hent_skjema("centre") |>
+    select(id, typeid) |>
+    mutate(id = as.integer(id))
+
+  d_belongsto_fylt = hent_skjema("centre") |>
+    select(id, centrename, belongsto) |>
+    mutate(belongsto = if_else(is.na(belongsto), id, belongsto))
+
+  d_belongsto_hf = d_belongsto_fylt |>
+    select(-belongsto) |>
+    rename(hf = centrename)
+
+  d_centre_hf = d_belongsto_fylt |>
+    left_join(
+      d_belongsto_hf,
+      by = join_by(belongsto == id),
+      relationship = "many-to-one"
+    )
+
+
+  d_id_sykehus_hf_rhf = d_centre_hf |>
+    mutate(id = as.numeric(id)) |>
+    left_join(d_centre,
+      by = join_by(id == id)
+    ) |>
+    left_join(d_centretype,
+      by = join_by(typeid == id)
+    ) |>
+    rename(rhf = name, sykehusnavn = centrename) |>
+    select(id, sykehusnavn, hf, rhf) |>
+    distinct()
+
+  if (user_role == "SC" && enhetstype == "RHF") {
+    d_dashboard = d_dashboard |>
+      filter(centreid %in% (d_id_sykehus_hf_rhf |>
+        filter(rhf %in% per_rhf) |>
+        pull(id)))
+  }
+
+  if (user_role == "SC" && enhetstype == "HF") {
+    d_dashboard = d_dashboard |>
+      filter(centreid %in% (d_id_sykehus_hf_rhf |>
+        filter(hf %in% per_hf) |>
+        pull(id)))
+  }
+
+  if (user_role == "SC" && enhetstype == "Sykehus") {
+    d_dashboard = d_dashboard |>
+      filter(centreid %in% (d_id_sykehus_hf_rhf |>
+        filter(sykehusnavn %in% per_sykehus) |>
+        pull(id)))
   }
 
   d_dashboard

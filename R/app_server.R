@@ -22,6 +22,43 @@ app_server = function(input, output, session) {
     select(UnitId = id, orgname = centrename)
   user = rapbase::navbarWidgetServer2("ltmv-navbar-widget", "ltmv", caller = "ltmv", map_orgname = map_orgname)
 
+  d_centretype = hent_skjema("centretype") |>
+    select(id, name)
+
+  d_centre = hent_skjema("centre") |>
+    select(id, typeid) |>
+    mutate(id = as.integer(id))
+
+  d_belongsto_fylt = hent_skjema("centre") |>
+    select(id, centrename, belongsto) |>
+    mutate(belongsto = if_else(is.na(belongsto), id, belongsto))
+
+  d_belongsto_hf = d_belongsto_fylt |>
+    select(-belongsto) |>
+    rename(hf = centrename)
+
+  d_centre_hf = d_belongsto_fylt |>
+    left_join(
+      d_belongsto_hf,
+      by = join_by(belongsto == id),
+      relationship = "many-to-one"
+    )
+
+
+  d_id_sykehus_hf_rhf = d_centre_hf |>
+    mutate(id = as.numeric(id)) |>
+    left_join(d_centre,
+      by = join_by(id == id)
+    ) |>
+    left_join(d_centretype,
+      by = join_by(typeid == id)
+    ) |>
+    rename(rhf = name, sykehusnavn = centrename) |>
+    select(id, sykehusnavn, hf, rhf) |>
+    distinct()
+
+  v_rhf = pull(d_centretype, name)
+
   d_dashboard = shiny::reactive({
     lag_datasett_dashboard(
       fra = input$dato_dashboard[1],
@@ -31,7 +68,11 @@ app_server = function(input, output, session) {
       kjonn = input$kjonn,
       inkluder_missing = input$inkluder_missing,
       resh_id = user$unit(),
-      user_role = user$role()
+      user_role = user$role(),
+      enhetstype = input$enhet_type,
+      per_rhf = input$rhf_utvalg_dashboard,
+      per_hf = input$hf_utvalg_dashboard,
+      per_sykehus = input$sykehus_utvalg_dashboard
     )
   })
 
@@ -115,6 +156,55 @@ app_server = function(input, output, session) {
       end = dagens_dato
     )
   })
+
+  output$enhet_dashboard = renderUI(
+    if (user$role() == "SC") {
+      shiny::radioButtons("enhet_type",
+        label = "Enhetstype:",
+        choices = c("RHF", "HF", "Sykehus"),
+        selected = "RHF",
+        inline = TRUE
+      )
+    } else {
+      NULL
+    }
+  )
+
+  output$rhf_dashboard = renderUI(
+    if (user$role() == "SC" && input$enhet_type == "RHF") {
+      shiny::checkboxGroupInput("rhf_utvalg_dashboard",
+        label = "",
+        choices = v_rhf,
+        selected = v_rhf
+      )
+    } else {
+      NULL
+    }
+  )
+
+  output$hf_dashboard = renderUI(
+    if (user$role() == "SC" && input$enhet_type == "HF") {
+      shiny::selectInput("hf_utvalg_dashboard",
+        label = "",
+        choices = sort(d_id_sykehus_hf_rhf$hf),
+        multiple = TRUE
+      )
+    } else {
+      NULL
+    }
+  )
+
+  output$sykehus_dashboard = renderUI(
+    if (user$role() == "SC" && input$enhet_type == "Sykehus") {
+      shiny::selectInput("sykehus_utvalg_dashboard",
+        label = "",
+        choices = sort(d_id_sykehus_hf_rhf$sykehusnavn[!grepl("HF|IKT", d_id_sykehus_hf_rhf$sykehusnavn)]),
+        multiple = TRUE
+      )
+    } else {
+      NULL
+    }
+  )
 
   observeEvent(input$alle_datoer_knapp, {
     updateDateRangeInput(
