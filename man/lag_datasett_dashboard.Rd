@@ -12,7 +12,11 @@ lag_datasett_dashboard(
   kjonn,
   inkluder_missing,
   resh_id,
-  user_role
+  user_role,
+  enhetstype,
+  per_rhf,
+  per_hf,
+  per_sykehus
 )
 }
 \arguments{
@@ -34,6 +38,18 @@ startdato skal inkluderast.}
 
 \item{user_role}{Tekstvektor med brukarrolle som avgjer om datasettet skal filtrerast eller
 ikkje.}
+
+\item{enhetstype}{Tekstvektor med enhetstypene ("RHF", "HF", eller "Sykehus") data kan filtreres
+ut mot. Hentes fra \code{shiny::radioButtons()} med \code{id = enhet_type} i app_server.R.}
+
+\item{per_rhf}{Teksvektor med de ulike RHF-ene data kan filtreres ut mot.  Hentes fra
+\code{shiny::checkboxGroupInput()} med \code{id = rhf_utvalg_dashboard} i app_server.R.}
+
+\item{per_hf}{Teksvektor med de ulike HF-ene data kan filtreres ut mot.  Hentes fra
+\code{shiny::selectInput()} med \code{id = hf_utvalg_dashboard} i app_server.R.}
+
+\item{per_sykehus}{Teksvektor med de ulike sykehusene data kan filtreres ut mot.  Hentes fra
+\code{shiny::selectInput()} med \code{id = sykehus_utvalg_dashboard} i app_server.R.}
 }
 \value{
 Skjemaet ventreg med ekstra informasjon per rad,
