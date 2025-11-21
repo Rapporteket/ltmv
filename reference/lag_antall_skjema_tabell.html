@@ -67,7 +67,10 @@ sjukehusnivå for registrerings-, avslutnings- og ulike oppfylgjingsskjema.</p>
 <span>  <span class="va">alderkategori</span>,</span>
 <span>  <span class="va">aktiv_behandling</span>,</span>
 <span>  <span class="va">resh_id</span>,</span>
-<span>  <span class="va">user_role</span></span>
+<span>  <span class="va">user_role</span>,</span>
+<span>  <span class="va">vis_hf</span>,</span>
+<span>  <span class="va">vis_rhf</span>,</span>
+<span>  <span class="va">rhf_utvalg</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -101,6 +104,19 @@ Skjema oppretta til og med denne datoen vert inkludert.</p></dd>
 <dd><p>Tekststreng med rolla til innlogga brukar.
 Til dømes "SC" (system coordinator) eller "LU" (local user).</p></dd>
 
+
+<dt id="arg-vis-hf">vis_hf<a class="anchor" aria-label="anchor" href="#arg-vis-hf"></a></dt>
+<dd><p>Viser til <code>checkboxInput()</code> med etiketten "kun_hf" i ui som skal vise sykehusene gruppert per HF</p></dd>
+
+
+<dt id="arg-vis-rhf">vis_rhf<a class="anchor" aria-label="anchor" href="#arg-vis-rhf"></a></dt>
+<dd><p>Viser til <code>checkboxInput()</code> med etiketten "kun_rhf" i ui som skal vise data kun for RHF-ene</p></dd>
+
+
+<dt id="arg-rhf-utvalg">rhf_utvalg<a class="anchor" aria-label="anchor" href="#arg-rhf-utvalg"></a></dt>
+<dd><p>Viser til <code>checkboxGroupInput()</code> med etiketten "rhf_utvalgt" i ui som skal si
+hvilke RHF-er det vises data for.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -127,7 +143,13 @@ vert berre data frå eininga med RESH-ID <code>resh_id</code> vist.</p>
 <span class="r-in"><span>  alderkategori <span class="op">=</span> <span class="st">"voksen"</span>,</span></span>
 <span class="r-in"><span>  aktiv_behandling <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  resh_id <span class="op">=</span> <span class="fl">99999</span>,</span></span>
-<span class="r-in"><span>  user_role <span class="op">=</span> <span class="st">"SC"</span></span></span>
+<span class="r-in"><span>  user_role <span class="op">=</span> <span class="st">"SC"</span>,</span></span>
+<span class="r-in"><span>  vis_hf <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  vis_rhf <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  rhf_utvalg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"HELSE SØR-ØST RHF"</span>, <span class="st">"HELSE VEST RHF"</span>, <span class="st">"HELSE MIDT-NORGE RHF"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"HELSE NORD RHF"</span>, <span class="st">"PRIVAT/IDEELL ORGANISASJON"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
