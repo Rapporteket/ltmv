@@ -102,5 +102,39 @@ lag_datasett_dashboard = function(fra,
     d_dashboard = filter(d_dashboard, centreid == !!resh_id)
   }
 
+  d_centretype = hent_skjema("centretype") |>
+    select(id, name)
+
+  d_centre = hent_skjema("centre") |>
+    select(id, typeid) |>
+    mutate(id = as.integer(id))
+
+  d_belongsto_fylt = hent_skjema("centre") |>
+    select(id, centrename, belongsto) |>
+    mutate(belongsto = if_else(is.na(belongsto), id, belongsto))
+
+  d_belongsto_hf = d_belongsto_fylt |>
+    select(-belongsto) |>
+    rename(hf = centrename)
+
+  d_centre_hf = d_belongsto_fylt |>
+    left_join(
+      d_belongsto_hf,
+      by = join_by(belongsto == id),
+      relationship = "many-to-one"
+    )
+
+
+  d_id_sykehus_hf_rhf = d_centre_hf |>
+    mutate(id = as.numeric(id)) |>
+    left_join(d_centre,
+              by = join_by(id == id)
+    ) |>
+    left_join(d_centretype,
+              by = join_by(typeid == id)
+    ) |>
+    rename(rhf = name, sykehusnavn = centrename) |>
+    select(id, sykehusnavn, hf, rhf) |>
+    distinct()
   d_dashboard
 }
