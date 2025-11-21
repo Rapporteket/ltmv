@@ -17,6 +17,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom dplyr n
 #' @importFrom dplyr pull
+#' @importFrom dplyr relocate
 #' @importFrom dplyr rename
 #' @importFrom dplyr rename_with
 #' @importFrom dplyr rowwise
@@ -32,6 +33,7 @@
 #' @importFrom tibble is_tibble
 #' @importFrom tibble tibble
 #' @importFrom tibble tribble
+#' @importFrom tidyr drop_na
 #' @importFrom tidyr pivot_wider
 ## usethis namespace: end
 NULL
