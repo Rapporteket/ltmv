@@ -184,10 +184,13 @@ app_server = function(input, output, session) {
 
   output$hf_dashboard = renderUI(
     if (user$role() == "SC" && input$enhet_type == "HF") {
-      shiny::selectInput("hf_utvalg_dashboard",
+      shiny::selectizeInput("hf_utvalg_dashboard",
         label = NULL,
         choices = sort(d_id_sykehus_hf_rhf$hf),
-        multiple = TRUE
+        multiple = TRUE,
+        options = list(
+          placeholder = "Trykk her for å velge HF"
+        )
       )
     } else {
       NULL
@@ -196,10 +199,13 @@ app_server = function(input, output, session) {
 
   output$sykehus_dashboard = renderUI(
     if (user$role() == "SC" && input$enhet_type == "Sykehus") {
-      shiny::selectInput("sykehus_utvalg_dashboard",
+      shiny::selectizeInput("sykehus_utvalg_dashboard",
         label = NULL,
         choices = sort(d_id_sykehus_hf_rhf$sykehusnavn[!grepl("HF|IKT", d_id_sykehus_hf_rhf$sykehusnavn)]),
-        multiple = TRUE
+        multiple = TRUE,
+        options = list(
+          placeholder = "Trykk her for å velge sykehus"
+        )
       )
     } else {
       NULL
