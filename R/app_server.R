@@ -173,7 +173,7 @@ app_server = function(input, output, session) {
   output$rhf_dashboard = renderUI(
     if (user$role() == "SC" && input$enhet_type == "RHF") {
       shiny::checkboxGroupInput("rhf_utvalg_dashboard",
-        label = "",
+        label = NULL,
         choices = v_rhf,
         selected = v_rhf
       )
@@ -185,7 +185,7 @@ app_server = function(input, output, session) {
   output$hf_dashboard = renderUI(
     if (user$role() == "SC" && input$enhet_type == "HF") {
       shiny::selectInput("hf_utvalg_dashboard",
-        label = "",
+        label = NULL,
         choices = sort(d_id_sykehus_hf_rhf$hf),
         multiple = TRUE
       )
@@ -197,7 +197,7 @@ app_server = function(input, output, session) {
   output$sykehus_dashboard = renderUI(
     if (user$role() == "SC" && input$enhet_type == "Sykehus") {
       shiny::selectInput("sykehus_utvalg_dashboard",
-        label = "",
+        label = NULL,
         choices = sort(d_id_sykehus_hf_rhf$sykehusnavn[!grepl("HF|IKT", d_id_sykehus_hf_rhf$sykehusnavn)]),
         multiple = TRUE
       )
