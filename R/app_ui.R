@@ -60,12 +60,15 @@ app_ui = function() {
           shiny::mainPanel(
             shiny::fluidRow(
               shiny::column(
-                width = 4,
-                "Aktivitetsoversikt",
+                width = 2,
+                tags$div(
+                  "Aktivitetsoversikt",
+                  style = "font-size: 22px;"
+                ),
                 shiny::tableOutput("aktivitetsoversikt")
               ),
               shiny::column(
-                width = 4,
+                width = 6,
                 shiny::plotOutput("diagnosefordeling")
               ),
               shiny::column(
@@ -76,7 +79,10 @@ app_ui = function() {
             shiny::fluidRow(
               shiny::column(
                 width = 4,
-                "Blodgass målt før behandlingsstart",
+                tags$div(
+                  "Blodgass målt før behandlingsstart",
+                  style = "font-size: 22px;"
+                ),
                 shiny::plotOutput("blodgass_for")
               )
             ),
