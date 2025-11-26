@@ -202,9 +202,11 @@ app_server = function(input, output, session) {
       shiny::selectizeInput("sykehus_utvalg_dashboard",
         label = NULL,
         choices = sort(
-          d_id_sykehus_hf_rhf$sykehusnavn[!grepl("HF|IKT|AS|LANDSFORENINGEN FOR HJERTE OG LUNGESYKE",
-                                                              d_id_sykehus_hf_rhf$sykehusnavn)]
-          ),
+          d_id_sykehus_hf_rhf$sykehusnavn[!grepl(
+            "HF|IKT|AS|LANDSFORENINGEN FOR HJERTE OG LUNGESYKE",
+            d_id_sykehus_hf_rhf$sykehusnavn
+          )]
+        ),
         multiple = TRUE,
         options = list(
           placeholder = "Trykk her for å velge sykehus"

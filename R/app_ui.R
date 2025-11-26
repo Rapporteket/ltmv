@@ -79,7 +79,7 @@ app_ui = function() {
             shiny::fluidRow(
               shiny::column(
                 width = 4,
-              htmltools::tags$div(
+                htmltools::tags$div(
                   "Blodgass målt før behandlingsstart",
                   style = "font-size: 22px;"
                 ),
