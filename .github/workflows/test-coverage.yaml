@@ -24,7 +24,7 @@ jobs:
       DB_USER: "root"
       DB_PASS: "root"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Install unmet sys deps
         run: |
