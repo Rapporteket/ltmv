@@ -23,8 +23,8 @@ jobs:
 
       - name: Install packages
         run: |
-          install.packages(c("styler", "devtools"))
-          devtools::install_github("Rapporteket/rapwhale", dependencies = TRUE)
+          install.packages(c("styler", "remotes"))
+          remotes::install_github("Rapporteket/rapwhale", dependencies = TRUE)
         shell: Rscript {0}
 
       - name: Enable styler cache
