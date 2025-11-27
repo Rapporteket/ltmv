@@ -63,7 +63,11 @@ til kvar rad, og gjer datasettet klart til bruk i dashboardet.</p>
 <span>  <span class="va">kjonn</span>,</span>
 <span>  <span class="va">inkluder_missing</span>,</span>
 <span>  <span class="va">resh_id</span>,</span>
-<span>  <span class="va">user_role</span></span>
+<span>  <span class="va">user_role</span>,</span>
+<span>  <span class="va">enhetstype</span>,</span>
+<span>  <span class="va">per_rhf</span>,</span>
+<span>  <span class="va">per_hf</span>,</span>
+<span>  <span class="va">per_sykehus</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -104,6 +108,26 @@ startdato skal inkluderast.</p></dd>
 <dt id="arg-user-role">user_role<a class="anchor" aria-label="anchor" href="#arg-user-role"></a></dt>
 <dd><p>Tekstvektor med brukarrolle som avgjer om datasettet skal filtrerast eller
 ikkje.</p></dd>
+
+
+<dt id="arg-enhetstype">enhetstype<a class="anchor" aria-label="anchor" href="#arg-enhetstype"></a></dt>
+<dd><p>Tekstvektor med enhetstypene ("RHF", "HF", eller "Sykehus") data kan filtreres
+ut mot. Hentes fra <code><a href="https://rdrr.io/pkg/shiny/man/radioButtons.html" class="external-link">shiny::radioButtons()</a></code> med <code>id = enhet_type</code> i app_server.R.</p></dd>
+
+
+<dt id="arg-per-rhf">per_rhf<a class="anchor" aria-label="anchor" href="#arg-per-rhf"></a></dt>
+<dd><p>Teksvektor med de ulike RHF-ene data kan filtreres ut mot.  Hentes fra
+<code><a href="https://rdrr.io/pkg/shiny/man/checkboxGroupInput.html" class="external-link">shiny::checkboxGroupInput()</a></code> med <code>id = rhf_utvalg_dashboard</code> i app_server.R.</p></dd>
+
+
+<dt id="arg-per-hf">per_hf<a class="anchor" aria-label="anchor" href="#arg-per-hf"></a></dt>
+<dd><p>Teksvektor med de ulike HF-ene data kan filtreres ut mot.  Hentes fra
+<code><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">shiny::selectInput()</a></code> med <code>id = hf_utvalg_dashboard</code> i app_server.R.</p></dd>
+
+
+<dt id="arg-per-sykehus">per_sykehus<a class="anchor" aria-label="anchor" href="#arg-per-sykehus"></a></dt>
+<dd><p>Teksvektor med de ulike sykehusene data kan filtreres ut mot.  Hentes fra
+<code><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">shiny::selectInput()</a></code> med <code>id = sykehus_utvalg_dashboard</code> i app_server.R.</p></dd>
 
 </dl></div>
     <div id="value">
