@@ -49,7 +49,7 @@ app_ui = function() {
               label = "Kjønn:",
               choices = c(Mann = 1, Kvinne = 2, Ukjent = NA),
               selected = c(1, 2, NA),
-              inline = FALSE
+              inline = TRUE
             ),
             shiny::uiOutput("enhet_dashboard"),
             shiny::uiOutput("rhf_dashboard"),
