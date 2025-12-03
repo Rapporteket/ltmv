@@ -103,6 +103,23 @@ app_server = function(input, output, session) {
     lag_spcfigur_ki_blodgass(d_ki())
   })
 
+  d_ki_superbreitt = shiny::reactive({
+    lag_datasett_superbreitt_dashboard(
+      fra = input$dato_dashboard[1],
+      til = input$dato_dashboard[2],
+      alderkat = input$alderkat_dashboard,
+      kjonn = input$kjonn,
+      inkluder_missing = input$inkluder_missing,
+      resh_id = user$unit(),
+      user_role = user$role()
+    ) |>
+      filter(lubridate::year(r_start_date) >= lubridate::year(Sys.Date()) - 5)
+  })
+
+  output$blodgass_forste_aar = renderPlot({
+    lag_spcfigur_ki_blodgass_forste_aar(d_ki_superbreitt())
+  })
+
   output$download_report = shiny::downloadHandler(
     filename = function() {
       basename(tempfile(

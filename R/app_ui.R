@@ -84,6 +84,11 @@ app_ui = function() {
                   style = "font-size: 22px;"
                 ),
                 shiny::plotOutput("blodgass_for")
+              ),
+              shiny::column(
+                width = 4,
+                "Blodgass målt første år",
+                shiny::plotOutput("blodgass_forste_aar")
               )
             ),
             width = 10

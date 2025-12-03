@@ -39,7 +39,7 @@ ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, rapporteringsdato)
         !is.na(f1_be) |
         !is.na(f1_arterialpco2_air) |
         !is.na(f1_transcutaneous_co2_air),
-      diff_start_fah = difftime(fah_followup_date, dato_start, unit = "days"),
+      diff_start_fah = difftime(fah_followup_date, r_start_date, unit = "days"),
       fah_blodgass = diff_start_fah <= 730.5 & (!is.na(fah_pco2_air) |
         !is.na(fah_po2_air) |
         !is.na(fah_capillarypo2_air) |
@@ -48,18 +48,18 @@ ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, rapporteringsdato)
         !is.na(fah_arterialpco2_air) |
         !is.na(fah_transcutaneous_co2_air)),
       diff_start_stopp = case_when(
-        !is.na(dato_stopp) & is.na(deceased_date) ~ dato_stopp - dato_start,
-        is.na(dato_stopp) & !is.na(deceased_date) ~ deceased_date - dato_start,
-        dato_stopp <= deceased_date ~ dato_stopp - dato_start,
-        dato_stopp > deceased_date ~ deceased_date - dato_start,
+        !is.na(c_stop_date) & is.na(c_deceased_date) ~ c_stop_date - r_start_date,
+        is.na(c_stop_date) & !is.na(c_deceased_date) ~ c_deceased_date - r_start_date,
+        c_stop_date <= c_deceased_date ~ c_stop_date - r_start_date,
+        c_stop_date > c_deceased_date ~ c_deceased_date - r_start_date,
         TRUE ~ NA
       ),
       ki_krit_nevner = case_when(
-        ventilation_method == 3 ~ FALSE,
-        year(dato_start) < 2002 ~ FALSE,
+        r_ventilation_method == 3 ~ FALSE,
+        year(r_start_date) < 2002 ~ FALSE,
         blodgass ~ TRUE,
         fah_blodgass ~ TRUE,
-        dato_start > !!rapporteringsdato - 730.5 ~ FALSE,
+        r_start_date > !!rapporteringsdato - 730.5 ~ FALSE,
         diff_start_stopp <= 730.5 ~ FALSE,
         TRUE ~ TRUE
       ),
