@@ -4,10 +4,10 @@
 \alias{ki_blodgass_forste_aar}
 \title{Kvalitetsindikator for oppfølging av blodgass første år.}
 \usage{
-ki_blodgass_forste_aar(d_full_reg_forste_aar_ahoc, rapporteringsdato)
+ki_blodgass_forste_aar(d_superbreitt, dato_data)
 }
 \arguments{
-\item{d_full_reg_forste_aar_ahoc}{Tar inn et datasett på
+\item{d_superbreitt}{Tar inn et datasett på
 superbredt"-format som inneholder ventreg, ventfol
 (filtrert for year == 1 og year == -1 (første adhoc))
 og conclude (one-to-one).
@@ -16,10 +16,11 @@ tillegg starte med "f1_" (f.eks. "f1_qlwakeup") og
 variabelnavnene i ventfol knyttet til year == -1 må
 starte med "fah_" (f.eks. "fah_po2_air").}
 
-\item{rapporteringsdato}{Tar inn en dato (År-Måned-Dag)
+\item{dato_data}{Tar inn en dato (År-Måned-Dag)
 som er den siste datoen som blir tatt med i beregningen
-(innen to år). F.eks. dersom datoen er "2023-12-31",
-blir siste år med komplett data 2021.}
+for når oppfølgingen må ha vært gjennomført (innen to år).
+F.eks. dersom datoen er "2023-12-31", blir siste år
+med komplett data 2021.}
 }
 \value{
 KI-datasett egnet for bruk med \code{\link[rapwhale:aggreger_ki_prop]{rapwhale::aggreger_ki_prop()}}.
@@ -28,12 +29,30 @@ KI-datasett egnet for bruk med \code{\link[rapwhale:aggreger_ki_prop]{rapwhale::
 Lag KI-datasett for andel forløp som fikk utført
 blodgassmåling ved oppfølging - innen 2 år.
 Dersom pasienten har avsluttet eller dødd innen
-2 år uten å ha besvart PROM, blir pasienten ikke
-tatt med i beregningen av nevner eller teller.
+2 år uten å fått utført blodgassmåling ved
+oppfølging, blir pasienten ikke tatt med i
+beregningen av nevner eller teller.
+Pasienter som er behandlet med CPAP skal ikke
+inkluderes i beregningen. Tilsvarende for
+pasienter som startet behandling før 2002
+(registeret ble elektronisk, og ble nasjonalt).
 
 Tar inn et datasett på "superbredt"-format som
 inneholder ventreg, ventfol (filtrert på year == 1)
 og conclude.
 Variabelnavnene i ventfol må i tillegg starte med
 "f1_" (f.eks. "f1_qlwakeup").
+}
+\examples{
+\dontrun{
+d_superbreitt = superbreitt_format(
+d_full_patientlist = hent_skjema("patient"),
+d_full_mce = hent_skjema("mce"),
+d_full_ventreg = hent_skjema("ventreg"),
+d_full_ventfol = hent_skjema("ventfol"),
+d_full_conclude = hent_skjema("conclude")
+)
+
+ki_blodgass_forste_aar(d_superbreitt, dato_data = as.Date("2024-12-31"))
+}
 }
