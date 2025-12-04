@@ -87,5 +87,6 @@ ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
         TRUE ~ TRUE
       ),
       ki_krit_teller = ki_krit_nevner & (blodgass | fah_blodgass)
-    )
+    ) |>
+    select(-blodgass, -diff_start_fah, -fah_blodgass_start_fah, -fah_blodgass, -diff_start_stopp)
 }
