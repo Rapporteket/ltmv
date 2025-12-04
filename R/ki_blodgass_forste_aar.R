@@ -18,7 +18,7 @@
 #' Variabelnavnene i ventfol må i tillegg starte med
 #' "f1_" (f.eks. "f1_qlwakeup").
 #'
-#' @param d_full_reg_forste_aar_ahoc Tar inn et datasett på
+#' @param d_superbreitt Tar inn et datasett på
 #' superbredt"-format som inneholder ventreg, ventfol
 #' (filtrert for year == 1 og year == -1 (første adhoc))
 #' og conclude (one-to-one).
@@ -26,7 +26,7 @@
 #' tillegg starte med "f1_" (f.eks. "f1_qlwakeup") og
 #' variabelnavnene i ventfol knyttet til year == -1 må
 #' starte med "fah_" (f.eks. "fah_po2_air").
-#' @param rapporteringsdato Tar inn en dato (År-Måned-Dag)
+#' @param dato_data Tar inn en dato (År-Måned-Dag)
 #' som er den siste datoen som blir tatt med i beregningen
 #' for når oppfølgingen må ha vært gjennomført (innen to år).
 #' F.eks. dersom datoen er "2023-12-31", blir siste år
@@ -35,6 +35,7 @@
 #' @return KI-datasett egnet for bruk med [rapwhale::aggreger_ki_prop()].
 #'
 #' @export
+ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
     mutate(
       blodgass = !is.na(f1_pco2_air) |
         !is.na(f1_po2_air) |
