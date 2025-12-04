@@ -38,7 +38,7 @@ ki_prom_forste_aar = function(d_full_reg_forste_aar, rapporteringsdato) {
       ),
       ki_krit_nevner = case_when(
         gyldig_prom ~ TRUE,
-        year(dato_start) < 2014 ~ FALSE,
+        lubridate::year(dato_start) < 2014 ~ FALSE,
         dato_start > !!rapporteringsdato - 730.5 ~ FALSE,
         diff_start_stopp <= 730.5 ~ FALSE,
         TRUE ~ TRUE
