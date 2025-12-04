@@ -36,11 +36,11 @@
 #'
 #' lag_spcfigur_ki_blodgass(d_superbreitt, tidseining = "year")
 #' }
-lag_spcfigur_ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, tidseining = "month") {
-  ki_blodgass_forste_aar = d_full_reg_forste_aar_ahoc |>
-    ki_blodgass_forste_aar(rapporteringsdato = Sys.Date()) |>
+lag_spcfigur_ki_blodgass_forste_aar = function(d_ki_superbreitt, tidseining = "month") {
+  d_ki_blodgass_forste_aar = d_ki_superbreitt |>
+    ki_blodgass_forste_aar(dato_data = Sys.Date()) |>
     group_by(
-      start_tid = lubridate::floor_date(start_date, unit = tidseining)
+      start_tid = lubridate::floor_date(r_start_date, unit = tidseining)
     ) |>
     rapwhale::aggreger_ki_prop()
 
