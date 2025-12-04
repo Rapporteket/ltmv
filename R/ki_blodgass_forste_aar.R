@@ -62,12 +62,13 @@ ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
         !is.na(f1_transcutaneous_co2_air),
       diff_start_fah = difftime(fah_followup_date, r_start_date, unit = "days"),
       fah_blodgass_start_fah = diff_start_fah <= to_aar & diff_start_fah > 0, # Tar ikke med de som har hatt ad hoc oppfølging samme dag, før, eller mer enn to år etter behandlingsstart
+      fah_blodgass = !is.na(fah_pco2_air) |
         !is.na(fah_po2_air) |
         !is.na(fah_capillarypo2_air) |
         !is.na(fah_capillarypco2_air) |
         !is.na(fah_be) |
         !is.na(fah_arterialpco2_air) |
-        !is.na(fah_transcutaneous_co2_air)),
+        !is.na(fah_transcutaneous_co2_air),
       diff_start_stopp = case_when(
         !is.na(c_stop_date) & is.na(c_deceased_date) ~ c_stop_date - r_start_date,
         is.na(c_stop_date) & !is.na(c_deceased_date) ~ c_deceased_date - r_start_date,
