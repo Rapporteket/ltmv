@@ -49,6 +49,7 @@
 #' ki_blodgass_forste_aar(d_superbreitt, dato_data = as.Date("2024-12-31"))
 #' }
 ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
+  d_superbreitt |>
     mutate(
       blodgass = !is.na(f1_pco2_air) |
         !is.na(f1_po2_air) |
@@ -76,8 +77,8 @@ ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
         r_ventilation_method == 3 ~ FALSE,
         year(r_start_date) < 2002 ~ FALSE,
         blodgass ~ TRUE,
+        r_start_date > !!dato_data - to_aar ~ FALSE, # Tar med bare de som har startet behandling to år før "dato_data"
         fah_blodgass ~ TRUE,
-        r_start_date > !!rapporteringsdato - 730.5 ~ FALSE,
         diff_start_stopp <= 730.5 ~ FALSE,
         TRUE ~ TRUE
       ),
