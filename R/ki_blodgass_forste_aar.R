@@ -77,11 +77,12 @@ ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
         TRUE ~ NA
       ),
       ki_krit_nevner = case_when(
-        r_ventilation_method == 3 ~ FALSE,
-        year(r_start_date) < 2002 ~ FALSE,
-        blodgass ~ TRUE,
+        r_ventilation_method == 3 ~ FALSE, # Tar ikke med de som får CPAP
+        lubridate::year(r_start_date) < 2002 ~ FALSE, # Ble elektronisk i 2002
         r_start_date > !!dato_data - to_aar ~ FALSE, # Tar med bare de som har startet behandling to år før "dato_data"
         diff_start_stopp <= to_aar ~ FALSE, # Tar ikke med de som har dødd/stoppet behandling innen to år etter startet behandling
+        blodgass ~ TRUE, # Målt blodgass ved ett års oppfølging
+        !fah_blodgass_start_fah ~ FALSE, # Tar ikke med de som har hatt ad hoc oppfølging samme dag, før, eller mer enn to år etter behandlingsstart
         fah_blodgass ~ TRUE,
         TRUE ~ TRUE
       ),
