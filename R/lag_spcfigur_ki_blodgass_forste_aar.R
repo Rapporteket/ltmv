@@ -42,7 +42,8 @@ lag_spcfigur_ki_blodgass_forste_aar = function(d_ki_superbreitt, tidseining = "m
     group_by(
       start_tid = lubridate::floor_date(r_start_date, unit = tidseining)
     ) |>
-    rapwhale::aggreger_ki_prop()
+    rapwhale::aggreger_ki_prop() |>
+    filter(!is.na(est)) # Fjerner punktene hvor nevner blir satt til FALSE i ki_blodgass_forste_aar()
 
   p = qicharts2::qic(
     x = start_tid,
