@@ -38,13 +38,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' d_superbreitt = superbreitt_format(
-#' d_full_patientlist = hent_skjema("patient"),
-#' d_full_mce = hent_skjema("mce"),
-#' d_full_ventreg = hent_skjema("ventreg"),
-#' d_full_ventfol = hent_skjema("ventfol"),
-#' d_full_conclude = hent_skjema("conclude")
-#' )
+# d_superbreitt = superbreitt_format(
+#   d_full_patientlist = hent_skjema("patient"),
+#   d_full_mce = hent_skjema("mce"),
+#   d_full_ventreg = hent_skjema("ventreg"),
+#   d_full_ventfol = hent_skjema("ventfol"),
+#   d_full_conclude = hent_skjema("conclude")
+# )
 #'
 #' ki_blodgass_forste_aar(d_superbreitt, dato_data = as.Date("2024-12-31"))
 #' }
