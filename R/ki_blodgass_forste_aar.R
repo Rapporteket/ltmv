@@ -49,6 +49,8 @@
 #' ki_blodgass_forste_aar(d_superbreitt, dato_data = as.Date("2024-12-31"))
 #' }
 ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
+  to_aar = lubridate::years(2) # Ett års oppfølging må være gjort innen to år etter behandlingsstart.
+
   d_superbreitt |>
     mutate(
       blodgass = !is.na(f1_pco2_air) |
@@ -59,7 +61,7 @@ ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
         !is.na(f1_arterialpco2_air) |
         !is.na(f1_transcutaneous_co2_air),
       diff_start_fah = difftime(fah_followup_date, r_start_date, unit = "days"),
-      fah_blodgass = diff_start_fah <= 730.5 & (!is.na(fah_pco2_air) |
+      fah_blodgass_start_fah = diff_start_fah <= to_aar & diff_start_fah > 0, # Tar ikke med de som har hatt ad hoc oppfølging samme dag, før, eller mer enn to år etter behandlingsstart
         !is.na(fah_po2_air) |
         !is.na(fah_capillarypo2_air) |
         !is.na(fah_capillarypco2_air) |
@@ -78,8 +80,8 @@ ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
         year(r_start_date) < 2002 ~ FALSE,
         blodgass ~ TRUE,
         r_start_date > !!dato_data - to_aar ~ FALSE, # Tar med bare de som har startet behandling to år før "dato_data"
+        diff_start_stopp <= to_aar ~ FALSE, # Tar ikke med de som har dødd/stoppet behandling innen to år etter startet behandling
         fah_blodgass ~ TRUE,
-        diff_start_stopp <= 730.5 ~ FALSE,
         TRUE ~ TRUE
       ),
       ki_krit_teller = ki_krit_nevner & (blodgass | fah_blodgass)
