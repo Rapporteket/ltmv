@@ -4,8 +4,13 @@
 #' Lag KI-datasett for andel forløp som fikk utført
 #' blodgassmåling ved oppfølging - innen 2 år.
 #' Dersom pasienten har avsluttet eller dødd innen
-#' 2 år uten å ha besvart PROM, blir pasienten ikke
-#' tatt med i beregningen av nevner eller teller.
+#' 2 år uten å fått utført blodgassmåling ved
+#' oppfølging, blir pasienten ikke tatt med i
+#' beregningen av nevner eller teller.
+#' Pasienter som er behandlet med CPAP skal ikke
+#' inkluderes i beregningen. Tilsvarende for
+#' pasienter som startet behandling før 2002
+#' (registeret ble elektronisk, og ble nasjonalt).
 #'
 #' Tar inn et datasett på "superbredt"-format som
 #' inneholder ventreg, ventfol (filtrert på year == 1)
@@ -23,14 +28,13 @@
 #' starte med "fah_" (f.eks. "fah_po2_air").
 #' @param rapporteringsdato Tar inn en dato (År-Måned-Dag)
 #' som er den siste datoen som blir tatt med i beregningen
-#' (innen to år). F.eks. dersom datoen er "2023-12-31",
-#' blir siste år med komplett data 2021.
+#' for når oppfølgingen må ha vært gjennomført (innen to år).
+#' F.eks. dersom datoen er "2023-12-31", blir siste år
+#' med komplett data 2021.
 #'
 #' @return KI-datasett egnet for bruk med [rapwhale::aggreger_ki_prop()].
 #'
 #' @export
-ki_blodgass_forste_aar = function(d_full_reg_forste_aar_ahoc, rapporteringsdato) {
-  d_full_reg_forste_aar_ahoc |>
     mutate(
       blodgass = !is.na(f1_pco2_air) |
         !is.na(f1_po2_air) |
