@@ -32,9 +32,9 @@
 #'     lubridate::year(start_date) >= format(Sys.Date() - years(6), "%Y")
 #'   )
 #'
-#' lag_spcfigur_ki_blodgass(d_superbreitt)
+#' lag_spcfigur_ki_blodgass_forste_aar(d_superbreitt)
 #'
-#' lag_spcfigur_ki_blodgass(d_superbreitt, tidseining = "year")
+#' lag_spcfigur_ki_blodgass_forste_aar(d_superbreitt, tidseining = "year")
 #' }
 lag_spcfigur_ki_blodgass_forste_aar = function(d_ki_superbreitt, tidseining = "month") {
   d_ki_blodgass_forste_aar = d_ki_superbreitt |>
