@@ -64,6 +64,27 @@ lag_datasett_superbreitt_dashboard = function(fra,
     select(id, sykehusnavn, hf, rhf) |>
     distinct()
 
+  if (user_role == "SC" && enhetstype == "RHF") {
+    d_superbreitt_dashboard = d_superbreitt_dashboard |>
+      filter(r_centreid %in% (d_id_sykehus_hf_rhf |>
+                              filter(rhf %in% per_rhf) |>
+                              pull(id)))
+  }
+
+  if (user_role == "SC" && enhetstype == "HF") {
+    d_superbreitt_dashboard = d_superbreitt_dashboard |>
+      filter(r_centreid %in% (d_id_sykehus_hf_rhf |>
+                              filter(hf %in% per_hf) |>
+                              pull(id)))
+  }
+
+  if (user_role == "SC" && enhetstype == "Sykehus") {
+    d_superbreitt_dashboard = d_superbreitt_dashboard |>
+      filter(r_centreid %in% (d_id_sykehus_hf_rhf |>
+                              filter(sykehusnavn %in% per_sykehus) |>
+                              pull(id)))
+  }
+
   d_superbreitt_dashboard
 }
 
