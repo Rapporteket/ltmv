@@ -55,10 +55,10 @@ lag_datasett_superbreitt_dashboard = function(fra,
   d_id_sykehus_hf_rhf = d_centre_hf |>
     mutate(id = as.numeric(id)) |>
     left_join(d_centre,
-              by = join_by(id == id)
+      by = join_by(id == id)
     ) |>
     left_join(d_centretype,
-              by = join_by(typeid == id)
+      by = join_by(typeid == id)
     ) |>
     rename(rhf = name, sykehusnavn = centrename) |>
     select(id, sykehusnavn, hf, rhf) |>
@@ -67,22 +67,22 @@ lag_datasett_superbreitt_dashboard = function(fra,
   if (user_role == "SC" && enhetstype == "RHF") {
     d_superbreitt_dashboard = d_superbreitt_dashboard |>
       filter(r_centreid %in% (d_id_sykehus_hf_rhf |>
-                              filter(rhf %in% per_rhf) |>
-                              pull(id)))
+        filter(rhf %in% per_rhf) |>
+        pull(id)))
   }
 
   if (user_role == "SC" && enhetstype == "HF") {
     d_superbreitt_dashboard = d_superbreitt_dashboard |>
       filter(r_centreid %in% (d_id_sykehus_hf_rhf |>
-                              filter(hf %in% per_hf) |>
-                              pull(id)))
+        filter(hf %in% per_hf) |>
+        pull(id)))
   }
 
   if (user_role == "SC" && enhetstype == "Sykehus") {
     d_superbreitt_dashboard = d_superbreitt_dashboard |>
       filter(r_centreid %in% (d_id_sykehus_hf_rhf |>
-                              filter(sykehusnavn %in% per_sykehus) |>
-                              pull(id)))
+        filter(sykehusnavn %in% per_sykehus) |>
+        pull(id)))
   }
 
   d_superbreitt_dashboard
