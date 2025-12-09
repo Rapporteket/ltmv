@@ -4,7 +4,11 @@ lag_datasett_superbreitt_dashboard = function(fra,
                                               kjonn,
                                               inkluder_missing,
                                               resh_id,
-                                              user_role) {
+                                              user_role,
+                                              enhetstype,
+                                              per_rhf,
+                                              per_hf,
+                                              per_sykehus) {
   d_superbreitt_dashboard = superbreitt_format(
     d_full_patientlist = hent_skjema("patient"),
     d_full_mce = hent_skjema("mce"),
