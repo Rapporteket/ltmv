@@ -83,7 +83,7 @@ ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
         blodgass ~ TRUE, # Målt blodgass ved ett års oppfølging
         !fah_blodgass_start_fah ~ FALSE, # Tar ikke med de som har hatt ad hoc oppfølging samme dag, før, eller mer enn to år etter behandlingsstart
         fah_blodgass ~ TRUE,
-        TRUE ~ TRUE
+        .default = TRUE
       ),
       ki_krit_teller = ki_krit_nevner & (blodgass | fah_blodgass)
     ) |>
