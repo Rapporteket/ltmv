@@ -73,8 +73,7 @@ ki_blodgass_forste_aar = function(d_superbreitt, dato_data) {
         !is.na(c_stop_date) & is.na(c_deceased_date) ~ c_stop_date - r_start_date,
         is.na(c_stop_date) & !is.na(c_deceased_date) ~ c_deceased_date - r_start_date,
         c_stop_date <= c_deceased_date ~ c_stop_date - r_start_date,
-        c_stop_date > c_deceased_date ~ c_deceased_date - r_start_date,
-        TRUE ~ NA
+        c_stop_date > c_deceased_date ~ c_deceased_date - r_start_date
       ),
       ki_krit_nevner = case_when(
         r_ventilation_method == 3 ~ FALSE, # Tar ikke med de som får CPAP
