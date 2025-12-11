@@ -51,7 +51,11 @@
 #'   kjonn = c(1, 2, NA_real_),
 #'   inkluder_missing = TRUE,
 #'   resh_id = 99999,
-#'   user_role = "SC"
+#'   user_role = "SC",
+#'   enhetstype = "RHF",
+#'   per_rhf = c("HELSE SØR-ØST RHF", "HELSE VEST RHF"),
+#'   per_hf = NULL,
+#'   per_sykehus = NULL
 #' )
 #' }
 lag_datasett_dashboard = function(fra,
