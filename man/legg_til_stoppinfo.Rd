@@ -18,6 +18,9 @@ Datarammen \code{d}, med ekstra kolonner med info om behandlingsstopp.
 Tar inn en dataramme,
 og legger til ekstra kolonner med info om behandlingsstopp.
 }
+\details{
+Funksjonen vil ikke klare å hente skjema om den brukes utenfor rapporteket.
+}
 \examples{
 \dontrun{
 hent_skjema("ventreg") |>

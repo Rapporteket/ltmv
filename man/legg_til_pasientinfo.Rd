@@ -23,6 +23,7 @@ i kolonnen \code{pasientid_varnavn}.
 Fra pasientskjema hentes dato for registrering, fødselsdato, kjønn,
 info om pasienten er død eller levende, og eventuell dødsdato.
 Denne infoen legges så til som nye kolonner i den originale datarammen.
+Funksjonen vil ikke klare å hente skjema om den brukes utenfor rapporteket.
 }
 \examples{
 \dontrun{
