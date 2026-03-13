@@ -17,6 +17,9 @@ Datarammen \code{d}, med en ekstra kolonne med med pasient-ID.
 \description{
 Tar inn en dataramme, og legger til en ekstra kolonne med pasient-ID.
 }
+\details{
+Funksjonen vil ikke klare å hente skjema om den brukes utenfor rapporteket.
+}
 \examples{
 \dontrun{
 hent_skjema("ventreg") |>

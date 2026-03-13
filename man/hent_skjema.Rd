@@ -21,7 +21,8 @@ Hentar all data frå eitt skjema.
 \details{
 Fuksjonen brukar \code{\link[rapbase:loadRegData]{rapbase::loadRegData()}}
 til å henta all data frå skjemaet med namn \code{skjemanamn}:
-\verb{SELECT * FROM skjemanamn}
+\verb{SELECT * FROM skjemanamn}. Funksjonen vil ikke klare å
+hente skjema om den brukes utenfor rapporteket.
 
 I databasen er det brukt store bokstavar i variabelnamna.
 I utdata frå denne funksjonen er dei gjort om til små bokstavar med
