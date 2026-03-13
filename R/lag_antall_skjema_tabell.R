@@ -43,7 +43,6 @@
 #' @return
 #' HTML-tabell med talet på ferdige og uferdige skjema på sjukehusnivå
 #' for registrerings-, avslutnings- og ulike oppfylgjingsskjema.
-#' @export
 #'
 #' @examples
 #' \dontrun{
