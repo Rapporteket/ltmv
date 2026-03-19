@@ -18,7 +18,7 @@ jobs:
     name: Push Docker image to Harbor
     runs-on: ubuntu-latest
     env:
-        IMAGE_NAME: ${{ github.repository }}
+      IMAGE_NAME: ${{ github.repository }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v6
@@ -28,6 +28,8 @@ jobs:
           dockerfile: "Dockerfile"
       - name: R setup
         uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
       - name: Build package (tarball)
         run: R CMD build .
       - name: Prepare tags
@@ -56,3 +58,4 @@ jobs:
           push: ${{ github.event_name == 'release' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: GH_PAT=${{ secrets.GITHUB_TOKEN }}
