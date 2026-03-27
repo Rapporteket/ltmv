@@ -18,6 +18,7 @@
 #' Fra pasientskjema hentes dato for registrering, fødselsdato, kjønn,
 #' info om pasienten er død eller levende, og eventuell dødsdato.
 #' Denne infoen legges så til som nye kolonner i den originale datarammen.
+#' Funksjonen vil ikke klare å hente skjema om den brukes utenfor rapporteket.
 #'
 #' @export
 #'
@@ -46,6 +47,9 @@ legg_til_pasientinfo = function(d, pasientid_varnavn) {
 #'
 #' @return
 #' Datarammen `d`, med en ekstra kolonne med med pasient-ID.
+#'
+#' @details
+#' Funksjonen vil ikke klare å hente skjema om den brukes utenfor rapporteket.
 #'
 #' @export
 #'
@@ -121,6 +125,9 @@ legg_til_alder_og_kategori = function(d, fodselsdato_varnavn, hendelsesdato_varn
 #'
 #' @return
 #' Datarammen `d`, med ekstra kolonner med info om behandlingsstopp.
+#'
+#' @details
+#' Funksjonen vil ikke klare å hente skjema om den brukes utenfor rapporteket.
 #'
 #' @export
 #'
