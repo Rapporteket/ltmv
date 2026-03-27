@@ -31,17 +31,17 @@ superbredt format.
 Funksjonen tar inn skjemaene patientlist, mce, ventreg, ventfol,
 og conclude, og legger på en bokstav i starten av hver variabel
 før skjemaene blir slått sammen til datasettet d_superbrei.
+}
+\details{
+Funksjonen tar i bruk fjern_duplikate_skjema() for ventfol, som
+beholder bare det øverste skjema dersom en pasient ligger inne
+med flere skjema for oppfølging 1 år, eller 3 år.
 
 "p_" blir lagt på starten av variablene i patientlist.
 "r_" blir lagt på starten av variablene i ventreg.
 "f1_", "f3", "fah_" og "lf_" blir lagt på starten av variablene
 i ventfol avhengig om variablene er tilknyttet oppfølgning 1 år,
 3 år, ad hoc, eller siste oppfølging.
-}
-\details{
-Funksjonen tar i bruk sjekk_duplikat() for ventfol, som beholder
-bare det øverste skjema dersom en pasient ligger inne med flere
-skjema for oppfølging 1 år, eller 3 år.
 }
 \examples{
 \dontrun{

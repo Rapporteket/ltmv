@@ -118,9 +118,9 @@ lag_datasett_superbreitt_dashboard = function(fra,
 #' superbredt format.
 #'
 #' @details
-#' Funksjonen tar i bruk sjekk_duplikat() for ventfol, som beholder
-#' bare det øverste skjema dersom en pasient ligger inne med flere
-#' skjema for oppfølging 1 år, eller 3 år.
+#' Funksjonen tar i bruk fjern_duplikate_skjema() for ventfol, som
+#' beholder bare det øverste skjema dersom en pasient ligger inne
+#' med flere skjema for oppfølging 1 år, eller 3 år.
 #'
 #' @export
 #'
@@ -179,13 +179,13 @@ superbreitt_format = function(d_full_patientlist,
   d_f1 = d_full_ventfol_ekstra |>
     filter(year == 1) |>
     rename_with(~ paste0("f1_", .x), .cols = !c(patient_id, parent_mce)) |>
-    sjekk_duplikat("1")
+    fjern_duplikate_skjema("1")
 
   # Oppfylgjing år 3
   d_f3 = d_full_ventfol_ekstra |>
     filter(year == 3) |>
     rename_with(~ paste0("f3_", .x), .cols = !c(patient_id, parent_mce)) |>
-    sjekk_duplikat("3")
+    fjern_duplikate_skjema("3")
 
   # Fyrste ad hoc oppfylgjing
   d_fah = d_full_ventfol_ekstra |>
@@ -272,9 +272,9 @@ superbreitt_format = function(d_full_patientlist,
 #'   by = join_by(mceid == mceid)
 #' )
 #'
-#' sjekk_duplikat(d_full_ventfol_ekstra, "3")
+#' fjern_duplikate_skjema(d_full_ventfol_ekstra, "3")
 #' }
-sjekk_duplikat = function(d, aar) {
+fjern_duplikate_skjema = function(d, aar) {
   if (n_distinct(d$parent_mce) < nrow(d)) {
     warning("Det finst registreringsskjema med fleire ", aar, "-års-oppfølgingsskjema")
     # Øvste skjema når det finst fleire
