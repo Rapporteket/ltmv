@@ -256,7 +256,7 @@ superbreitt_format = function(d_full_patientlist,
 #' Tekstvariabel. Året for oppfølgning (f.eks. "1")
 #'
 #' @return
-#' Datasett uten duplikate oppfølingsskjema dersom det finnes.
+#' Datasettet d, men der eventuelle duplikate oppfølgingsskjema er fjerne.
 #' Om det ikke finnes duplikate oppfølgingsskjema blir datasettet
 #' retunert uendret.
 #'
