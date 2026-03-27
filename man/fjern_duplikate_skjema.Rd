@@ -21,6 +21,9 @@ Funksjonen tar inn datasettet ventfol og aar for oppfølging,
 og beholder bare det øverste skjema dersom en pasient ligger
 inne med flere skjema for oppfølging 1 år eller 3 år.
 }
+\details{
+Funksjonen gir varsel dersom det finnes duplikate skjema.
+}
 \examples{
 \dontrun{
 les_data_ltmv()
