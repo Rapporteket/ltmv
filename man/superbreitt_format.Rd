@@ -39,9 +39,10 @@ med flere skjema for oppfølging 1 år, eller 3 år.
 
 "p_" blir lagt på starten av variablene i patientlist.
 "r_" blir lagt på starten av variablene i ventreg.
-"f1_", "f3", "fah_" og "lf_" blir lagt på starten av variablene
-i ventfol avhengig om variablene er tilknyttet oppfølgning 1 år,
-3 år, ad hoc, eller siste oppfølging.
+"f1_", "f3_", "fah_" og "lf_" blir lagt på starten av variablene
+i ventfol avhengig om variablene er tilknyttet oppfølgning 1 år (f1),
+3 år (f3), første ad hoc (fah), eller siste oppfølging (lf).
+Oppfølging utover dette blir fjernet.
 }
 \examples{
 \dontrun{
