@@ -12,8 +12,8 @@
 #' @details
 #' Fuksjonen brukar [rapbase::loadRegData()]
 #' til å henta all data frå skjemaet med namn `skjemanamn`:
-#' `SELECT * FROM skjemanamn`. Funksjonen vil ikke klare å
-#' hente skjema om den brukes utenfor rapporteket.
+#' `SELECT * FROM skjemanamn`. Funksjonen er avhengig av
+#' at database er kopla til for å fungere.
 #'
 #' I databasen er det brukt store bokstavar i variabelnamna.
 #' I utdata frå denne funksjonen er dei gjort om til små bokstavar med
