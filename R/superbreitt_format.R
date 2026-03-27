@@ -260,8 +260,6 @@ superbreitt_format = function(d_full_patientlist,
 #' Om det ikke finnes duplikate oppfølgingsskjema blir datasettet
 #' retunert uendret.
 #'
-#' @export
-#'
 #' @examples
 #' \dontrun{
 #' les_data_ltmv()
