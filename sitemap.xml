@@ -9,6 +9,7 @@
 <url><loc>/reference/app_server.html</loc></url>
 <url><loc>/reference/app_ui.html</loc></url>
 <url><loc>/reference/finn_storrelse_diag.html</loc></url>
+<url><loc>/reference/fjern_duplikate_skjema.html</loc></url>
 <url><loc>/reference/formater_antall_skjema_tabell.html</loc></url>
 <url><loc>/reference/grupper_skjemaoversikt.html</loc></url>
 <url><loc>/reference/hent_skjema.html</loc></url>
@@ -42,5 +43,6 @@
 <url><loc>/reference/regn_ut_gj_trakestomi.html</loc></url>
 <url><loc>/reference/report_processor.html</loc></url>
 <url><loc>/reference/run_app.html</loc></url>
+<url><loc>/reference/superbreitt_format.html</loc></url>
 </urlset>
 

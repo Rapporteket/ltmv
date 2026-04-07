@@ -77,7 +77,8 @@ Argumentet er med for å kunna køyra testar på testdatabase.</p></dd>
     <h2>Details</h2>
     <p>Fuksjonen brukar <code><a href="https://rdrr.io/pkg/rapbase/man/loadRegData.html" class="external-link">rapbase::loadRegData()</a></code>
 til å henta all data frå skjemaet med namn <code>skjemanamn</code>:
-<code>SELECT * FROM skjemanamn</code></p>
+<code>SELECT * FROM skjemanamn</code>. Funksjonen er avhengig av
+at database er kopla til for å fungere.</p>
 <p>I databasen er det brukt store bokstavar i variabelnamna.
 I utdata frå denne funksjonen er dei gjort om til små bokstavar med
 <code><a href="https://stringr.tidyverse.org/reference/case.html" class="external-link">stringr::str_to_lower()</a></code>.</p>
