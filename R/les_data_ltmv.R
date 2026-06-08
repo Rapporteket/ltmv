@@ -54,6 +54,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
                          status = 1, valider = TRUE, omgjevnad = .GlobalEnv) {
   # ID brukt i datadump-filnamn
   register_id = "Nasjonalt_register_for_langtids_mekanisk_ventilasjon"
+  datadump_id = "LTMVregisteret@helse-bergen.no"
 
   # lagre dato for datadump
   if (is.null(dato)) {
@@ -139,7 +140,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
   ) # fixme: må sjekke om disse er obligatoriske
   les_og_lagra = function(skjema, status, kb) {
     d = rapwhale::les_dd_oqr(mappe_dd,
-      reg_id = register_id, skjema_id = skjema,
+      reg_id = datadump_id, skjema_id = skjema,
       status = status, dato = dato, kodebok = kb,
       valider_kb = TRUE, valider_dd = valider
     )
