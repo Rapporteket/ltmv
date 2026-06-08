@@ -9,9 +9,10 @@ ki_prom_forste_aar(d_full_reg_forste_aar, rapporteringsdato)
 \arguments{
 \item{d_full_reg_forste_aar}{Tar inn et datasett på
 "superbredt"-format som inneholder ventreg, ventfol
-(filtrert på year == 1) og conclude (one-to-one).
-Variabelnavnene i ventfol må i tillegg starte med "f1_"
-(f.eks. "f1_qlwakeup").}
+og conclude.
+Variabelnavnene i ventfol må starte med "f1_" (f.eks. "f1_qlwakeup"),
+variablene fra ventreg må starte med "r_" (f.eks. "r_dato_start") og
+variablene fra conclude må starte med "c_" (f.eks. "c_dato_stopp").}
 
 \item{rapporteringsdato}{Tar inn en dato (År-Måned-Dag)
 som er den siste datoen som blir tatt med i beregningen
@@ -27,4 +28,10 @@ oppfølging - innen 2 år.
 Dersom pasienten har avsluttet eller dødd innen 2 år uten
 å ha besvart PROM, blir pasienten ikke tatt med i
 beregningen av nevner eller teller.
+}
+\examples{
+\dontrun{
+
+ki_prom_forste_aar(d_superbreitt, dato_data = as.Date("2024-12-31"))
+}
 }
