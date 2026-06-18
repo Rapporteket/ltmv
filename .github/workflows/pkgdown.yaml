@@ -15,7 +15,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}     # use built-in token
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           # ensure the checkout action uses the token so pushes from actions succeed
           token: ${{ secrets.GITHUB_TOKEN }}
