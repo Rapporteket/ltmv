@@ -69,3 +69,52 @@ jobs:
         with:
           error-on: '"error"'
           upload-snapshots: true
+
+  alpine-latest:
+    runs-on: ubuntu-latest # GitHub Action må køyra på windows, macOS eller ubuntu
+    container:
+      image: rhub/r-minimal:latest # rhub/r-minimal brukar Alpine Linux
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bekreft Alpine Linux
+        run: cat /etc/os-release
+
+      - uses: actions/checkout@v7
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install build dependencies
+        run: |
+          apk add --no-cache build-base linux-headers gfortran
+          which gfortran
+
+      - name: Db unit tests in linux
+        run: |
+          if [[ ${{ runner.os }} == Linux ]]; then
+            echo "GITHUB_ACTIONS_RUN_DB_UNIT_TESTS=true" >> $GITHUB_ENV
+            echo "DB_HOST=localhost" >> $GITHUB_ENV
+            echo "DB_NAME=testDb" >> $GITHUB_ENV
+            echo "DB_USER=root" >> $GITHUB_ENV
+            echo "DB_PASS=root" >> $GITHUB_ENV
+          else
+            echo "GITHUB_ACTIONS_RUN_DB_UNIT_TESTS=false" >> $GITHUB_ENV
+          fi
+      - name: Set up MySQL, ubuntu only
+        if: runner.os == 'Linux'
+        run: |
+          if [ -f /etc/init.d/mariadb ] || [ -f /etc/init.d/mysql ]; then
+            /etc/init.d/mariadb start || /etc/init.d/mysql start
+          fi
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck, any::remotes
+          needs: check, remotes
+
+      - uses: r-lib/actions/check-r-package@v2
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+        with:
+          error-on: '"error"'
+          upload-snapshots: true
