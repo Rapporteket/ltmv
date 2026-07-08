@@ -6,8 +6,6 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  schedule:
-    - cron: '0 21 * * 6' # run every Saturday at 21
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -22,10 +20,6 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v7
-      - name: R setup
-        uses: r-lib/actions/setup-r@v2
-      - name: Build package (tarball)
-        run: R CMD build .
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.3.0
         with:
@@ -38,7 +32,6 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=schedule,pattern=weekly
             type=semver,pattern={{major}}.{{minor}}.{{patch}}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -54,6 +47,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
+          pull: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
-          build-args: GH_PAT=${{ secrets.GITHUB_TOKEN }}
+          secrets: "github_pat=${{ secrets.GITHUB_TOKEN }}"
