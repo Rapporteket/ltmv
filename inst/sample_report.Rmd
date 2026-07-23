@@ -24,6 +24,9 @@ output:
 # nolint start: undesirable_function_linter.
 options(knitr.table.format = params$tableFormat)
 knitr::opts_chunk$set(warnings = FALSE, echo = FALSE)
+if (knitr::is_html_output() && !capabilities("cairo")) {
+  knitr::opts_chunk$set(dev = "svglite")
+}
 options(stringsAsFactors = FALSE)
 Sys.setlocale("LC_TIME", "nb_NO.UTF-8")
 # nolint end
