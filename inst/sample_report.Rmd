@@ -24,8 +24,17 @@ output:
 # nolint start: undesirable_function_linter.
 options(knitr.table.format = params$tableFormat)
 knitr::opts_chunk$set(warnings = FALSE, echo = FALSE)
+knitr::opts_chunk$set(
+  dev = if (knitr::is_latex_output()) "cairo_pdf" else "svglite"
+)
 options(stringsAsFactors = FALSE)
 Sys.setlocale("LC_TIME", "nb_NO.UTF-8")
+warning(sprintf(
+  "PROBE dev=%s html=%s cairo=%s",
+  paste(knitr::opts_chunk$get("dev"), collapse = ","),
+  knitr::is_html_output(),
+  capabilities("cairo")
+))
 # nolint end
 ```
 
