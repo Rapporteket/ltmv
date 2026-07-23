@@ -84,7 +84,20 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          apk add --no-cache build-base linux-headers gfortran
+          apk add --no-cache \
+            bash \
+            build-base \
+            linux-headers \
+            gfortran \
+            fontconfig-dev \
+            freetype-dev \
+            libpng-dev \
+            font-dejavu \
+            curl-dev \
+            openssl-dev \
+            libxml2-dev \
+            mariadb-connector-c-dev
+          fc-cache -f
           which gfortran
 
       - name: Db unit tests in linux
