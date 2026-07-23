@@ -17,15 +17,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Are Edvardsen \email{biorakel@gmail.com} (\href{https://orcid.org/0000-0002-5210-3656}{ORCID})
+\strong{Maintainer}: Per Erik Haugedal \email{per.erik.haugedal@helse-bergen.no}
 
 Authors:
 \itemize{
-  \item Per Erik Haugedal \email{per.erik.haugedal@helse-bergen.no}
   \item Endre Kvåle Evjen \email{endre.kvale.evjen@helse-bergen.no}
   \item Sergio Carracedo Huroz \email{sergio.carracedo.huroz@helse-bergen.no}
-  \item Fatemeh Ghavidel \email{fatemeh.zamanzad.ghavidel@helse-bergen.no}
-  \item Stian Tufte Veisene \email{stian.tufte.veisene@helse-bergen.no}
+  \item Ørjan Løseth Skaar \email{orjan.loseth.skaar@helse-bergen.no}
 }
 
 }
