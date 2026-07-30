@@ -10,7 +10,7 @@ lag_spcfigur_ki_blodgass(d_ventreg, tidseining = "month")
 \item{d_ventreg}{Dataramme med oppstartsskjema.}
 
 \item{tidseining}{Tekstring med tidseining for SPC-diagrammet som vert laga.
-Sjå argumentet \code{unit} i \code{\link[lubridate:round_date]{lubridate::floor_date()}} for detaljar om
+Sjå argumentet \code{unit} i \code{\link[lubridate:floor_date]{lubridate::floor_date()}} for detaljar om
 moglege verdiar.
 Standardverdi er \code{"month"}.}
 }

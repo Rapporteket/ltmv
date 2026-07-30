@@ -21,6 +21,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Per Erik Haugedal \email{per.erik.haugedal@helse-bergen.no}
   \item Endre Kvåle Evjen \email{endre.kvale.evjen@helse-bergen.no}
   \item Sergio Carracedo Huroz \email{sergio.carracedo.huroz@helse-bergen.no}
   \item Ørjan Løseth Skaar \email{orjan.loseth.skaar@helse-bergen.no}

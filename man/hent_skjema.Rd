@@ -26,7 +26,7 @@ at database er kopla til for å fungere.
 
 I databasen er det brukt store bokstavar i variabelnamna.
 I utdata frå denne funksjonen er dei gjort om til små bokstavar med
-\code{\link[stringr:case]{stringr::str_to_lower()}}.
+\code{\link[stringr:str_to_lower]{stringr::str_to_lower()}}.
 }
 \examples{
 \dontrun{
