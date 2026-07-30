@@ -11,7 +11,7 @@ lag_spcfigur_ki_blodgass_forste_aar(d_ki_superbreitt, tidseining = "month")
 med variabelnavn r_{variabel}, og oppfølingsskjema.}
 
 \item{tidseining}{Tekstring med tidseining for SPC-diagrammet som vert laga.
-Sjå argumentet \code{unit} i \code{\link[lubridate:round_date]{lubridate::floor_date()}} for detaljar om
+Sjå argumentet \code{unit} i \code{\link[lubridate:floor_date]{lubridate::floor_date()}} for detaljar om
 moglege verdiar.
 Standardverdi er \code{"month"}.}
 }

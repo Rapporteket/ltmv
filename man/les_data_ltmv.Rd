@@ -18,7 +18,7 @@ les_data_ltmv(
 Må ha undermapper med datonamn (format: \code{ÅÅÅÅ-MM-DD}).}
 
 \item{dato}{Datoen for den aktuelle datadumpen (anten tekst på formatet \code{ÅÅÅÅ-MM-DD}
-eller eit \link[base:Dates]{base::Date}-objekt). Vert brukt til å velja rett undermappe
+eller eit \link[base:Date]{base::Date}-objekt). Vert brukt til å velja rett undermappe
 til \code{mappe_dd}. Viss \code{NULL} (standard), vert nyaste dato brukt.}
 
 \item{maksdato}{Dato for siste startdato,
