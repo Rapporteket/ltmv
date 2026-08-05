@@ -1,0 +1,2180 @@
+---
+output:
+    pdf_document:
+      latex_engine: "lualatex"
+params:
+  HF_navn: 
+  #rapporteringsaar: '`r lubridate::year(Sys.time()) - 1`'
+  rapporteringsaar: 
+title: Rapport for LTMV-registrering
+subtitle: Nasjonalt register for langtids mekanisk ventilasjon
+author: Solfrid Indrekvam, registerleder
+date: '`r format(Sys.time(), "%d. %B, %Y")`'
+registryName: ltmv
+reglogo: '`r system.file("ltmv.png", package = "ltmv")`'
+regtext: '`r readLines(system.file("registry_short_description.txt", package = "ltmv"))`'
+userFullName: '`r params$user_full_name`'
+lang: nb
+---
+```{r render-rapport, include=FALSE, results='hide'}
+# # Kode som kan brukes for å kjøre `render` med parameter for å få ut
+# # raporten for alle HF.
+# HF = c("Oslo universitetssykehus", "Helse Bergen", "Sykehuset i Vestfold", "Sørlandet sykehus",
+#        "Sykehuset Østfold", "Nordlandssykehuset", "Helse Stavanger", "Sykehuset Innlandet",
+#        "Sykehuset Telemark", "St. Olavs Hospital", "Universitetssykehuset Nord-Norge", "Helse Møre og Romsdal",
+#        "Vestre Viken", "Helse Førde", "Akershus Universitetssykehus", "Helse Nord-Trøndelag",
+#        "Sunnaas sykehus", "Finnmarkssykehuset", "Helse Fonna", "Lovisenberg Diakonale Sykehus")
+# 
+# path_rapport = paste0(here::here(),"/nasjonale-register/ltmv/prosjekt/hf-rapport/")
+# path_input = paste0(path_rapport, "HF-rapport.Rmd")
+# path_output = paste0(path_rapport, "rapporter/")
+# 
+# for (hf in HF) {
+#     rmarkdown::render(input = path_input,
+#                       params = list(HF_navn = hf),
+#                       output_dir = path_output,
+#                       output_format = "pdf_document",
+#                       output_file = paste0("HF-rapport-", hf),
+#                       clean = TRUE,
+#                       envir = new.env())
+# }
+```
+
+```{r nødvendige pakker, include=FALSE, results='hide'}
+library(tidyverse) # lisvnæring. ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr og forcats
+library(lubridate) # For handtering av dato og tal
+library(scales) # Ymse skalafunksjonar (for ggplot2)
+library(testthat) # For unit testing
+# library(rjstat) # For å hente inn JSON-stat filer
+library(readxl) # for å hente inn sykehusdata
+library(readr) # for å hente data
+library(rapwhale) # ymse funksjoner utarbeidet på fagsenteret
+library(ltmv) # LTMV-spesifikke funksjoner
+
+#library(here) # For å lese inn filer fra riktig adresse
+
+#library(glue)
+library(knitr) # For visning av tabell
+library(kableExtra) # For visning av tabell
+library(gridExtra) # For å plotte figurer samlet
+```
+
+```{r globale-variabler, include=FALSE}
+# Endra desse variablane for å velja utgjevings- og rapporteringsaar
+rapporteringsaar = as.numeric(params$rapporteringsaar) # Året rapporten gjeld for (typisk året før han vert utgjeven)
+rapporteringsaar_siste_dato = as.Date(paste0(params$rapporteringsaar, "-12-31"))
+strukturdata_aar = 2025 # Året strukturdata senest ble samlet inn.
+regstart_aar = 2002 # Året registeret kom fullt i gang.
+
+hf_navn = paste0(params$HF_navn, " HF")
+
+theme_tekststorrelse = ggplot2::theme(axis.title = element_text(size = 11), 
+            axis.text = element_text(size = 9),
+            text = element_text(size = 9))
+```
+
+```{r knitrOptions, include=FALSE}
+# nolint start: undesirable_function_linter.
+options(knitr.table.format = params$tableFormat)
+knitr::opts_chunk$set(warnings = FALSE, echo = FALSE)
+options(stringsAsFactors = FALSE)
+# nolint end
+```
+
+```{r temafarger}
+rapwhale::aktiver_kvalregtema()
+
+# Farger for bruk i figurer
+farger = rapwhale::farger_kvalreg()
+colPrim = farger$farger_hoved
+colNoyt = farger$farger_noyt
+colKontr = farger$farger_kontr
+```
+
+```{r funksjoner-ltmv, include=FALSE}
+# veldig enkel liten funksjon for å legge til \n i
+# tekstvektorer, nyttig for bruk i figurer hvor navn på diagnoser/medisiner
+# blir for lange til at de vises i figuren, og kan gå over to linjer
+# alt man trenger å mate inn med er en tekstvektor, x, ellers er bredde mulig å velge
+bryt_tekst = function(x, bredde = 15) {
+  str_wrap(x, width = bredde)
+}
+
+# Funksjon for å hente ut tidsintervall
+# fra minst til høyeste år som finnes i bstart_aar
+# funksjonen henter ut ønsket intervall, og lager en tekststreng basert på intervallet
+# den sørger for at det dekkes over et år ekstra hvis 
+# antall år ikke går opp i opp i intervallene
+# brukes til analyser hvor det er ønskelig
+# å se på årsintervall heller enn enkeltår (mest elektiv behandling)
+lag_aars_intervall = function(d, intervall) {
+  startaar = min(d$r_bstart_aar) # minste året figuren kan vise
+  sluttaar = max(d$r_bstart_aar) # største året figuren kan vise
+  plengd = intervall # antall år som intervallet skal dekke
+
+  pslutt = seq(sluttaar, startaar, by = -plengd) 
+  # lager intervall fra minste til største år i ønsket intervall
+  pstart = pmax(pslutt - plengd + 1, startaar) # hvor figuren starter
+
+  d_intervaller = tibble(pstart, pslutt) %>%
+    mutate(ant_aar = pslutt - pstart + 1)
+  d_rep = d_intervaller[rep(1:nrow(d_intervaller), 
+                            times = d_intervaller$ant_aar), ]
+  d_rep$aar = map2(d_intervaller$pstart, d_intervaller$pslutt, seq) %>%
+    flatten_int()
+  d_rep = d_rep %>%
+    arrange(aar) %>%
+    mutate(periode = paste0(pstart, "-", pslutt)) %>% 
+    # lager teksstreng med periode
+    dplyr::select(aar, periode)
+
+  # koble til data
+  d = d %>%
+    left_join(d_rep, by = c("r_bstart_aar" = "aar"))
+  d
+}
+```
+
+
+```{r historiske-kommunenummer, include=FALSE}
+# # Laster inn datasett med historiske komunenummer for å koble til ventreg
+# # Adresse til filen med oppdaterte kommunenummer
+# kommunenr_oppdatert_adresse = here(
+#   "fellesting",
+#   "ressursar",
+#   "historiske-kommuneendringer",
+#   "oppdatert-kommune-masterliste.csv"
+# )
+# 
+# # Leser inn den oppdaterte kommunenummerlisten
+# ssb_kommuner_oppdatert = read_delim(kommunenr_oppdatert_adresse,
+#   delim = ",",
+#   col_types = "ccddccddccccc"
+# ) |>
+#   select(kilde_kode, kilde_tittel, dagens_kode)
+# 
+# # Får det på samme format som i registeret
+# ssb_fylker_oppdatert = ssb_kommuner_oppdatert |>
+#   mutate(
+#     fylker_historisk = str_extract(kilde_kode, "^\\d{2}"),
+#     fylker_historisk = str_remove(fylker_historisk, "^0"),
+#     fylker_oppdatert = str_extract(dagens_kode, "^\\d{2}"),
+#     fylker_oppdatert = str_remove(fylker_oppdatert, "^0")
+#   )
+
+d_fylke_til_rhf = tribble(
+  ~fylker_oppdatert, ~fylker_tekst, ~fylker_ltmv, ~rhf_kode, ~rhf_tekst, ~rhf_resh,
+  "3", "Oslo", 14, 1, "Helse Sør-Øst", 111919,
+  "11", "Rogaland", 7, 2, "Helse Vest", 100021,
+  "15", "Møre og Romsdal", 5, 3, "Helse Midt-Norge", 100024,
+  "18", "Nordland", 3, 4, "Helse Nord", 100022,
+  "31", "Østfold", 15, 1, "Helse Sør-Øst", 111919,
+  "32", "Akershus", 13, 1, "Helse Sør-Øst", 111919,
+  "33", "Buskerud", 11, 1, "Helse Sør-Øst", 111919,
+  "34", "Innlandet", 12, 1, "Helse Sør-Øst", 111919,
+  "39", "Vestfold", 10, 1, "Helse Sør-Øst", 111919,
+  "40", "Telemark", 9, 1, "Helse Sør-Øst", 111919,
+  "42", "Agder", 8, 1, "Helse Sør-Øst", 111919,
+  "46", "Vestland", 6, 2, "Helse Vest", 100021,
+  "50", "Trøndelag", 4, 3, "Helse Midt-Norge", 100024,
+  "55", "Troms", 2, 4, "Helse Nord", 100022,
+  "56", "Finnmark", 1, 4, "Helse Nord", 100022
+)
+
+d_rhf = d_fylke_til_rhf |>
+    select(starts_with("rhf")) |>
+    distinct(rhf_kode, .keep_all = TRUE)
+d_fylker = d_fylke_til_rhf |>
+    select(starts_with("fylker"))
+
+
+# # Gjør om "fylker_oppdatert" til numerisk for at det skal samsvare med registeret
+# d_fylker$fylker_oppdatert = as.character(d_fylker$fylker_oppdatert)
+# 
+# fylker_rhf_og_resh = ssb_fylker_oppdatert |>
+#   left_join(d_fylker,
+#             by = join_by(fylker_oppdatert),
+#             relationship = "many-to-one")
+```
+
+
+```{r ltmv-data, include=FALSE}
+# Last inn all data
+d_full_patientlist = hent_skjema("patient")
+d_full_mce = hent_skjema("mce")
+d_full_ventreg = hent_skjema("ventreg")
+d_full_ventfol = hent_skjema("ventfol")
+d_full_conclude = hent_skjema("conclude")
+
+# Duplikater som ikke skal være med
+dupl_mce = c(35639, 31291, 36283, 36286, 31354, 29425, 29422, 29423, 28042, 28200, 27799, 19700)
+
+# Filtrerer ut duplikater
+d_full_ventreg = d_full_ventreg |>
+  filter(!mceid %in% !!dupl_mce)
+
+# Legg til overordnede diagnosegrupper,
+# helseforetaknavn og helseregionnavn,
+# oppdaterte fylker og helseregionrekkefølge
+d_full_ventreg = d_full_ventreg |>
+  # FIXME Avkommenter når kommunernummer er avkryptert
+  # mutate(
+  #   kode_fylke = str_extract(municipality_number, "^\\d{2}"), 
+  #   kode_fylke = str_remove(kode_fylke, "^0")
+  # ) |>
+  legg_til_overordnet_diag() |>
+  legg_til_hf_rhf_navn()
+
+
+# FIXME Fjer utkommentering når OQReg6-datadump inneholder ukryptert kommunenummer
+# d_full_ventreg = d_full_ventreg |> 
+#   left_join(fylker_rhf_og_resh,
+#             by = join_by(municipality_number == kilde_kode),
+#             relationship = "many-to-one")
+
+d_full_ventreg = d_full_ventreg |>
+    rename(rhf_kode = move_to_rhf) |>
+    left_join(d_rhf, by = "rhf_kode")
+
+
+# I mange figurer ønsker man å ha linjeskift mellom ord i lange diagnoser
+# og helseforetaknavn, her lages egne variabler for det
+d_full_ventreg = d_full_ventreg |>
+  mutate(
+    diag_gruppe_navn_bryt = bryt_tekst(diag_gruppe_navn)
+  )
+
+
+d_full_superbrei = superbreitt_format(
+    d_full_patientlist,
+    d_full_mce,
+    d_full_ventreg,
+    d_full_ventfol,
+    d_full_conclude
+  )
+
+# Datoer med greiere variabelnavn, behandlingsstartsår med bare år
+# og en versjon med 2 siffer som årstall til fordel for enkelte figurer
+d_full_superbrei = d_full_superbrei |>
+  rename(p_dato_reg = p_RegistreringsDato,
+         r_dato_start = r_start_date,
+         c_dato_stopp = c_stop_date) |>
+  mutate(
+    r_bstart_aar = year(r_dato_start),
+    r_bstart_aar_2siff = format(r_dato_start, format = "%y")
+  )
+
+d_full_superbrei = d_full_superbrei |>
+  mutate(r_hf_tekst = if_else(r_hf_resh == 106635,
+                              "Lovisenberg Diakonale Sykehus",
+                              r_hf_tekst))
+
+# Lager en variabel for alder, samt en variabel viser om
+# pasienten er barn eller voksen ved behandlingsstart
+
+# Definerer og legger til variabelen
+d_full_superbrei = d_full_superbrei |>
+  mutate(
+    alder = time_length(interval(p_Fodselsdato, r_dato_start), "years"),
+    alderkat = factor(alder >= 18,
+      levels = c("FALSE", "TRUE"),
+      labels = c("Barn", "Voksen")
+    )
+  )
+
+# Filtrerer data for HF-et som vises i rapporten
+d_superbrei_hf = d_full_superbrei |>
+  filter(r_hf_tekst == params$HF_navn)
+
+# Filtrerer ut oppføringer med dato for behandlingsstart etter 31.12.2020.
+# Det er kun i prevalensutregninger vi trenger datasett med oppføringer
+# etter 31.12.2020, altså d_full_ventreg_mce_patientlist.
+d_superbrei_hf_siste_dato = d_superbrei_hf |>
+  filter(r_dato_start <= rapporteringsaar_siste_dato)
+
+# Fjerner variabler i d_ventreg_mce_patientlist som ikke benyttes i årsrapporten.
+# Kaller objektet d_ventreg siden det inneholder opplysninger tilknyttet behandlingsstart.
+d_superbrei = d_superbrei_hf_siste_dato |>
+  select(
+    patient_id, r_mceid, r_diagnosis1, r_status, alder, alderkat, p_Kjonn,
+    p_Fodselsdato, p_Avdod, p_Dodsdato, r_diag_gruppe_barn, r_diag_gruppe_barn_navn,
+    r_diag_gruppe, r_diag_gruppe_navn, r_diag_gruppe_navn_bryt, r_nevro,
+    r_nevro_navn, r_hf_resh, r_hf_tekst, r_hf_gr, r_hf_gr_tekst,
+    r_rhf_kode, r_rhf_tekst, p_dato_reg,
+    r_dato_start, r_bstart_aar, r_bstart_aar_2siff, r_respcon,
+    r_ventilation_method, r_po2_air, r_pco2_air, r_capillarypo2_air,
+    r_capillarypco2_air, r_be, r_arterialpco2_air, r_situation_ventilation,
+    r_transcutaneous_co2_air, # FIXME fylker_oppdatert, fylker_ltmv, rhf_resh - legg til variablene når kommunenummer ikke er kryptert lengre
+    contains(c("mceid", "followup_date", "po2_air", "pco2_air", "capillarypo2_air",
+    "capillarypco2_air", "be", "arterialpco2_air", "transcutaneous_co2_air", "year")),
+    c_status, c_deceased_date, c_dato_stopp, contains("ql")
+  )
+
+d_superbrei_oppfolging = d_superbrei |>
+  filter(
+    f1_followup_date <= rapporteringsaar_siste_dato |
+      f3_followup_date <= rapporteringsaar_siste_dato |
+      fah_followup_date <= rapporteringsaar_siste_dato |
+      lf_followup_date <= rapporteringsaar_siste_dato
+  )
+
+d_superbrei_avsluttet = d_superbrei |> 
+  filter(
+    is.na(c_dato_stopp) | c_dato_stopp <= rapporteringsaar_siste_dato,
+    is.na(c_deceased_date) | c_deceased_date <= rapporteringsaar_siste_dato
+  )
+  
+
+# Ferdigstilte ventreg-skjema siden registerstart for HF
+d_ventreg_regstart = d_superbrei |>
+  filter(r_bstart_aar >= regstart_aar)
+
+# Ferdigstilte ventreg-skjema siste 5 år
+d_ventreg_siste_fem_aar = d_superbrei |>
+  filter(r_bstart_aar >= rapporteringsaar - 4)
+
+# Filtrerer ut oppføringer med dato for behandlingsstart etter 31.12.rapporteringsår.
+d_full_superbrei_siste_dato = d_full_superbrei |>
+  filter(r_dato_start <= rapporteringsaar_siste_dato)
+
+# Ferdigstilte ventreg-skjema siden registerstart, nasjonalt
+d_full_superbrei_regstart = d_full_superbrei_siste_dato |>
+  filter(r_bstart_aar >= regstart_aar)
+
+# Ferdigstilte ventreg-skjema nasjonalt siste 5 år
+d_ventreg_siste_fem_aar_nasjonalt = d_full_superbrei_regstart |>
+  filter(r_bstart_aar >= rapporteringsaar - 4)
+
+# Ferdigstilte ventreg-skjema aktuelt år
+d_ventreg_akt = d_superbrei |>
+  filter(r_bstart_aar == rapporteringsaar)
+
+# Ferdigstilte unike pasienter alle år
+d_pers_alle_aar = d_superbrei |>
+  distinct(patient_id, .keep_all = TRUE)
+
+# Ferdigstilte unike pasienter aktuelt år
+d_pers_akt = d_ventreg_akt |>
+  distinct(patient_id, .keep_all = TRUE)
+
+# Antall nye pasienter aktuelt år (barn og voksne)
+n_barn_ny_akt = d_pers_akt |>
+  filter(alder < 18) |>
+  nrow()
+
+n_voksen_ny_akt = d_pers_akt |>
+  filter(alder >= 18) |>
+  nrow()
+
+# Ferdigstilte unike pasienter siden registerstart
+# For pasienter som har flere startskjema er det det
+# første skjemaet som skal være med (dette objektet
+# blir kun brukt i en analyse av andel menn/kvinner
+# per år, og registerleder har sagt at da skal kun
+# det første skjemaet være med).
+d_pers_regstart = d_ventreg_regstart |>
+  arrange(r_bstart_aar) |>
+  distinct(patient_id, .keep_all = TRUE)
+
+# Ferdigstilte unike pasienter alle år inkludert rapporteringsår + 1.
+# Brukes i utregninger av prevalens og insidens.
+d_pers_inkl_aar_innlevering = d_superbrei |>
+  arrange(desc(r_bstart_aar)) |>
+  distinct(patient_id, .keep_all = TRUE)
+
+# Filtrerer PROM-data til å kun inkludere dem som registrerte
+# det etter oppstart av elektronisk register i 2014-08-25.
+
+# Henter ut variabler som brukes i PROM-analyser.
+d_full_prom = d_superbrei_hf_siste_dato |>
+  filter(r_dato_start >= "2014-08-25", alderkat == "Voksen") |>
+  select(
+    contains(c("patient_id", "mceid", "mcetype", "dato_reg", "kjonn", 
+               "fodselsdato", "dato_start", "bstart_aar", "rhf_kode", 
+               "rhf_tekst", "hf_resh", "hf_tekst", "_q", "parent_mce",
+               "followup_date", "year"))
+  ) |>
+  filter(
+    f1_followup_date <= rapporteringsaar_siste_dato
+  )
+
+```
+
+```{r SSB-data}
+# # Hent inn tall fra ssb på folkemengden i hele norge
+# ssb_folk_full = fromJSONstat(
+#   readLines(
+#     glue(
+#       "https://data.ssb.no/api/pxwebapi/v2/tables/06913/data?lang=no&",
+#       "valueCodes[Region]=*&valueCodes[ContentsCode]=*&valueCodes[Tid]=",
+#       "from(1951)&codelist[Region]=agg_KommFylkerHist&outputValues[Region]",
+#       "=aggregated&outputValues[Region]=single"
+#       ),
+#   encoding = "UTF-8",
+#   warn = FALSE
+#   ),
+#   naming = "id") |>
+#   as_tibble()
+# 
+# 
+# # vi bruker så langt bare tall på selve folkemengden, ikke innflyttinger osv.
+# # filtrerer derfor ut folkemengde
+# # endrer navn på kolonnen "value" til noe mer intuitivt
+# # FIXME Trengs når kommunenummer ikke er kryptert lengre i datadump og
+# # registeret ønsker å presentere insidens og prevalens i HF-rapport som tidligere.
+# ssb_folk = ssb_folk_full |>
+#   filter(ContentsCode == "Folkemengde") |>
+#   rename("folk" = "value") |>
+#   mutate(Region = str_replace(Region, "F_", ""))
+```
+
+```{r testhat}
+# Test at sluttdato skal være etter startdato
+
+# Lager en variabel som viser antall dager mellom start og stopp
+d_dato_test = d_superbrei |>
+  filter(!is.na(c_dato_stopp)) |>
+  mutate(datediff = as.numeric(c_dato_stopp) - as.numeric(r_dato_start))
+
+# Test at sluttdato er etter oppstartsdato
+testthat::expect_gt(min(d_dato_test$datediff), -1)
+```
+
+
+# `r hf_navn`
+Denne rapporten fra LTMV-registeret er ment å gi en oversikt 
+over hvilket resultat ditt foretak har i forhold til 
+landsgjennomsnittet for `r rapporteringsaar` og vil 
+derfor være et supplement til 
+[årsrapporten](https://kvalitetsregistre.fnsp.nhn.no/49d94f/siteassets/dokumenter/arsrapporter/langtidsmekanisk-ventregisteret/arsrapport_lmtv_2024.pdf) 
+for registeret.
+Mer informasjon kan finnes på registerets 
+[nettsider](https://www.helse-bergen.no/avdelinger/lungeavdelinga/nasjonalt-register-for-langtids-mekanisk-ventilasjon) 
+og på [Behandlingskvalitet](https://apps.skde.no/behandlingskvalitet/mek_vent/).
+
+Vi setter pris på tilbakemeldinger om dere finner noe som er 
+uklart eller overraskende i resultatene nedenfor, slik at vi 
+får muligheten til å rette opp eventuelle feil.
+
+Ettersom vi behandler diagnoser med et lite pasientgrunnlag 
+kan små variasjoner gi store utslag i resultater, særlig 
+måledata må derfor tolkes med forsiktighet.
+Figurene i rapporten baserer seg på ferdigstilte registreringer
+siste 5 år fram til og med `r rapporteringsaar`.
+Forekomst av LTMV behandling og registreringer i registeret er innhentet
+per desember 2025.
+
+```{r n-pas, results="hide"}
+# Antall pasienter i aktiv behandling per 31/12 i rapporteringsåret
+aktiv_behandling = function(d_superbrei) {
+  d_superbrei |>
+  # Skal kun inkludere pasienter som mangler verdi for status-variabelen fra 
+  # avslutningsskjemaet (som vil si at de ikke har et ferdigstilt avslutningsskjema)
+  # og/eller pasienter hvor følgende IKKE er oppfylt: har avslutningskjema og 
+  # mangler både dødsdato, stoppdato samt at avdod = 0. Noen pasienter har
+  # ferdigstilt avslutningskjema, men mangler stoppdato. Registerleder har sjekket 
+  # i journal at alle disse har har avsluttet behandling før 31.12.2021. De må 
+  # derfor filtreres bort (gjøres i kodelinjen under). Registerleder skal lage 
+  # Jira-sak på at stoppdato må bli obligatorisk å fylle inn.
+  filter(
+    is.na(c_status) |
+    !(c_status == 1 &
+    is.na(c_dato_stopp) &
+    is.na(p_Dodsdato) & p_Avdod == 0)) |>
+  # Erstatter manglende stoppdatoer med dødsdatoer. Har avklart med  
+  # registerleder at dette er ok å gjøre for pasienter som har en 
+  # dødsdato, men som mangler en stoppdato.
+  mutate(
+    dato_stopp = if_else(
+      (!is.na(p_Dodsdato) & is.na(c_dato_stopp)),
+      p_Dodsdato,
+      c_dato_stopp
+    ),
+    aktiv_behandling = r_bstart_aar <= rapporteringsaar &
+      (is.na(c_dato_stopp) | c_dato_stopp > rapporteringsaar_siste_dato)
+  ) |>
+  filter(aktiv_behandling)
+}
+
+# Hent antall registrerte pasienter i registeret for
+# året før rapporteringsåret
+d_pas_akt_minus_en = d_superbrei |>
+  filter(r_bstart_aar == rapporteringsaar - 1)
+
+# Hent antall registrerte pasienter i registeret for
+# rapporteringsåret
+d_pas_akt = d_superbrei |>
+  filter(r_bstart_aar == rapporteringsaar)
+
+d_aktiv_behandling_utgang_rapporteringsaar = d_superbrei |> aktiv_behandling()
+
+n_tot = d_superbrei |> regn_n_pas() |> pull(n)
+n_aktiv = d_aktiv_behandling_utgang_rapporteringsaar |>
+  regn_n_pas() |> pull(n)
+n_oppstart_minus_en = d_pas_akt_minus_en |> regn_n_pas() |> pull(n)
+n_oppstart = d_pas_akt |> regn_n_pas() |> pull(n)
+```
+
+```{r andel-pas, results='hide'}
+# Andel pasienter siste 5 år for HF
+andel_pas_siste_fem_aar = d_ventreg_siste_fem_aar |>
+  count(alderkat) |>
+  mutate(andel = n / sum(n) * 100)
+
+andel_voksne_siste_fem_aar = andel_pas_siste_fem_aar |>
+  filter(alderkat == "Voksen") |>
+  pull(andel) |>
+  round(digits = 0)
+
+andel_barn_siste_fem_aar = andel_pas_siste_fem_aar |>
+  filter(alderkat == "Barn") |>
+  pull(andel) |>
+  round(digits = 0)
+
+# Andel pasienter siste 5 år nasjonalt
+andel_pas_siste_fem_aar_nasjonalt = d_ventreg_siste_fem_aar_nasjonalt |>
+  count(alderkat) |>
+  mutate(andel = n / sum(n) * 100)
+
+andel_voksne_siste_fem_aar_nasjonalt = andel_pas_siste_fem_aar_nasjonalt |>
+  filter(alderkat == "Voksen") |>
+  pull(andel) |>
+  round(digits = 0)
+
+andel_barn_siste_fem_aar_nasjonalt = andel_pas_siste_fem_aar_nasjonalt |>
+  filter(alderkat == "Barn") |>
+  pull(andel) |>
+  round(digits = 0)
+
+# Andel barn i aktiv behandling med oppstart siste 5 år for rapporteringsåret 
+andel_barn_akt_rappaar_hf = d_aktiv_behandling_utgang_rapporteringsaar |>
+  filter(r_bstart_aar >= rapporteringsaar - 4) |>
+  count(alderkat) |>
+  mutate(andel = n / sum(n) * 100) |>
+  filter(alderkat == "Barn") |>
+  pull(andel) |>
+  round(digits = 0)
+
+# Andel barn i aktiv behandling med oppstart siste 5 år for rapporteringsåret - nasjonalt
+andel_barn_akt_rappaar_nasjonalt = d_full_superbrei |>
+  aktiv_behandling() |>
+  filter(r_bstart_aar >= rapporteringsaar - 4) |>
+  count(alderkat) |>
+  mutate(andel = n / sum(n) * 100) |>
+  filter(alderkat == "Barn") |>
+  pull(andel) |>
+  round(digits = 0)
+
+# Andel menn og kvinner med oppstart de siste 5 år
+andel_kjonn_siste_fem_aar_hf = d_ventreg_siste_fem_aar |>
+  count(p_Kjonn) |>
+  mutate(kjonn_tekst = if_else(p_Kjonn == 1, "menn", "kvinner"),
+         andel = round(n / sum(n) * 100, digits = 0))
+
+# Velger kjønnet med høyest andel
+andel_kjonn_siste_fem_aar_hf_maks = andel_kjonn_siste_fem_aar_hf |>
+  filter(n == max(n))
+
+# Andel menn og kvinner med oppstart de siste 5 år nasjonalt
+andel_kjonn_siste_fem_aar_nasjonalt = d_ventreg_siste_fem_aar_nasjonalt |>
+  count(p_Kjonn) |>
+  mutate(kjonn_tekst = if_else(p_Kjonn == 1, "menn", "kvinner"),
+         andel = round(n / sum(n) * 100, digits = 0))
+
+# Velger kjønnet med høyest andel nasjonalt
+andel_kjonn_siste_fem_aar_nasjonalt_maks = andel_kjonn_siste_fem_aar_nasjonalt |>
+  filter(n == max(n))
+
+# Fjerner "r_" fra kolonnenavnet til "respcon" for å kunne bruke funksjonen
+# "regn_ut_gj_trakestomi()"
+d_ventreg_siste_fem_aar = d_ventreg_siste_fem_aar |>
+  rename(respcon = r_respcon)
+d_ventreg_siste_fem_aar_nasjonalt = d_ventreg_siste_fem_aar_nasjonalt |>
+  rename(respcon = r_respcon)
+
+# Antall registrerte pasienter med trakeostomerte ved behandlingsstart siste 5 år
+andel_trakeostemi_hf = d_ventreg_siste_fem_aar |>
+  regn_ut_gj_trakestomi(1) # 1 for trakeostomi
+
+andel_trakeostemi_nasjonalt = d_ventreg_siste_fem_aar_nasjonalt |>
+  regn_ut_gj_trakestomi(1)
+```
+
+
+
+## Generell beskrivelse
+
+Ved årsskifte har helseforetaket `r n_tot` registrerte pasienter hvorav
+`r n_aktiv` i fortsatt aktiv behandling. Det var `r n_oppstart` nye i
+`r rapporteringsaar-1` og `r n_oppstart_minus_en` nye i `r rapporteringsaar`.
+
+Av de registrerte pasientene siste 5 år er `r andel_voksne_siste_fem_aar` %
+voksne ($\ge$ 18 år) og `r andel_barn_siste_fem_aar` % barn (\< 18 år),
+tilsvarende nasjonale tall er `r andel_voksne_siste_fem_aar_nasjonalt` % 
+voksne og `r andel_barn_siste_fem_aar_nasjonalt` % barn. 
+Per årsskifte er `r andel_barn_akt_rappaar_hf` % av pasientene i aktiv
+behandling under 18 år lokalt og `r andel_barn_akt_rappaar_nasjonalt` % 
+nasjonalt.
+
+Av pasientene i oppstart siste 5 år i `r hf_navn`
+er det `r andel_kjonn_siste_fem_aar_hf_maks$andel` % 
+`r andel_kjonn_siste_fem_aar_hf_maks$kjonn_tekst`, nasjonalt er
+det et lite flertall
+`r andel_kjonn_siste_fem_aar_nasjonalt_maks$kjonn_tekst`,
+`r andel_kjonn_siste_fem_aar_nasjonalt_maks$andel` %.
+
+For de fleste pasienter er maskebehandling tilstrekkelig.
+Det er særlig for enkelte nevromuskulære sykdommer/skader
+at trakeostomikanyle kan være aktuelt.
+Totalt `r andel_trakeostemi_hf` % av de registrerte 
+pasientene er trakeostomerte ved behandlingsoppstart siste 5
+år, nasjonalt `r andel_trakeostemi_nasjonalt` %.
+Men noen pasienter, spesielt nevromuskulære, blir 
+trakeostomert senere i forløpet.
+
+
+```{r data-dekningsgrad, results='hide', eval=FALSE}
+# # tilslutning ligger i samme mappe som dekningsgrader
+# mappe_dekning = "dekningsgrader\\"
+# # d_sykehus = read_excel(paste0(grunnmappe, mappe_dekning, "tilslutning-ltmv.xlsx"), sheet = 1)
+# 
+# # Henter inn sykehusinfo fra kvalitetsserveren
+# mappe_kb = paste0(grunnmappe, "kodebok\\")
+# filnavn_kb_sjukehus = "s_registerresh_sjukehusinfo.xlsx"
+# d_sjukehus_info = read_excel(paste0(mappe_kb, filnavn_kb_sjukehus)) |>
+#   mutate(
+#     hf_tekst = str_replace_all(hf_tekst, "\\ HF", ""),
+#     hf_gr_tekst = str_replace_all(hf_gr_tekst, "\\ HF", "")
+#   )
+# 
+# # Henter inn dekningsgrad strukturert per avdeling med teller og nevner
+# # Disse er regnet ut ved hver avdeling, altså ikke opp mot NPR
+# d_dgrad_full = read_excel(
+#   paste0(grunnmappe, mappe_dekning, "dekningsgrad-ltmv.xlsx"),
+#   sheet = 1,
+#   .name_repair = "unique_quiet")
+# # dataene kommer inn med mange tommer rader
+# # (fordi disse inneholder formler for fremtidig innregistrering)
+# # disse fjerner vi
+# missing_foretak = which(is.na(d_dgrad_full$hf_tekst))
+# d_dgrad = d_dgrad_full |>
+#   slice(-missing_foretak)
+# 
+# # kobler med helseforetakinfo for å få navn
+# d_hf = d_sjukehus_info |>
+#   select(-register_resh, -starts_with("sjukehus")) |>
+#   distinct(hf_resh, .keep_all = TRUE)
+# d_dgrad = d_dgrad |>
+#   left_join(d_hf, by = c("hf_resh", "hf_tekst"))
+# # fjerner "HF" og "RHF"
+# d_dgrad = d_dgrad |>
+#   mutate(
+#     hf_tekst = str_replace_all(hf_tekst, "\\ HF", ""),
+#     rhf_tekst = str_replace_all(rhf_tekst, "\\ RHF", "")
+#   )
+# 
+# # Henter resh for HF-et i rapporten
+# r_hf_resh = d_superbrei_hf |>
+#   distinct(r_hf_resh) |>
+#   pull()
+# 
+# # FIXME Hør med registeret om "Lovisenberg Diakonale Sykehus AS" skal inkluderes.
+# # Ser ikke ut som den blir tatt med i manuell beregning for DG aar = 2024
+# d_dgrad = d_dgrad |>
+#   filter(hf_resh != -101) # fjerner Lovisenberg Diakonale Sykehus AS
+# 
+# # Filtrerer DG for HF-et
+# d_dgrad_hf = d_dgrad |>
+#   filter(hf_resh == !!r_hf_resh)
+# 
+# # Rapporteringsåret er året rapporten gjeld for (typisk året før han blir utgitt)
+# # mens "aar" i dekningsgradsanalysen er året DG er utført (typisk rapporteringsåret + 1)
+# dg_rappaar_hf_tot = d_dgrad_hf |>
+#   filter(aar == rapporteringsaar + 1) |>
+#   summarise(tot = round(sum(teller) / sum(nevner) * 100, digits = 0)) |>
+#   pull()
+# 
+# # avd_type, teller, nevner og DG per avdeling for rapporteringsåret
+# d_dg_rappaar_avd = d_dgrad_hf |>
+#   filter(aar == rapporteringsaar + 1) |>
+#   group_by(sykehus_avdeling) |>
+#   summarise(avd_type,
+#             teller,
+#             nevner,
+#             dg = round(teller / nevner * 100, digits = 0))
+# 
+# # Beregner samlet DG dersom det finnes flere voksne/barneavdelinger
+# d_dg_rappaar_avd_typ_samlet = d_dg_rappaar_avd |>
+#   group_by(avd_type) |>
+#   summarise(dg_samlet = round(sum(teller) / sum(nevner) * 100, digits = 0))
+# 
+# dg_rappaar_hf_barn = d_dg_rappaar_avd_typ_samlet |>
+#   filter(avd_type == 1) |> # barn
+#   pull(dg_samlet)
+# 
+# dg_rappaar_hf_voksen = d_dg_rappaar_avd_typ_samlet |>
+#   filter(avd_type == 2) |> # voksen
+#   pull(dg_samlet)
+# 
+# # Beregner antall avdelinger som leverer beregningsgrunnlag for rapporteringsåret
+# n_levert_dg_nasjonalt = d_dgrad |>
+#   filter(aar == rapporteringsaar + 1, !is.na(nevner)) |>
+#   nrow()
+# 
+# # NAsjonal DG samlet
+# dg_rappaar_tot = d_dgrad |>
+#   filter(aar == rapporteringsaar + 1) |>
+#   summarise(
+#     dg_tot = round(sum(teller, na.rm = TRUE) / sum(nevner, na.rm = TRUE) * 100,
+#                 digits = 0)
+#     ) |>
+#   pull()
+# 
+# # Nasjonal DG for barn og voksne
+# d_dg_rappaar_barn_voksne = d_dgrad |>
+#     filter(aar == rapporteringsaar + 1) |>
+#     group_by(avd_type) |>
+#     summarise(
+#         dg_barn_voksne = round(sum(teller, na.rm = TRUE) / sum(nevner, na.rm = TRUE) * 100,
+#                     digits = 0)
+#     )
+# 
+# # Nasjonal DG barn
+# dg_rappaar_nasjonalt_barn = d_dg_rappaar_barn_voksne |>
+#   filter(avd_type == 1) |> # barn
+#   pull(dg_barn_voksne)
+# 
+# # Nasjonal DG voksne
+# dg_rappaar_nasjonalt_voksne = d_dg_rappaar_barn_voksne |>
+#   filter(avd_type == 2) |> # voksne
+#   pull(dg_barn_voksne)
+```
+
+
+
+<!-- ## Dekningsgrad -->
+
+
+```{r tabell-dg, echo=FALSE, warning=FALSE, results="asis", eval=FALSE}
+# tabelltekst_dg = paste0(
+#   "Dekningsgrad og beregningsgrunnlag for dekningsgrad 
+#   per innregistrerende avdeling."
+# )
+# 
+# # Endrer kolonnenavn til visning av tabell
+# d_dg_rappaar_avd_tabell = d_dg_rappaar_avd |>
+#   select(!avd_type) |> 
+#   rename("Sykehus avdeling" = sykehus_avdeling,
+#          Registrert = teller,
+#          Totalt = nevner,
+#          "Dekningsgrad-%" = dg)
+# 
+# # Viser dataen som en tabell
+# kable(d_dg_rappaar_avd_tabell,
+#       caption = tabelltekst_dg) |>
+#   kable_styling(bootstrap_options = "bordered",
+#                 full_width = FALSE,
+#                 position = "center")
+
+# gt::gt(d_dg_rappaar_avd_tabell) |> gt::tab_options(table.align = "left", table.width = gt::pct(50))
+```
+
+
+
+```{r dg-fig, echo=FALSE, warning=FALSE, fig.height=2, fig.width=4.5, results="hide", fig.cap=figtekst_dg, eval=FALSE}
+# figtekst_dg = paste0(
+#   "Dekningsgrad for ", hf_navn, " og Nasjonalt."
+# )
+# 
+# dg_fig_hf_nasjonalt = tribble(
+#   ~hf_navn, ~hf_dg,
+#   hf_navn, dg_rappaar_hf_tot / 100,
+#   "Nasjonalt", dg_rappaar_tot / 100)
+# 
+# 
+# lag_fig_soyle_prosent(
+#   dg_fig_hf_nasjonalt,
+#   x = hf_navn,
+#   y =  hf_dg,
+#   fill = c(colPrim[3], colKontr)) +
+#   scale_fill_manual(values =  c(colPrim[3], colKontr)) +
+#   ylab("Dekningsgrad") + xlab(NULL)
+```
+
+
+
+## Aldersfordeling
+
+```{r fig-alder, echo=FALSE, results='asis', warning=FALSE, fig.height=4, fig.width=10, fig.cap=figtekst_aldersfordeling}
+figtekst_aldersfordeling = paste0(
+  "Aldersfordeling av pasienter med oppstart de siste fem årene 
+  for ", hf_navn, " og Nasjonalt"
+)
+
+# Tester for aldersvariabelen
+d_test_alder = d_ventreg_siste_fem_aar_nasjonalt |>
+  filter(!is.na(alder)) |>
+  select(alder)
+
+expect_true(min(d_test_alder) >= 0)
+expect_true(max(d_test_alder) < 120)
+
+# Fig aldersfordeling for HF
+aldersfordeling_fig_hf = lag_fig_histogram(
+  d_ventreg_siste_fem_aar,
+  x = alder, binwidth = 5,
+  breaks_width = 10) +
+  xlab("Alder") +
+  ylab("Antall pasienter") +
+  fjern_x_ticks() +
+  labs(title = hf_navn) +
+  theme_tekststorrelse
+
+# Fig aldersformdeling nasjonalt
+aldersfordeling_fig_nasjonal = lag_fig_histogram(
+  d_ventreg_siste_fem_aar_nasjonalt,
+  x = alder, binwidth = 5,
+  breaks_width = 10) +
+  xlab("Alder") +
+  ylab("Antall pasienter") +
+  fjern_x_ticks() +
+  labs(title = "Nasjonalt") +
+  theme_tekststorrelse
+
+# Plotter figurene side om side
+grid.arrange(aldersfordeling_fig_hf, aldersfordeling_fig_nasjonal, ncol = 2)
+```
+
+Start av ventilatorbehandling er sjeldne hendelser i et lite foretak,
+og variasjonene fra et år til et annet kan derfor bli store.
+For ikke å mistolke data vises fordelingen for de siste 5 år.
+Om andelen i den yngste aldersgruppen er mye mindre enn for
+landsgjennomsnittet kan det indikere en svakhet i håndtering 
+av barn med behov for LTMV, men kan også være at barna blir
+ivaretatt av et større sykehus i et annet helseforetak eller
+at barna foreløpig ikke er registrert.
+Om andelen er mye større enn for landsgjennomsnittet er det tvert om.
+
+```{r data-diagnosefordeling, echo=FALSE, results='hide'}
+# lager datasett med begrenset variabler for HF
+d_diagnose_hf = d_ventreg_siste_fem_aar |>
+  select(patient_id, p_dato_reg, r_bstart_aar, r_diagnosis1,
+         alderkat, r_diag_gruppe_barn, r_diag_gruppe_barn_navn)
+
+# lager datasett med begrenset variabler nasjonalt
+d_diagnose_nasjonal = d_ventreg_siste_fem_aar_nasjonalt |>
+  select(patient_id, p_dato_reg, r_bstart_aar, r_diagnosis1,
+         alderkat, r_diag_gruppe_barn, r_diag_gruppe_barn_navn)
+
+# regner ut andel per barn og voksne for HF
+d_n_diag_akt_hf = d_diagnose_hf |>
+  filter(r_bstart_aar == rapporteringsaar) |>
+  count(alderkat, r_diag_gruppe_barn, r_diag_gruppe_barn_navn) |>
+  group_by(alderkat) |>
+  mutate(
+    andel = (n / sum(n)),
+    diag_gruppe_navn_lang = case_when(
+      r_diag_gruppe_barn == 2 ~
+        "ervervede nevromuskulære sykdommer (skade eller sykdom i muskulatur eller nerveapparat som ikke er arvelig)",
+      r_diag_gruppe_barn == 4 ~ "adipositas hypoventilasjon (underventilering på grunn av fedme)",
+      r_diag_gruppe_barn == 9 ~ "samlegruppen «annet»",
+      TRUE ~ r_diag_gruppe_barn_navn
+    )
+  ) |>
+  ungroup()
+
+# regner ut andel per barn og voksne Nasjonalt
+d_n_diag_akt_nasjonal = d_diagnose_nasjonal |>
+  filter(r_bstart_aar == rapporteringsaar,
+         !is.na(alderkat)) |>
+  count(alderkat, r_diag_gruppe_barn, r_diag_gruppe_barn_navn) |>
+  group_by(alderkat) |>
+  mutate(
+    andel = (n / sum(n)),
+    diag_gruppe_navn_lang = case_when(
+      r_diag_gruppe_barn == 2 ~
+        "ervervede nevromuskulære sykdommer (skade eller sykdom i muskulatur eller nerveapparat som ikke er arvelig)",
+      r_diag_gruppe_barn == 4 ~ "adipositas hypoventilasjon (underventilering på grunn av fedme)",
+      r_diag_gruppe_barn == 9 ~ "samlegruppen «annet»",
+      TRUE ~ r_diag_gruppe_barn_navn
+    )
+  ) |>
+  ungroup()
+
+# Setter rekkefølgen for diagnosene til fig
+rekkefolge_diag_annet = d_n_diag_akt_nasjonal |>
+  arrange(r_diag_gruppe_barn) |>
+  distinct(r_diag_gruppe_barn) |>
+  pull(r_diag_gruppe_barn)
+rekkefolge_diag_navn_annet = d_n_diag_akt_nasjonal |>
+  arrange(r_diag_gruppe_barn) |>
+  distinct(r_diag_gruppe_barn_navn) |>
+  pull(r_diag_gruppe_barn_navn)
+
+d_n_diag_akt_hf = d_n_diag_akt_hf |>
+  mutate(diagnose_fac = factor(r_diag_gruppe_barn,
+    levels = rev(!!rekkefolge_diag_annet),
+    labels = rev(!!rekkefolge_diag_navn_annet)
+  ))
+
+d_n_diag_akt_nasjonal = d_n_diag_akt_nasjonal |>
+  mutate(diagnose_fac = factor(r_diag_gruppe_barn,
+    levels = rev(!!rekkefolge_diag_annet),
+    labels = rev(!!rekkefolge_diag_navn_annet)
+  ))
+
+figtekst_andel_diag = paste0(
+"Figurene viser diagnosefordeling for de registrerte pasientene de
+siste fem årene for eget helseforetak og totalt for landet for voksne
+og barn."
+)
+```
+
+\pagebreak
+
+## Diagnosefordeling
+
+**`r hf_navn`**
+
+```{r fig-diagnosefordeling-hf, echo=FALSE, results='asis', fig.height=4, fig.width=10}
+ggplot(d_n_diag_akt_hf, aes(x = diagnose_fac, y = andel, fill = alderkat)) +
+  facet_wrap(~alderkat) +
+  geom_bar(stat = "identity", fill = colPrim[3], width = 2 / 3) +
+  coord_flip() +
+  fjern_y() +
+  xlab(NULL) +
+  ylab("Andel") +
+  scale_y_continuous(
+    limits = c(0, NA),
+    breaks = breaks_width(0.15),
+    labels = akse_prosent_format(0),
+    expand = expand_soyle()
+  ) +
+  scale_x_discrete(drop = FALSE) + 
+  theme_tekststorrelse
+```
+
+**Nasjonalt**
+
+```{r fig-diagnosefordeling-nasjonal, echo=FALSE, results='asis', fig.height=4, fig.width=10, fig.cap=figtekst_andel_diag}
+ggplot(d_n_diag_akt_nasjonal, aes(x = diagnose_fac, y = andel, fill = alderkat)) +
+  facet_wrap(~alderkat) +
+  geom_bar(stat = "identity", fill = colPrim[3], width = 2 / 3) +
+  coord_flip() +
+  fjern_y() +
+  xlab(NULL) +
+  ylab("Andel") +
+  scale_y_continuous(
+    limits = c(0, NA),
+    breaks = breaks_width(0.15),
+    labels = akse_prosent_format(0),
+    expand = expand_soyle()
+  ) +
+  scale_x_discrete(drop = FALSE) +
+  theme_tekststorrelse
+```
+
+
+Diagnosefordelingen kan variere fra ett helseforetak til et annet.
+Det er tett samarbeid om pasientgruppen innen regionene, og dette kan
+forklare noe av ulikhetene.
+Få pasienter i et helseforetak kan medføre store variasjoner over år,
+fordelingen er derfor vist for de siste fem år.
+
+```{r data-blodgass-for-start, echo=FALSE, results='hide'}
+figtekst_andel_blodgass_start = paste0(
+  "Figurene viser andel med oppgitt blodgass før behandlingsstart for de
+  siste fem årene for ", hf_navn, " og totalt for landet."
+)
+
+# Fjerner "r_" for å bruke "ki_blodgass()"
+d_blodgass_start_siste_fem_aar_hf = d_ventreg_siste_fem_aar |>
+  rename(
+  po2_air = r_po2_air,
+  pco2_air = r_pco2_air,
+  capillarypo2_air = r_capillarypo2_air,
+  capillarypco2_air = r_capillarypco2_air,
+  be = r_be,
+  arterialpco2_air = r_arterialpco2_air,
+  transcutaneous_co2_air = r_transcutaneous_co2_air
+  ) |>
+  ki_blodgass() 
+
+d_blodgass_start_siste_fem_aar_nasjonal = d_ventreg_siste_fem_aar_nasjonalt |>
+  rename(
+  po2_air = r_po2_air,
+  pco2_air = r_pco2_air,
+  capillarypo2_air = r_capillarypo2_air,
+  capillarypco2_air = r_capillarypco2_air,
+  be = r_be,
+  arterialpco2_air = r_arterialpco2_air,
+  transcutaneous_co2_air = r_transcutaneous_co2_air
+  ) |>
+  ki_blodgass()
+
+# Henter resultatet for rapporteringsaar - HF
+andel_blodgass_start_rappaar_hf = d_blodgass_start_siste_fem_aar_hf |>
+  filter(r_bstart_aar == rapporteringsaar) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100, digits = 0)) |>
+  pull(est)
+
+# Henter resultatet for rapporteringsaar - Nasjonal
+andel_blodgass_start_rappaar_nasjonal = d_blodgass_start_siste_fem_aar_nasjonal |>
+  filter(r_bstart_aar == rapporteringsaar) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100, digits = 0)) |> 
+  pull(est)
+```
+
+
+\pagebreak
+
+## Andel med blodgass før start av behandling
+
+```{r fig-blodgass-start, echo=FALSE, results='asis', fig.height=4, fig.width=10, fig.cap=figtekst_andel_blodgass_start}
+# Viser andel per år
+d_fig_blodgass_start_siste_fem_aar_hf = d_blodgass_start_siste_fem_aar_hf |>
+  group_by(r_bstart_aar, r_bstart_aar_2siff) |>
+  aggreger_ki_prop()
+
+# Lagrer figuren for å vise HF og nasjonalt side om side
+fig_blodgass_start_siste_fem_aar_hf = ggplot(
+  d_fig_blodgass_start_siste_fem_aar_hf,
+  aes(
+  x = r_bstart_aar_2siff,
+  y = est,
+  ymin = konfint_nedre,
+  ymax = konfint_ovre,
+  group = 1
+)) +
+  lag_fig_linje(refline = 0.8, ylab = "Blodgass start", angle = FALSE) +
+  scale_y_continuous(
+    labels = akse_prosent_format(0), limits = c(0, 1),
+    breaks = breaks_width(0.2)
+  ) +
+  labs(title = hf_navn) +
+  theme_tekststorrelse
+
+# Viser andel per år
+d_fig_blodgass_start_siste_fem_aar_nasjonal = d_blodgass_start_siste_fem_aar_nasjonal |>
+  group_by(r_bstart_aar, r_bstart_aar_2siff) |>
+  aggreger_ki_prop()
+
+# Lagrer figuren for å vise HF og nasjonalt side om side
+fig_blodgass_start_siste_fem_aar_nasjonal = ggplot(
+  d_fig_blodgass_start_siste_fem_aar_nasjonal,
+  aes(
+  x = r_bstart_aar_2siff,
+  y = est, ymin = konfint_nedre, ymax = konfint_ovre, group = 1
+)) +
+  lag_fig_linje(refline = 0.8, ylab = "Blodgass start", angle = FALSE) +
+  scale_y_continuous(
+    labels = akse_prosent_format(0), limits = c(0, 1),
+    breaks = breaks_width(0.2)
+  ) +
+  labs(title = "Nasjonalt") +
+  theme_tekststorrelse
+
+# Samler figurene
+grid.arrange(fig_blodgass_start_siste_fem_aar_hf,
+             fig_blodgass_start_siste_fem_aar_nasjonal,
+             ncol = 2)
+```
+
+
+En høy andel med angitt blodgass før oppstart kan være en indikator
+på at behandlingen er gjort velfundert.
+Blå linje viser ønsket måloppnåelse og er satt til \>80 %.
+I `r rapporteringsaar` fikk `r andel_blodgass_start_rappaar_hf` % 
+registrert blodgass før  start av behandling lokalt og 
+`r andel_blodgass_start_rappaar_nasjonal` % nasjonalt.
+
+
+```{r tabell-blodgass-start-siste-fem-aar, echo=FALSE, warning=FALSE, results="asis"}
+# Henter nødvendig info for å lage tabell for blodgass før start,
+# for barn og voksne, de siste fem årene.
+
+# Andel for HFet
+# Fjerner tilfeller hvor det mangler verdi for ventilation_method,
+# siden man ikke vet om det er med eller uten CPAP
+d_andel_blodgass_start_siste_fem_aar_hf = d_blodgass_start_siste_fem_aar_hf |>
+  filter(!is.na(r_ventilation_method)) |>
+  group_by(alderkat, r_ventilation_method) |>
+  aggreger_ki_prop()
+
+andel_voksne_uten_cpap_siste_fem_aar_hf = d_andel_blodgass_start_siste_fem_aar_hf |>
+  filter(alderkat == "Voksen", r_ventilation_method != 3) |>
+  summarise(est = round(sum(ki_teller) / sum(ki_nevner) * 100)) |>
+  pull()
+
+andel_barn_uten_cpap_siste_fem_aar_hf = d_andel_blodgass_start_siste_fem_aar_hf |>
+  filter(alderkat == "Barn", r_ventilation_method != 3) |>
+  summarise(est = round(sum(ki_teller) / sum(ki_nevner) * 100)) |>
+  pull()
+
+andel_barn_med_cpap_siste_fem_aar_hf = d_andel_blodgass_start_siste_fem_aar_hf |>
+  filter(alderkat == "Barn", r_ventilation_method == 3) |>
+  summarise(est = round(sum(ki_teller) / sum(ki_nevner) * 100)) |>
+  pull()
+
+# Andel nasjonalt
+# Fjerner tilfeller hvor det mangler verdi for ventilation_method,
+# siden man ikke vet om det er med eller uten CPAP
+d_andel_blodgass_start_siste_fem_aar_nasjonal = d_blodgass_start_siste_fem_aar_nasjonal |>
+  filter(!is.na(r_ventilation_method)) |>
+  group_by(alderkat, r_ventilation_method) |>
+  aggreger_ki_prop()
+
+andel_voksne_uten_cpap_siste_fem_aar_nasjonal = d_andel_blodgass_start_siste_fem_aar_nasjonal |>
+  filter(alderkat == "Voksen", r_ventilation_method != 3) |>
+  summarise(est = round(sum(ki_teller) / sum(ki_nevner) * 100)) |>
+  pull()
+
+andel_barn_uten_cpap_siste_fem_aar_nasjonal = d_andel_blodgass_start_siste_fem_aar_nasjonal |>
+  filter(alderkat == "Barn", r_ventilation_method != 3) |>
+  summarise(est = round(sum(ki_teller) / sum(ki_nevner) * 100)) |>
+  pull()
+
+andel_barn_med_cpap_siste_fem_aar_nasjonal = d_andel_blodgass_start_siste_fem_aar_nasjonal |>
+  filter(alderkat == "Barn", r_ventilation_method == 3) |>
+  summarise(est = round(sum(ki_teller) / sum(ki_nevner) * 100)) |>
+  pull()
+
+# Lager tabell som skal vises
+tabell_andel_blodgass_start_siste_fem_aar = tibble(
+  Alder = c("Voksne (uten CPAP)", "Barn (uten CPAP)", "Barn (inkl. CPAP)"),
+  HF = c(andel_voksne_uten_cpap_siste_fem_aar_hf,
+         andel_barn_uten_cpap_siste_fem_aar_hf,
+         andel_barn_med_cpap_siste_fem_aar_hf),
+  Nasjonalt = c(andel_voksne_uten_cpap_siste_fem_aar_nasjonal,
+                andel_barn_uten_cpap_siste_fem_aar_nasjonal,
+                andel_barn_med_cpap_siste_fem_aar_nasjonal)
+)
+
+names(tabell_andel_blodgass_start_siste_fem_aar) = c(
+  "Aldersgruppe",
+  paste0(hf_navn, " %"),
+  "Nasjonalt %")
+
+tabelltekst_blodgass_start = paste0(
+  "Andel med blodgass før start for barn og voksne de siste fem årene
+  for eget helseforetak og totalt for landet."
+)
+
+# Viser dataen som en tabell
+kable(tabell_andel_blodgass_start_siste_fem_aar,
+      caption = tabelltekst_blodgass_start) |>
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE,
+                position = "center")
+
+# gt::gt(d_dg_rappaar_avd_tabell) |> gt::tab_options(table.align = "left", table.width = gt::pct(50))
+```
+
+Barnegruppen skiller seg fra voksengruppen ved at det her 
+også er CPAP pasienter i LTMV behandling.
+Holdes CPAP pasientene utenfor for begge grupper er andelen 
+med oppgitt blodgass `r andel_barn_uten_cpap_siste_fem_aar_hf` % 
+for barnegruppen lokalt og `r andel_barn_uten_cpap_siste_fem_aar_nasjonal` % 
+for barnegruppen nasjonalt siste 5 år.
+Dette inkluderer transkutane/arterielle CO2 målinger under søvn.
+
+
+\pagebreak
+
+## Andel med planlagt behandlingsstart
+
+```{r data-elektiv, echo=FALSE, warning=FALSE, results='asis'}
+# Fjerner "r_" for å bruke "ki_elektiv()"
+d_elektiv_hf_ki = d_ventreg_regstart |>
+  lag_aars_intervall(intervall = 3) |> 
+  rename(situation_ventilation = r_situation_ventilation) |>
+  ki_elektiv()
+
+d_elektiv_nasjonal_ki = d_full_superbrei_regstart |>
+  lag_aars_intervall(intervall = 3) |>
+  rename(situation_ventilation = r_situation_ventilation) |>
+  ki_elektiv()
+
+# regner ut antall per 3. år for pasienter med nevromuskulære sykdommer eller ALS
+d_elektiv_3aar_nevro_hf = d_elektiv_hf_ki |>
+  filter(
+    r_bstart_aar >= rapporteringsaar - 8,
+    r_nevro %in% 1:2
+  ) |>
+  group_by(periode, r_nevro, r_nevro_navn) |>
+  aggreger_ki_prop() |>
+  mutate(konfint_ovre = pmin(konfint_ovre, 1))
+
+
+d_elektiv_3aar_nevro_nasjonal = d_elektiv_nasjonal_ki |>
+  filter(
+    r_bstart_aar >= rapporteringsaar - 8,
+    r_nevro %in% 1:2
+  ) |>
+  group_by(periode, r_nevro, r_nevro_navn) |>
+  aggreger_ki_prop() |>
+  mutate(konfint_ovre = pmin(konfint_ovre, 1))
+
+
+figtekst_elektiv = paste0(
+  "Figurene viser andel med planlagt oppstart for ALS pasienter og
+  øvrige nevromuskulære pasienter for eget helseforetak (over 3 års
+  perioder) og totalt for landet over år."
+)
+
+# Andel elektive pasienter for alle diagnosegrunnene samlet
+andel_elektiv_hf_alle_diag = d_elektiv_hf_ki |>
+  filter(r_bstart_aar >= rapporteringsaar - 4) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100)) |>
+  pull(est)
+
+andel_elektiv_nasjonal_alle_diag = d_elektiv_nasjonal_ki |>
+  filter(r_bstart_aar >= rapporteringsaar - 4) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100)) |>
+  pull(est)
+
+# Andel elektive pasienter for alle diagnosegrupper samlet, for barn og voksne
+d_alle_elektive_hf_alderkat = d_elektiv_hf_ki |>
+  filter(r_bstart_aar >= rapporteringsaar - 4) |>
+  group_by(alderkat) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100))
+
+d_alle_elektive_nasjonal_alderkat = d_elektiv_nasjonal_ki |>
+  filter(r_bstart_aar >= rapporteringsaar - 4) |>
+  group_by(alderkat) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100))
+
+# Henter ut andelene til å bruke i teksten
+andel_elektive_hf_barn = d_alle_elektive_hf_alderkat |>
+  filter(alderkat == "Barn") |>
+  pull(est)
+
+andel_elektive_hf_voksen = d_alle_elektive_hf_alderkat |>
+  filter(alderkat == "Voksen") |>
+  pull(est)
+
+andel_elektive_nasjonal_barn = d_alle_elektive_nasjonal_alderkat |>
+  filter(alderkat == "Barn") |>
+  pull(est)
+
+andel_elektive_nasjonal_voksen = d_alle_elektive_nasjonal_alderkat |>
+  filter(alderkat == "Voksen") |>
+  pull(est)
+```
+
+```{r fig-elektiv, echo=FALSE, results='asis', fig.height=4.3, fig.width=10, fig.cap=figtekst_elektiv}
+# Figur for andel med planlagt oppstart for ALS pasienter og
+# øvrige nevromuskulære pasienter.
+# Viser siste 9 år.
+fig_elektiv_hf = ggplot(
+  d_elektiv_3aar_nevro_hf,
+  aes(
+  x = periode, y = est, ymin = konfint_nedre,
+  ymax = konfint_ovre, colour = r_nevro_navn,
+  group = r_nevro_navn
+  )
+) +
+  geom_hline(yintercept = .8, col = colPrim[6], linewidth = 1) + 
+  # Dette er linjen for ønsket måloppnåelse
+  geom_line(linewidth = 1, position = position_dodge(0.1)) +
+  geom_point(size = 2, position = position_dodge(0.1)) +
+  geom_linerange(linewidth = .5, position = position_dodge(0.1)) +
+  scale_y_continuous(labels = akse_prosent_format(0), 
+                     limits = c(0, 1), breaks = breaks_width(0.2)) +
+  ggtitle(hf_navn) +
+  xlab("År") +
+  ylab("Andel med \nelektiv behandling") +
+  fjern_x() +
+  ggplot2::theme(
+    plot.title = element_text(size = 10),
+    #axis.title.y  = element_text(angle = 90),
+    legend.position = "bottom", axis.text.x = element_text(angle = 45, vjust = 0.5),
+    legend.title = element_blank()
+  ) +
+  scale_colour_manual(values = c(colPrim[3], "#4daf4a")) +
+  theme_tekststorrelse
+
+
+
+fig_elektiv_nasjonal = ggplot(d_elektiv_3aar_nevro_nasjonal, aes(
+  x = periode, y = est, ymin = konfint_nedre,
+  ymax = konfint_ovre, colour = r_nevro_navn,
+  group = r_nevro_navn
+)) +
+  geom_hline(yintercept = .8, col = colPrim[6], linewidth = 1) + 
+  # Dette er linjen for ønsket måloppnåelse
+  geom_line(linewidth = 1, position = position_dodge(0.1)) +
+  geom_point(size = 2, position = position_dodge(0.1)) +
+  geom_linerange(linewidth = .5, position = position_dodge(0.1)) +
+  scale_y_continuous(labels = akse_prosent_format(0), 
+                     limits = c(0, 1), breaks = breaks_width(0.2)) +
+  ggtitle("Nasjonalt") +
+  xlab("År") +
+  ylab("Andel med \nelektiv behandling") +
+  fjern_x() +
+  ggplot2::theme(
+    legend.position = "bottom", axis.text.x = element_text(angle = 45, vjust = 0.5),
+    legend.title = element_blank()
+  ) +
+  scale_colour_manual(values = c(colPrim[3], "#4daf4a")) +
+  theme_tekststorrelse
+
+# Samler figurene
+grid.arrange(fig_elektiv_hf,
+             fig_elektiv_nasjonal,
+             ncol = 2)
+```
+
+
+En høy andel elektive (planlagt) oppstart kan være 
+en indikator på at underventilering oppdages tidlig.
+Blå linje viser ønsket måloppnåelse og er satt til \> 80 %.
+
+
+```{r tabell-elektiv-diag, echo=FALSE, warning=FALSE, results="asis"}
+# Finner andel elektive oppstart for ALS og nevromuskulære sykdommer
+# siste 5 år.
+d_elektiv_hf_ki_prop = d_elektiv_hf_ki |>
+  filter(r_bstart_aar >= rapporteringsaar - 4,
+         r_nevro %in% 1:2) |>
+  group_by(r_nevro, r_nevro_navn) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100))
+
+d_elektiv_nasjonal_ki_prop = d_elektiv_nasjonal_ki |>
+  filter(r_bstart_aar >= rapporteringsaar - 4,
+         r_nevro %in% 1:2) |>
+  group_by(r_nevro, r_nevro_navn) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100))
+
+# Henter ut relevante tall til tabell
+andel_nevro_hf = d_elektiv_hf_ki_prop |>
+  filter(r_nevro == 1) |>
+  pull(est)
+
+andel_als_hf = d_elektiv_hf_ki_prop |>
+  filter(r_nevro == 2) |>
+  pull(est)
+
+andel_nevro_nasjonal = d_elektiv_nasjonal_ki_prop |>
+  filter(r_nevro == 1) |>
+  pull(est)
+
+andel_als_nasjonal = d_elektiv_nasjonal_ki_prop |>
+  filter(r_nevro == 2) |>
+  pull(est)
+
+# Lager tabell som skal vises
+tabell_andel_elektive_nevro = tibble(
+  Diagnose = c("Nevromuskulære sykdommer", "ALS"),
+  HF = c(andel_nevro_hf,
+         andel_als_hf),
+  Nasjonalt = c(andel_nevro_nasjonal,
+                andel_als_nasjonal)
+)
+
+names(tabell_andel_elektive_nevro) = c(
+  "Diagnose",
+  paste0(hf_navn, " %"),
+  "Nasjonalt %")
+
+tabelltekst_elektive_nevro = paste0(
+  "Andel planlagt oppstart for ALS og øvrige nevromuskulære sykdommer
+  for barn og voksne siste 5 år."
+)
+
+# Viser dataen som en tabell
+kable(tabell_andel_elektive_nevro,
+      caption = tabelltekst_elektive_nevro) |>
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE,
+                position = "center")
+
+# gt::gt(d_dg_rappaar_avd_tabell) |> gt::tab_options(table.align = "left", table.width = gt::pct(50))
+```
+
+
+```{r tabell-elektiv-alderkat, echo=FALSE, warning=FALSE, results="asis"}
+# Finner andel elektive oppstart for ALS og nevromuskulære sykdommer
+# vist for barn og voksne siste 5 år.
+# FIXME Hør med registeret om det er riktig at tabellen under bare viser resultater fra nevromuskulære sykdommer (ekskludert ALS), som er gjort tidligere
+d_elektiv_hf_ki_prop_alderkat = d_elektiv_hf_ki |>
+  filter(r_bstart_aar >= rapporteringsaar - 4,
+         r_nevro == 1) |>
+  group_by(alderkat) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100))
+
+d_elektiv_nasjonal_ki_prop_alderkat = d_elektiv_nasjonal_ki |>
+  filter(r_bstart_aar >= rapporteringsaar - 4,
+         r_nevro == 1) |>
+  group_by(alderkat) |>
+  aggreger_ki_prop() |>
+  mutate(est = round(est * 100))
+
+# Henter ut relevante tall til tabell
+andel_nevro_barn_hf = d_elektiv_hf_ki_prop_alderkat |>
+  filter(alderkat == "Barn") |>
+  pull(est)
+
+andel_nevro_voksen_hf = d_elektiv_hf_ki_prop_alderkat |>
+  filter(alderkat == "Voksen") |>
+  pull(est)
+
+andel_nevro_barn_nasjonal = d_elektiv_nasjonal_ki_prop_alderkat |>
+  filter(alderkat == "Barn") |>
+  pull(est)
+
+andel_nevro_voksen_nasjonal = d_elektiv_nasjonal_ki_prop_alderkat |>
+  filter(alderkat == "Voksen") |>
+  pull(est)
+
+# Lager tabell som skal vises
+tabell_andel_elektive_alderkat = tibble(
+  Alder = c("Voksen", "Barn"),
+  HF = c(andel_nevro_voksen_hf,
+         andel_nevro_barn_hf),
+  Nasjonalt = c(andel_nevro_voksen_nasjonal,
+                andel_nevro_barn_nasjonal)
+)
+
+names(tabell_andel_elektive_alderkat) = c(
+  "Alder",
+  paste0(hf_navn, " %"),
+  "Nasjonalt %")
+
+tabelltekst_elektive_alderkat = paste0(
+  "Andel med planlagt oppstart for nevromuskulære pasienter de siste fem
+  årene for eget helseforetak og totalt for landet vist for barn og
+  voksne."
+)
+
+# Viser dataen som en tabell
+kable(tabell_andel_elektive_alderkat,
+      caption = tabelltekst_elektive_alderkat) |>
+  kable_styling(bootstrap_options = "bordered",
+                full_width = FALSE,
+                position = "center")
+```
+
+
+Lokalt startet `r andel_elektiv_hf_alle_diag` % 
+av pasienter i alle diagnosegrupper planlagt siste 5 år, 
+og i hele landet `r andel_elektiv_nasjonal_alle_diag` %.
+
+Nasjonalt hadde avdelinger med barn høyere andel planlagt 
+oppstart for alle diagnosegrupper enn voksenavdelingene 
+siste 5 år (`r andel_elektive_nasjonal_barn` % versus 
+`r andel_elektive_nasjonal_voksen` %). 
+Lokalt er fordelingen `r andel_elektive_hf_barn` % med 
+planlagt oppstart for barneavdelingen og 
+`r andel_elektive_hf_voksen` % for voksenavdelingen for
+alle diagnosegrupper siste 5 år.
+
+
+```{r data-prom-start, echo=FALSE, warning=FALSE, results='asis'}
+# Analyser av PROM-besvarelser ved start av behandling.
+# Vi skal se på livskvalitetsskjema (5 spørsmål om søvn) + ESS.
+
+# For HF
+d_prom_selektert_hf = d_ventreg_siste_fem_aar |>
+  filter(r_dato_start >= "2014-08-25", alderkat == "Voksen") |>
+  select(
+    patient_id, r_bstart_aar, starts_with("r_ql"),
+    r_rhf_kode, r_rhf_tekst, r_hf_resh, r_hf_tekst
+  )
+d_prom_lang_spr_ess_for_hf = d_prom_selektert_hf |>
+  pivot_longer(c(starts_with("r_ql")), names_to = "prom", values_to = "verdi")
+
+# Vi godtar at en pasient har en prom-besvarelse hvis de har svart på
+# minst 1 livskvalitetsskjema ELLER har en ESS-sumskår.
+# Lager et objekt med besvarelser kodet i variabelen mangler_ikke.
+d_prom_lang_spr_ess_for_hf = d_prom_lang_spr_ess_for_hf |>
+  mutate(mangler_ikke = case_when(!is.na(verdi) ~ 1, is.na(verdi) ~ 0))
+
+# Finner antall og andel som har svart på PROM ved behandlingsstart
+d_prom_andel_hf = d_prom_lang_spr_ess_for_hf |>
+  group_by(r_bstart_aar) |>
+  ki_prom() |>
+  aggreger_ki_prop()
+
+# Nasjonalt
+d_prom_selektert_nasjonal = d_ventreg_siste_fem_aar_nasjonalt |>
+  filter(r_dato_start >= "2014-08-25", alderkat == "Voksen") |>
+  select(
+    patient_id, r_bstart_aar, starts_with("r_ql"),
+    r_rhf_kode, r_rhf_tekst, r_hf_resh, r_hf_tekst
+  )
+d_prom_lang_spr_ess_for_nasjonal = d_prom_selektert_nasjonal |>
+  pivot_longer(c(starts_with("r_ql")), names_to = "prom", values_to = "verdi")
+
+# Vi godtar at en pasient har en prom-besvarelse hvis de har svart på
+# minst 1 livskvalitetsskjema ELLER har en ESS-sumskår.
+# Lager et objekt med besvarelser kodet i variabelen mangler_ikke.
+d_prom_lang_spr_ess_for_nasjonal = d_prom_lang_spr_ess_for_nasjonal |>
+  mutate(mangler_ikke = case_when(!is.na(verdi) ~ 1, is.na(verdi) ~ 0))
+
+# Finner antall og andel som har svart på PROM ved behandlingsstart
+d_prom_andel_nasjonal = d_prom_lang_spr_ess_for_nasjonal |>
+  group_by(r_bstart_aar) |>
+  ki_prom() |>
+  aggreger_ki_prop()
+
+# Andel besvarte prom før start for rapporteringsåret
+andel_besvart_prom_rapaar_hf = d_prom_andel_hf |>
+  filter(r_bstart_aar == rapporteringsaar) |> 
+  mutate(est = round(est * 100)) |>
+  pull(est)
+
+andel_besvart_prom_rapaar_nasjonal = d_prom_andel_nasjonal |>
+  filter(r_bstart_aar == rapporteringsaar) |>
+  mutate(est = round(est * 100)) |>
+  pull(est)
+```
+
+\pagebreak
+
+## Andel med pasientenes vurdering av symptomer før start
+
+```{r fig-prom-start, echo=FALSE, results='asis', fig.height=4, fig.width=10, fig.cap=figtekst_prom_start}
+figtekst_prom_start = paste0(
+  "Andel voksne som har besvart livskvalitetsskjema og/eller
+  PROM-skjemaet «Epworth Sleepiness Scale» ved behandlingsstart."
+)
+
+# Graf over andel PROM-besvarelser per år, HF
+fig_prom_per_aar_hf = ggplot(
+  d_prom_andel_hf,
+  aes(
+    x = r_bstart_aar, y = est,
+    ymin = konfint_nedre, ymax = konfint_ovre,
+    group = 1
+  )
+) +
+  lag_fig_linje(refline = .8, ylab = "Andel pasienter", angle = FALSE) +
+  scale_y_continuous(
+    labels = akse_prosent_format(0),
+    limits = c(0, 1),
+    breaks = breaks_width(0.2)
+  ) +
+  scale_x_continuous(breaks = breaks_width(1)) +
+  ggtitle(hf_navn) +
+  theme_tekststorrelse
+  
+# Graf over andel PROM-besvarelser per år, nasjonalt
+fig_prom_per_aar_nasjonal = ggplot(
+  d_prom_andel_nasjonal,
+  aes(
+    x = r_bstart_aar, y = est,
+    ymin = konfint_nedre, ymax = konfint_ovre,
+    group = 1
+  )
+) +
+  lag_fig_linje(refline = .8, ylab = "Andel pasienter", angle = FALSE) +
+  scale_y_continuous(
+    labels = akse_prosent_format(0),
+    limits = c(0, 1),
+    breaks = breaks_width(0.2)
+  ) +
+  scale_x_continuous(breaks = breaks_width(1)) +
+  ggtitle("Nasjonalt") +
+  theme_tekststorrelse
+
+# Viser figurene side om side
+grid.arrange(fig_prom_per_aar_hf, fig_prom_per_aar_nasjonal, ncol = 2)
+```
+
+Innhenting av pasientenes vurdering av symptomer før start gir viktig
+informasjon som også kan brukes til sammenligning ved oppfølging og
+vurdering av behandlingens nytteverdi. Indikatoren regner % andel av
+voksne (\>= 18 år) som har besvart spørsmål før oppstart siden PROM
+ble inkludert i registeret 25.08.2014. Andel med pasientenes vurdering
+av symptomer før start har vært stigende, i `r rapporteringsaar`
+totalt `r andel_besvart_prom_rapaar_hf` % lokalt og
+`r andel_besvart_prom_rapaar_nasjonal` % nasjonalt.
+
+\pagebreak
+
+```{r data-blodgass-oppf, echo=FALSE, warning=FALSE, results='asis'}
+# Finner antall og andel som har hatt oppfølging med blodgass etter ett år, HF
+d_blodgass_oppf_hf = d_ventreg_regstart |>
+  rename(
+    r_start_date = r_dato_start,
+    c_stop_date = c_dato_stopp
+  ) |>
+  group_by(r_bstart_aar) |>
+  ki_blodgass_forste_aar(rapporteringsaar_siste_dato) |>
+  aggreger_ki_prop()
+
+# Siden KI tillater at oppfølging er gjort ila to år, kan vi bare vise resultater
+# for opptil to år før rapporteringsåret.
+# Viser data for fem år, opptil "rapporteringsår - 2".
+d_blodgass_oppf_hf = d_blodgass_oppf_hf |>
+  filter(r_bstart_aar <= rapporteringsaar - 2,
+         r_bstart_aar >= rapporteringsaar- 6)
+
+# Finner antall og andel som har hatt oppfølging med blodgass etter ett år, Nasjonalt
+d_blodgass_oppf_nasjonal = d_full_superbrei_regstart |>
+  rename(
+    r_start_date = r_dato_start,
+    c_stop_date = c_dato_stopp
+  ) |>
+  group_by(r_bstart_aar) |>
+  ki_blodgass_forste_aar(rapporteringsaar_siste_dato) |>
+  aggreger_ki_prop()
+
+# Siden KI tillater at oppfølging er gjort ila to år, kan vi bare vise resultater
+# for opptil to år før rapporteringsåret.
+# Viser data for fem år, opptil "rapporteringsår - 2".
+d_blodgass_oppf_nasjonal = d_blodgass_oppf_nasjonal |>
+  filter(r_bstart_aar <= rapporteringsaar - 2,
+         r_bstart_aar >= rapporteringsaar- 6)
+
+
+# Andel blodgass ett års oppfølging for "rapporteringsår - 2"
+andel_blodgass_oppf_hf_siste_aar = d_blodgass_oppf_hf |>
+  filter(r_bstart_aar == rapporteringsaar - 2) |>
+  mutate(est = round(est * 100)) |>
+  pull(est)
+
+andel_blodgass_oppf_nasjonal_siste_aar = d_blodgass_oppf_nasjonal |>
+  filter(r_bstart_aar == rapporteringsaar - 2) |>
+  mutate(est = round(est * 100)) |>
+  pull(est)
+
+gj_blodgass_oppf_hf_siste_fem = d_blodgass_oppf_hf |>
+  summarise(gj_andel = round(mean(est) * 100)) |>
+  pull()
+
+gj_blodgass_oppf_nasjonal_siste_fem = d_blodgass_oppf_nasjonal |>
+  summarise(gj_andel = round(mean(est) * 100)) |>
+  pull()
+```
+
+## Oppfølging med blodgass første år
+
+```{r fig-blodgass-oppfolging, echo=FALSE, results='asis', fig.height=4, fig.width=10, fig.cap=figtekst_blodgass_forsteaar}
+figtekst_blodgass_forsteaar = paste0(
+  "Andel med blodgassmåling ved oppfølging innen 2 år."
+)
+
+# Graf over andel målt blodgass ved ett års oppføling, HF
+fig_blodgass_oppfolging_hf = ggplot(
+  d_blodgass_oppf_hf,
+  aes(
+    x = r_bstart_aar,
+    y = est,
+    ymin = konfint_nedre,
+    ymax = konfint_ovre,
+    group = 1
+  )
+) +
+  lag_fig_linje(
+    refline = .8,
+    xlab="Startår",
+    ylab = "Andel målt \nblodgass første år",
+    angle = FALSE
+  ) +
+  scale_y_continuous(
+    labels = akse_prosent_format(0),
+    limits = c(0, 1),
+    breaks = breaks_width(0.2)
+  ) +
+  ggtitle(hf_navn) +
+  theme_tekststorrelse
+  
+# Graf over andel målt blodgass ved ett års oppføling, nasjonalt
+fig_blodgass_oppfolging_nasjonal = ggplot(
+  d_blodgass_oppf_nasjonal,
+  aes(
+    x = r_bstart_aar,
+    y = est,
+    ymin = konfint_nedre,
+    ymax = konfint_ovre,
+    group = 1
+  )
+) +
+  lag_fig_linje(
+    refline = .8,
+    xlab="Startår",
+    ylab = "Andel målt \nblodgass første år",
+    angle = FALSE
+  ) +
+  scale_y_continuous(
+    labels = akse_prosent_format(0),
+    limits = c(0, 1),
+    breaks = breaks_width(0.2)
+  ) +
+  ggtitle("Nasjonalt") +
+  theme_tekststorrelse
+
+# Viser figurene side om side
+grid.arrange(fig_blodgass_oppfolging_hf,
+             fig_blodgass_oppfolging_nasjonal,
+             ncol = 2)
+```
+
+Det er viktig å følge opp pasienter som har startet LTMV med kontroller.
+Ny blodgasskontroll kan avdekke behov for å justere behandlingen.
+Målet er at \> 80 % av pasientene med BiPAP og respirator
+har fått oppfølging med blodgass første to år.
+
+For `r hf_navn`, ble `r andel_blodgass_oppf_hf_siste_aar` % 
+av pasientene med oppstart i `r rapporteringsaar - 2` fulgt 
+opp med blodgass innen 2 år 
+(nasjonalt `r andel_blodgass_oppf_nasjonal_siste_aar` %) 
+og totalt har `r gj_blodgass_oppf_hf_siste_fem` % fått oppfølging
+innen to år med blodgass de siste 5 år 
+(nasjonalt `r gj_blodgass_oppf_nasjonal_siste_fem` %).
+
+```{r data-prom-oppf, echo=FALSE, warning=FALSE, results='asis'}
+# Finner antall og andel besvart PROM etter ett år, HF
+d_prom_oppf_hf = d_ventreg_regstart |>
+  filter(r_dato_start >= "2014-08-25", alderkat == "Voksen") |>
+  rename(
+    dato_start = r_dato_start,
+    dato_stopp = c_dato_stopp,
+    deceased_date = c_deceased_date
+  ) |>
+  group_by(r_bstart_aar) |>
+  ki_prom_forste_aar(rapporteringsaar_siste_dato) |>
+  aggreger_ki_prop()
+
+# Siden KI tillater at oppfølging er gjort ila to år, kan vi bare vise resultater
+# for opptil to år før rapporteringsåret.
+# Viser data for fem år, opptil "rapporteringsår - 2".
+d_prom_oppf_hf = d_prom_oppf_hf |>
+  filter(r_bstart_aar <= rapporteringsaar - 2,
+         r_bstart_aar >= rapporteringsaar- 6)
+
+
+# Finner antall og andel som har hatt oppfølging med blodgass etter ett år, Nasjonalt
+d_prom_oppf_nasjonal = d_full_superbrei_regstart |>
+  filter(r_dato_start >= "2014-08-25", alderkat == "Voksen") |>
+  rename(
+    dato_start = r_dato_start,
+    dato_stopp = c_dato_stopp,
+    deceased_date = c_deceased_date
+  ) |>
+  group_by(r_bstart_aar) |>
+  ki_prom_forste_aar(rapporteringsaar_siste_dato) |>
+  aggreger_ki_prop()
+
+# Siden KI tillater at oppfølging er gjort ila to år, kan vi bare vise resultater
+# for opptil to år før rapporteringsåret.
+# Viser data for fem år, opptil "rapporteringsår - 2".
+d_prom_oppf_nasjonal = d_prom_oppf_nasjonal |>
+  filter(r_bstart_aar <= rapporteringsaar - 2,
+         r_bstart_aar >= rapporteringsaar- 6)
+
+
+# Andel besvart prom ved ett års oppfølging for "rapporteringsår - 2"
+andel_prom_oppf_hf_siste_aar = d_prom_oppf_hf |>
+  filter(r_bstart_aar == rapporteringsaar - 2) |>
+  mutate(est = round(est * 100)) |>
+  pull(est)
+
+andel_prom_oppf_nasjonal_siste_aar = d_prom_oppf_nasjonal |>
+  filter(r_bstart_aar == rapporteringsaar - 2) |>
+  mutate(est = round(est * 100)) |>
+  pull(est)
+
+gj_prom_oppf_hf_siste_fem = d_prom_oppf_hf |>
+  summarise(gj_andel = round(mean(est) * 100)) |>
+  pull()
+
+gj_prom_oppf_nasjonal_siste_fem = d_prom_oppf_nasjonal |>
+  summarise(gj_andel = round(mean(est) * 100)) |>
+  pull()
+```
+
+## Patientenes vurdering av symptomer første år
+
+```{r fig-prom-oppfolging, echo=FALSE, results='asis', fig.height=4, fig.width=10, fig.cap=figtekst_prom_forsteaar}
+figtekst_prom_forsteaar = paste0(
+  "Andel pasienter som har svart på livskvalitetsskjema og/eller
+  PROM-skjemaet «Epworth Sleepiness Scale» ved oppfølging
+  innen to år."
+)
+
+# Graf over andel besvart prom ved ett års oppføling, HF
+fig_prom_oppfolging_hf = ggplot(
+  d_prom_oppf_hf,
+  aes(
+    x = r_bstart_aar,
+    y = est,
+    ymin = konfint_nedre,
+    ymax = konfint_ovre,
+    group = 1
+  )
+) +
+  lag_fig_linje(
+    refline = .8,
+    xlab="Startår",
+    ylab = "Andel besvart \nprom første år",
+    angle = FALSE
+  ) +
+  scale_y_continuous(
+    labels = akse_prosent_format(0),
+    limits = c(0, 1),
+    breaks = breaks_width(0.2)
+  ) +
+  ggtitle(hf_navn) +
+  theme_tekststorrelse
+  
+# Graf over andel besvart prom ved ett års oppføling, nasjonalt
+fig_prom_oppfolging_nasjonal = ggplot(
+  d_prom_oppf_nasjonal,
+  aes(
+    x = r_bstart_aar,
+    y = est,
+    ymin = konfint_nedre,
+    ymax = konfint_ovre,
+    group = 1
+  )
+) +
+  lag_fig_linje(
+    refline = .8,
+    xlab="Startår",
+    ylab = "Andel besvart \nprom første år",
+    angle = FALSE
+  ) +
+  scale_y_continuous(
+    labels = akse_prosent_format(0),
+    limits = c(0, 1),
+    breaks = breaks_width(0.2)
+  ) +
+  ggtitle("Nasjonalt") +
+  theme_tekststorrelse
+
+# Viser figurene side om side
+grid.arrange(fig_prom_oppfolging_hf,
+             fig_prom_oppfolging_nasjonal,
+             ncol = 2)
+```
+
+Innhenting av pasientenes vurdering av symptomer første år gir viktig
+informasjon for å vurdere effekt og behov for å justere behandlingen.
+Målet er \> 80 % med besvart PROM første år for voksne pasienter.
+
+I `r hf_navn` har   `r andel_prom_oppf_hf_siste_aar` % av pasienter
+med oppstart i `r rapporteringsaar - 2` besvart spørreskjema innen 2 år 
+(nasjonalt `r andel_prom_oppf_nasjonal_siste_aar` %) og totalt har 
+`r gj_prom_oppf_hf_siste_fem` % besvart PROM innen to år de siste 5 år 
+(nasjonalt `r gj_prom_oppf_nasjonal_siste_fem` %) .
+
+\pagebreak
+
+```{r data-endring-pco2, echo=FALSE, warning=FALSE, results='hide'}
+# Lager data til figur som viser endringen av pCO2-verdier før
+# og ett år etter behandling på enhetsnivå, de siste 5 år.
+# HF
+d_endring_pco2_hf = d_ventreg_siste_fem_aar |>
+  filter(r_ventilation_method != 3) |> # uten CPAP
+  select(
+    r_hf_tekst, r_hf_resh, r_dato_start, c_dato_stopp,
+    r_pco2_air, r_capillarypco2_air, f1_pco2_air, f1_capillarypco2_air
+  ) |>
+  mutate(                                                                  # 1. arteriel 2. capillary
+    f1_pco2 = if_else(!is.na(f1_pco2_air), f1_pco2_air, f1_capillarypco2_air),
+    pco2 = if_else(!is.na(r_pco2_air), r_pco2_air, r_capillarypco2_air)
+  ) |>
+  filter(!is.na(f1_pco2) & !is.na(pco2)) |> # Fjerner tilfeller hvor det ikke finnes målinger ved start og ved ett års oppfølging
+  mutate(diff_pCO2 = f1_pco2 - pco2) |>
+  add_count(r_hf_resh, name = "n_svar") |>
+  group_by(r_hf_tekst, n_svar) |>
+  summarise(
+    gj_pCO2_hf = mean(diff_pCO2),
+    .groups = "keep"
+  ) |>
+  mutate(hf_tekst_n = paste0(r_hf_tekst, " HF \n(n = ", n_svar, ")")) |>
+  ungroup()
+
+# Nasjonalt
+d_endring_pco2_nasjonal = d_ventreg_siste_fem_aar_nasjonalt |>
+  filter(r_ventilation_method != 3) |> # uten CPAP
+  select(
+    r_hf_tekst, r_hf_resh, r_dato_start, c_dato_stopp,
+    r_pco2_air, r_capillarypco2_air, f1_pco2_air, f1_capillarypco2_air
+  ) |>
+  mutate(                                                                  # 1. arteriel 2. capillary
+    f1_pco2 = if_else(!is.na(f1_pco2_air), f1_pco2_air, f1_capillarypco2_air),
+    pco2 = if_else(!is.na(r_pco2_air), r_pco2_air, r_capillarypco2_air)
+  ) |>
+  filter(!is.na(f1_pco2) & !is.na(pco2)) |> # Fjerner tilfeller hvor det ikke finnes målinger ved start og ved ett års oppfølging
+  mutate(diff_pCO2 = f1_pco2 - pco2,
+         n_svar = n()) |>
+  group_by(n_svar) |>
+  summarise(
+    gj_pCO2_hf = mean(diff_pCO2)
+  ) |>
+  mutate(
+    r_hf_tekst = "Nasjonalt",
+    hf_tekst_n = paste0("Nasjonalt \n(n = ", n_svar, ")")
+  ) |>
+  ungroup()
+
+# Andel med pCO2 <= 6 ved 1 års kontroll
+andel_pco2_hf = d_ventreg_siste_fem_aar |>
+  filter(r_ventilation_method != 3) |> # uten CPAP
+  select(
+    r_hf_tekst, r_hf_resh, r_dato_start, c_dato_stopp,
+    r_pco2_air, r_capillarypco2_air, f1_pco2_air, f1_capillarypco2_air
+  ) |>
+  mutate(                                                                  # 1. arteriel 2. capillary
+    f1_pco2 = if_else(!is.na(f1_pco2_air), f1_pco2_air, f1_capillarypco2_air)
+  ) |>
+  filter(!is.na(f1_pco2)) |>
+  summarise(andel_under_seks = round(sum(f1_pco2 <= 6) / n() * 100)) |>
+  pull()
+
+andel_pco2_nasjonal = d_ventreg_siste_fem_aar_nasjonalt |>
+  filter(r_ventilation_method != 3) |> # uten CPAP
+  select(
+    r_hf_tekst, r_hf_resh, r_dato_start, c_dato_stopp,
+    r_pco2_air, r_capillarypco2_air, f1_pco2_air, f1_capillarypco2_air
+  ) |>
+  mutate(                                                                  # 1. arteriel 2. capillary
+    f1_pco2 = if_else(!is.na(f1_pco2_air), f1_pco2_air, f1_capillarypco2_air)
+  ) |>
+  filter(!is.na(f1_pco2)) |>
+  summarise(andel_under_seks = round(sum(f1_pco2 <= 6) / n() * 100)) |>
+  pull()
+```
+
+
+## Endring av pCO2 første år
+
+En ventilator (BiPAP/respirator) er et mekanisk hjelpemiddel som helt
+eller delvis kan kompensere for sviktende pusteevne og bidrar til
+tilfredsstillende nivå av blodgassene. PCO2 er karbondioksid trykket i
+blodet. Ved behandling forventes pCO2 å falle med i størrelses ordenen
+1 kpa.
+
+```{r fig-endring-pco2, echo=FALSE, warning=FALSE, fig.height=2.3, fig.width=5.5, results="hide", fig.cap=figtekst_endring_pco2}
+figtekst_endring_pco2 = paste0(
+  "Figuren viser gjennomsnittlig endring i pCO2 fra behandlingsstart til
+  ett års oppfølging de siste 5 år for eget helseforetak og totalt for
+  landet."
+)
+
+# Slår sammen data om HF og nasjonalt til å vise i samme figur
+d_endring_pco2 = bind_rows(d_endring_pco2_hf, d_endring_pco2_nasjonal)
+
+d_endring_pco2 = d_endring_pco2 |>
+  mutate(hf_tekst_n_fct = fct_reorder(hf_tekst_n, n_svar))
+
+grense_fig_pco2 = d_endring_pco2 |>
+  summarise(limit = max(gj_pCO2_hf)) |>
+  mutate(limit = round(limit - 0.2, digits = 2))
+
+grense_pco2 = grense_fig_pco2$limit
+
+fig_co2_skaar_endring = ggplot(d_endring_pco2,
+  aes(x = hf_tekst_n_fct,
+      y = gj_pCO2_hf,
+      fill = hf_tekst_n_fct)) +
+  geom_bar(stat = "identity", width = 1 / 4, show.legend = FALSE) +
+  geom_hline(yintercept = 0, col = colPrim[6], linewidth = 1) +
+  geom_text(aes(label = round(gj_pCO2_hf, 2),
+            hjust = ifelse(gj_pCO2_hf < 0, 1.1, -0.1)),
+            color = "#666666") +
+  xlab("Helseforetak") +
+  ylab("Gjennomsnittlig endring i pCO2") +
+  coord_flip() +
+  scale_y_continuous(
+    expand = expansion(mult = c(0.2, 0.14), add = 0),
+    breaks = breaks_width(0.2)
+  ) +
+  scale_fill_manual(values =  c(colPrim[3], colKontr)) +
+  ggplot2::theme(panel.grid.minor.x = element_blank()) +
+  fjern_y()
+
+fig_co2_skaar_endring
+```
+
+Totalt `r andel_pco2_hf` % hadde pCO2 $\le$ 6  ved 1 års kontroll 
+lokalt  og  `r andel_pco2_nasjonal` % nasjonalt.
+
+## Endring av ESS-skår første år
+
+Epworth Sleepiness Scale (ESS) er et internasjonalt akseptert verktøy
+for å vurdere egenvurdert dagtidstrøtthet. Det er spesielt anvendt ved
+mistanke eller bekreftet søvnapne, men både Sverige og Norge benytter
+det også ved mistanke eller bekreftet underventilering. Bedring
+(fallende skår) under behandling vurderes å være av klinisk
+betydning.
+
+```{r fig-endring-ess, echo=FALSE, warning=FALSE, fig.height=2.3, fig.width=5.5, results="hide", fig.cap=figtekst_endring_ess}
+figtekst_endring_ess = paste0(
+  "Figuren viser gjennomsnittlig endring i poengskår fra PROMS skjema
+  «Epworth Sleepiness Scale» fra behandlingsstart til ett års
+  oppfølging de siste 5 år for eget helseforetak og totalt for landet."
+)
+
+# Lager data til figur som viser endringen av ESS-verdier før
+# og ett år etter behandling på enhetsnivå, de siste 5 år.
+# HF
+d_endring_ess_hf = d_ventreg_siste_fem_aar |>
+  select(
+    r_qless, f1_qless, r_hf_tekst, r_hf_resh, r_dato_start, c_dato_stopp
+  ) |>
+  filter(!is.na(r_qless) & !is.na(f1_qless)) |> # Fjerner tilfeller hvor det ikke finnes målinger ved start og ved ett års oppfølging
+  mutate(diff_qless = f1_qless - r_qless) |>
+  add_count(r_hf_resh, name = "n_svar") |>
+  group_by(r_hf_tekst, n_svar) |>
+  summarise(
+    gj_ess_hf = mean(diff_qless),
+    .groups = "keep"
+  ) |>
+  mutate(hf_tekst_n = paste0(r_hf_tekst, " HF \n(n = ", n_svar, ")")) |>
+  ungroup()
+
+# Nasjonalt
+d_endring_ess_nasjonal = d_ventreg_siste_fem_aar_nasjonalt |>
+  select(
+    r_qless, f1_qless, r_hf_tekst, r_hf_resh, r_dato_start, c_dato_stopp
+  ) |>
+  filter(!is.na(r_qless) & !is.na(f1_qless)) |>
+  mutate(diff_qless = f1_qless - r_qless,
+         n_svar = n()) |>
+  group_by(n_svar) |>
+  summarise(
+    gj_ess_hf = mean(diff_qless),
+    .groups = "keep"
+  ) |>
+  mutate(
+    r_hf_tekst = "Nasjonalt",
+    hf_tekst_n = paste0("Nasjonalt \n(n = ", n_svar, ")")) |>
+  ungroup()
+
+
+# Slår sammen data om HF og nasjonalt til å vise i samme figur
+d_endring_ess = bind_rows(d_endring_ess_hf, d_endring_ess_nasjonal)
+
+d_endring_ess = d_endring_ess |>
+  mutate(hf_tekst_n_fct = fct_reorder(hf_tekst_n, n_svar))
+
+
+fig_ess_skaar_endring = ggplot(d_endring_ess,
+  aes(x = hf_tekst_n_fct,
+      y = gj_ess_hf,
+      fill = hf_tekst_n_fct)) +
+  geom_bar(stat = "identity", width = 1 / 4, show.legend = FALSE) +
+  geom_hline(yintercept = 0, col = colPrim[6], linewidth = 1) +
+  geom_text(aes(
+      label = round(gj_ess_hf, 1),
+      hjust = ifelse(gj_ess_hf < 0, 1.1, -0.1),
+      vjust = 0.5
+    ),
+            color = "#666666") +
+  xlab("Helseforetak") +
+  ylab("Gjennomsnittlig endring i ESS-skår") +
+  coord_flip() +
+  scale_y_continuous(
+    expand = expansion(mult = c(0.14, 0.09), add = 0),
+    breaks = breaks_width(0.2)
+  ) +
+  scale_fill_manual(values =  c(colPrim[3], colKontr)) +
+  ggplot2::theme(panel.grid.minor.x = element_blank()) +
+  fjern_y()
+
+fig_ess_skaar_endring
+```
+
+\pagebreak
+
+## Antall pasienter i behandling siste 5 år
+
+```{r fig-antall-pasienter, echo=FALSE, warning=FALSE, fig.height=5, fig.width=6.5, results="hide", fig.cap=figtekst_antall_pasienter}
+figtekst_antall_pasienter = paste0(
+  "Figuren viser antall pasienter i aktiv behandling, nye pasienter,
+  døde pasienter og pasienter som har avsluttet av andre årsaker de
+  siste 5 årene for eget helseforetak."
+)
+
+# Beregner antall pasienter for "aktiv behandling", "annen avslutning",
+# "Døde" og "Nye" de siste 5 årene for HF.
+d_utvikling_registrering = d_superbrei_hf |>
+  # FIXME - noen pasienter mangler både stoppdato og dødsdato selv om de har ferdigstilt
+  # avslutningsskjema. Disse pasientene blir filtrert ut her. Registerleder skal lage en
+  # Jira-sak på at stoppdato må bli en obligatorisk variabel.
+  filter(
+    is.na(c_status) |
+      !(c_status == 1 & is.na(c_dato_stopp) & is.na(p_Dodsdato) & p_Avdod == 0)
+  ) |>
+  mutate(
+    # Erstatter manglende stoppdatoer med dødsdatoer. Har avklart med
+    # registerleder at dette er ok å gjøre for pasienter som har en
+    # dødsdato, men som mangler en stoppdato.
+    dato_stopp = if_else(
+      (!is.na(p_Dodsdato) & is.na(c_dato_stopp)), p_Dodsdato, c_dato_stopp
+    ),
+    # Ser på de siste fem årene
+    aar = list((!!rapporteringsaar-4):!!rapporteringsaar)
+  ) |>
+  unnest(cols = c(aar)) |>
+  group_by(aar) |>
+  summarise(
+    # Antall nye pasienter per år
+    nye = sum(r_bstart_aar == aar),
+    # Antall pasienter som dør per år. Hvis en pasient har avsluttet
+    # behandling grunnet andre årsaker enn død, men dør på et senere
+    # tidspunkt, SKAL IKKE denne pasienten inkluderes i dette objektet.
+    dode = sum(!is.na(p_Dodsdato) & (year(p_Dodsdato) == aar) &
+      (!is.na(dato_stopp) & dato_stopp == p_Dodsdato)),
+    # Antall pasienter med annen avslutning enn død per år. Hvis en
+    # pasient har avsluttet behandling grunnet andre årsaker enn død,
+    # men dør på et senere tidspunkt, SKAL denne pasienten inkluderes
+    # i dette objektet.
+    annen_avslutning = sum(!is.na(dato_stopp) & year(dato_stopp) == aar &
+      (is.na(p_Dodsdato) | p_Dodsdato > dato_stopp)),
+    # Antall pasienter i aktiv behandling per år. Dette vil si alle
+    # som har vært i behandling I LØPET AV det aktuelle året.
+    aktiv_behandling = sum(r_bstart_aar <= aar &
+      (is.na(dato_stopp) | year(dato_stopp) >= aar))
+  )
+
+d_utvikling_registrering_lang = d_utvikling_registrering |>
+  pivot_longer(c(nye, dode, annen_avslutning, aktiv_behandling),
+    names_to = "type", values_to = "verdi"
+  ) |>
+  mutate(type = case_when(
+    type == "nye" ~ "Nye",
+    type == "dode" ~ "Døde",
+    type == "annen_avslutning" ~ "Annen avslutning",
+    type == "aktiv_behandling" ~ "Aktiv behandling"
+  ))
+
+breaks_y = if_else(
+  max(d_utvikling_registrering_lang$verdi) >= 100,
+  100,
+  round(max(d_utvikling_registrering_lang$verdi), digits = -1)
+)
+
+ggplot(
+  d_utvikling_registrering_lang,
+  aes(x = aar, y = verdi, colour = type)
+) +
+  geom_line() +
+  scale_y_continuous(limits = c(0, NA), breaks = breaks_width(breaks_y)) +
+  scale_x_continuous(breaks = breaks_width(1)) +
+  xlab("År") +
+  ylab("Antall\npasienter") +
+  fjern_x() +
+  ggplot2::theme(
+    legend.position = "bottom", axis.text.x = element_text(angle = 80, vjust = 0.5),
+    legend.title = element_blank()
+  ) +
+  scale_colour_manual(values = c("#4daf4a", colPrim[3], "#984ea3", colKontr))
+
+
+```
+
