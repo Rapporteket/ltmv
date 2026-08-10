@@ -32,39 +32,48 @@ export(regn_ut_gj_trakestomi)
 export(report_processor)
 export(run_app)
 export(superbreitt_format)
-importFrom(dplyr,arrange)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,c_across)
-importFrom(dplyr,case_when)
-importFrom(dplyr,count)
-importFrom(dplyr,distinct)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,if_else)
-importFrom(dplyr,join_by)
-importFrom(dplyr,last)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,n)
-importFrom(dplyr,n_distinct)
-importFrom(dplyr,pull)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rename)
-importFrom(dplyr,rename_with)
-importFrom(dplyr,row_number)
-importFrom(dplyr,rowwise)
-importFrom(dplyr,select)
-importFrom(dplyr,slice_max)
-importFrom(dplyr,summarise)
-importFrom(dplyr,ungroup)
+importFrom(dplyr,
+  arrange,
+  bind_rows,
+  c_across,
+  case_when,
+  count,
+  distinct,
+  filter,
+  filter_out,
+  group_by,
+  if_else,
+  join_by,
+  last,
+  left_join,
+  mutate,
+  n,
+  n_distinct,
+  pull,
+  relocate,
+  rename,
+  rename_with,
+  row_number,
+  rowwise,
+  select,
+  slice_max,
+  summarise,
+  ungroup
+)
 importFrom(forcats,fct_inorder)
 importFrom(purrr,walk)
 importFrom(readxl,read_excel)
-importFrom(stringr,str_replace_all)
-importFrom(stringr,str_to_lower)
-importFrom(tibble,as_tibble)
-importFrom(tibble,is_tibble)
-importFrom(tibble,tibble)
-importFrom(tibble,tribble)
-importFrom(tidyr,drop_na)
-importFrom(tidyr,pivot_wider)
+importFrom(stringr,
+  str_replace_all,
+  str_to_lower
+)
+importFrom(tibble,
+  as_tibble,
+  is_tibble,
+  tibble,
+  tribble
+)
+importFrom(tidyr,
+  drop_na,
+  pivot_wider
+)
