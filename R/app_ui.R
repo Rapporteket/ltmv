@@ -155,6 +155,41 @@ app_ui = function() {
         )
       ),
       shiny::navbarMenu(
+        "Rapporter",
+        menuName = "tab_rapport",
+        shiny::tabPanel(
+          "HF-rapport",
+          shiny::fluidPage(
+            shiny::titlePanel("Rapport for LTMV-registrering"),
+            shiny::sidebarLayout(
+              shiny::sidebarPanel(
+                shiny::selectInput(
+                  inputId = "HF_valg",
+                  label = "Helseforetak:",
+                  choices = NULL
+                ),
+                shiny::selectInput(
+                  inputId = "aar_valg",
+                  label = "Velg år:",
+                  choices = 2020:lubridate::year(Sys.time()) - 1,
+                  selected = lubridate::year(Sys.time()) - 1
+                ),
+                shiny::hr(),
+                shiny::actionButton(
+                  inputId = "generer",
+                  label = "Generer Rapport",
+                  class = "btn-primary w-100"
+                ),
+                shiny::downloadButton("download_report", "Last ned rapport")
+              ),
+              shiny::mainPanel(
+                shiny::htmlOutput("rapport_visning", inline = TRUE)
+              )
+            )
+          )
+        )
+      ),
+      shiny::navbarMenu(
         "Verkt\u00f8y",
         shiny::tabPanel(
           "Utsending",
