@@ -1,4 +1,4 @@
-options(
-  knitr.device.fallback = TRUE,
-  knitr.device.choices = list(svg = "svglite", png = "svglite")
-)
+# rhub/r-minimal (Alpine) har R bygd utan cairo; bruk svglite for figurar
+if (!capabilities("cairo")) {
+  knitr::opts_chunk$set(dev = "svglite")
+}
