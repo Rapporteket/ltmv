@@ -22,12 +22,10 @@ jobs:
         config:
           - {os: windows-latest, r: 'release'}
           - {os: macOS-latest, r: 'release'}
-          #- {os: ubuntu-24.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-24.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          #- {os: ubuntu-24.04, r: 'release'}
+          - {os: ubuntu-24.04, r: 'devel'}
 
     env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
@@ -74,6 +72,15 @@ jobs:
     runs-on: ubuntu-latest # GitHub Action må køyra på windows, macOS eller ubuntu
     container:
       image: rhub/r-minimal:latest # rhub/r-minimal brukar Alpine Linux
+    services:
+      mariadb:
+        image: mariadb:lts
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: testDb
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=2s --health-retries=30
     steps:
       - name: Bekreft Alpine Linux
         run: cat /etc/os-release
@@ -92,23 +99,13 @@ jobs:
             font-dejavu
           fc-cache -f
 
-      - name: Db unit tests in linux
+      - name: Miljøvariablar for db-testar
         run: |
-          if [[ ${{ runner.os }} == Linux ]]; then
-            echo "GITHUB_ACTIONS_RUN_DB_UNIT_TESTS=true" >> $GITHUB_ENV
-            echo "DB_HOST=localhost" >> $GITHUB_ENV
-            echo "DB_NAME=testDb" >> $GITHUB_ENV
-            echo "DB_USER=root" >> $GITHUB_ENV
-            echo "DB_PASS=root" >> $GITHUB_ENV
-          else
-            echo "GITHUB_ACTIONS_RUN_DB_UNIT_TESTS=false" >> $GITHUB_ENV
-          fi
-      - name: Set up MySQL, ubuntu only
-        if: runner.os == 'Linux'
-        run: |
-          if [ -f /etc/init.d/mariadb ] || [ -f /etc/init.d/mysql ]; then
-            /etc/init.d/mariadb start || /etc/init.d/mysql start
-          fi
+          echo "GITHUB_ACTIONS_RUN_DB_UNIT_TESTS=true" >> $GITHUB_ENV
+          echo "DB_HOST=mariadb" >> $GITHUB_ENV
+          echo "DB_NAME=testDb" >> $GITHUB_ENV
+          echo "DB_USER=root" >> $GITHUB_ENV
+          echo "DB_PASS=root" >> $GITHUB_ENV
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
