@@ -124,31 +124,6 @@ app_server = function(input, output, session) {
     lag_spcfigur_ki_blodgass_forste_aar(d_ki_superbreitt())
   })
 
-  output$download_report = shiny::downloadHandler(
-    filename = function() {
-      basename(tempfile(
-        pattern = "ltmv-sample_report",
-        fileext = paste0(".", input$format_report)
-      ))
-    },
-    content = function(file) {
-      fn = rapbase::renderRmd(
-        system.file("sample_report.Rmd", package = "ltmv"),
-        outputType = input$format_report,
-        params = list(
-          author = user$fullName(),
-          hospital_name = hospital_name,
-          table_format = input$format_report,
-          resh_id = user$org(),
-          registry_name = registry_name,
-          user_full_name = user$fullName(),
-          user_role = user$role()
-        )
-      )
-      file.rename(fn, file)
-    }
-  )
-
   dagens_dato = lubridate::today()
 
   observeEvent(input$vise_alt, {
