@@ -1,18 +1,15 @@
 ---
 output:
-    pdf_document:
-      latex_engine: "lualatex"
+  pdf_document:
+    latex_engine: "lualatex"
 params:
-  HF_navn: 
-  #rapporteringsaar: '`r lubridate::year(Sys.time()) - 1`'
-  rapporteringsaar: 
+  HF_navn:
+  rapporteringsaar:
 title: Rapport for LTMV-registrering
 subtitle: Nasjonalt register for langtids mekanisk ventilasjon
 author: Solfrid Indrekvam, registerleder
 date: '`r format(Sys.time(), "%d. %B, %Y")`'
 registryName: ltmv
-reglogo: '`r system.file("ltmv.png", package = "ltmv")`'
-regtext: '`r readLines(system.file("registry_short_description.txt", package = "ltmv"))`'
 userFullName: '`r params$user_full_name`'
 lang: nb
 ---
