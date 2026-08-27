@@ -61,7 +61,7 @@ regstart_aar = 2002 # Året registeret kom fullt i gang.
 
 hf_navn = paste0(params$HF_navn, " HF")
 
-theme_tekststorrelse = ggplot2::theme(axis.title = element_text(size = 11), 
+theme_tekststorrelse = theme(axis.title = element_text(size = 11), 
             axis.text = element_text(size = 9),
             text = element_text(size = 9))
 ```
