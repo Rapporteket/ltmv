@@ -72,8 +72,8 @@ theme_tekststorrelse = ggplot2::theme(axis.title = element_text(size = 11),
 ```{r knitrOptions, include=FALSE}
 # nolint start: undesirable_function_linter.
 options(knitr.table.format = params$tableFormat)
-knitr::opts_chunk$set(warnings = FALSE, echo = FALSE)
-options(stringsAsFactors = FALSE)
+knitr::opts_chunk$set(warnings = FALSE, echo = FALSE, out.width = "100%")
+# options(stringsAsFactors = FALSE)
 # nolint end
 ```
 
