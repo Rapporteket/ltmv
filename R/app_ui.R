@@ -174,13 +174,20 @@ app_ui = function() {
                   choices = 2020:lubridate::year(Sys.time()) - 1,
                   selected = lubridate::year(Sys.time()) - 1
                 ),
+                shiny::selectInput(
+                  inputId = "format_report",
+                  label = "Filformat",
+                  choices = c("pdf", "html"),
+                  selected = "pdf"
+                ),
                 shiny::hr(),
                 shiny::actionButton(
                   inputId = "generer",
                   label = "Generer Rapport",
                   class = "btn-primary w-100"
                 ),
-                shiny::downloadButton("download_report", "Last ned rapport")
+                shiny::downloadButton("download_report", "Last ned rapport"),
+                width = 3
               ),
               shiny::mainPanel(
                 shiny::htmlOutput("rapport_visning", inline = TRUE)
