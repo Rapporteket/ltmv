@@ -45,15 +45,11 @@ library(tidyverse) # lisvnæring. ggplot2, dplyr, tidyr, readr, purrr, tibble, s
 library(lubridate) # For handtering av dato og tal
 library(scales) # Ymse skalafunksjonar (for ggplot2)
 library(testthat) # For unit testing
-# library(rjstat) # For å hente inn JSON-stat filer
 library(readxl) # for å hente inn sykehusdata
 library(readr) # for å hente data
 library(rapwhale) # ymse funksjoner utarbeidet på fagsenteret
 library(ltmv) # LTMV-spesifikke funksjoner
 
-#library(here) # For å lese inn filer fra riktig adresse
-
-#library(glue)
 library(knitr) # For visning av tabell
 library(kableExtra) # For visning av tabell
 library(gridExtra) # For å plotte figurer samlet
