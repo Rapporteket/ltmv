@@ -374,17 +374,19 @@ app_server = function(input, output, session) {
 
       # renderRmd gir filen et tilfeldig navn.
       # Gir nytt navn til filen basert på "HF_valg"
-      pdf_dir = dirname(fn)
-      nytt_navn_pdf = paste0("HF-rapport-", input$HF_valg, ".pdf")
-      ny_filsti_pdf = file.path(pdf_dir, nytt_navn_pdf)
+      fil_dir = dirname(fn)
+      nytt_navn_fil = paste0(
+        "HF-rapport-", input$HF_valg, ".", input$format_report
+      )
+      ny_filsti = file.path(fil_dir, nytt_navn_fil)
 
       # Kopierer/omdøper filen
-      file.copy(from = fn, to = ny_filsti_pdf, overwrite = TRUE)
+      file.copy(from = fn, to = ny_filsti, overwrite = TRUE)
 
       # Lager filsti til rapporten
-      filsti_pdf = "pdf_filer"
-      shiny::addResourcePath(prefix = filsti_pdf, directoryPath = pdf_dir)
-      web_src = file.path(filsti_pdf, nytt_navn_pdf)
+      filsti_rapport = "filer"
+      shiny::addResourcePath(prefix = filsti_rapport, directoryPath = fil_dir)
+      web_src = file.path(filsti_rapport, nytt_navn_fil)
 
       output$rapport_visning = shiny::renderUI({
         shiny::tags$iframe(
