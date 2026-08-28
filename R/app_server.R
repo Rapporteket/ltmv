@@ -360,47 +360,50 @@ app_server = function(input, output, session) {
     on.exit(shiny::removeNotification(id), add = TRUE)
 
     # Forsøker å kjøre rapbase::renderRmd og gir ut feilmelding om det krasjer
-    tryCatch({
-      fn = rapbase::renderRmd(
-        system.file("HF_rapport.Rmd", package = "ltmv"),
-        outputType = input$format_report,
-        params = list(        # Liste med parametere til rapporten, som velges i sidemeny
-          HF_navn = input$HF_valg,
-          rapporteringsaar = input$aar_valg
-        ),
-        template = NULL,
-        quiet = FALSE
-      )
-
-      # renderRmd gir filen et tilfeldig navn.
-      # Gir nytt navn til filen basert på "HF_valg"
-      fil_dir = dirname(fn)
-      nytt_navn_fil = paste0(
-        "HF-rapport-", input$HF_valg, ".", input$format_report
-      )
-      ny_filsti = file.path(fil_dir, nytt_navn_fil)
-
-      # Kopierer/omdøper filen
-      file.copy(from = fn, to = ny_filsti, overwrite = TRUE)
-
-      # Lager filsti til rapporten
-      filsti_rapport = "filer"
-      shiny::addResourcePath(prefix = filsti_rapport, directoryPath = fil_dir)
-      web_src = file.path(filsti_rapport, nytt_navn_fil)
-
-      output$rapport_visning = shiny::renderUI({
-        shiny::tags$iframe(
-          src = web_src,
-          style = "width:100%; height: calc(100vh - 155px); border: none;"
+    tryCatch(
+      {
+        fn = rapbase::renderRmd(
+          system.file("HF_rapport.Rmd", package = "ltmv"),
+          outputType = input$format_report,
+          # Liste med parametere til rapporten, som velges i sidemeny
+          params = list(
+            HF_navn = input$HF_valg,
+            rapporteringsaar = input$aar_valg
+          ),
+          template = NULL,
+          quiet = FALSE
         )
-      })
-    },
-    error = function(e) {
-      shiny::showNotification(
-        paste("Feil ved generering:", e$message),
-        type = "error"
-      )
-    })
+
+        # renderRmd gir filen et tilfeldig navn.
+        # Gir nytt navn til filen basert på "HF_valg"
+        fil_dir = dirname(fn)
+        nytt_navn_fil = paste0(
+          "HF-rapport-", input$HF_valg, ".", input$format_report
+        )
+        ny_filsti = file.path(fil_dir, nytt_navn_fil)
+
+        # Kopierer/omdøper filen
+        file.copy(from = fn, to = ny_filsti, overwrite = TRUE)
+
+        # Lager filsti til rapporten
+        filsti_rapport = "filer"
+        shiny::addResourcePath(prefix = filsti_rapport, directoryPath = fil_dir)
+        web_src = file.path(filsti_rapport, nytt_navn_fil)
+
+        output$rapport_visning = shiny::renderUI({
+          shiny::tags$iframe(
+            src = web_src,
+            style = "width:100%; height: calc(100vh - 155px); border: none;"
+          )
+        })
+      },
+      error = function(e) {
+        shiny::showNotification(
+          paste("Feil ved generering:", e$message),
+          type = "error"
+        )
+      }
+    )
   })
 
   # Laster ned rapport
@@ -412,7 +415,8 @@ app_server = function(input, output, session) {
       fn = rapbase::renderRmd(
         system.file("HF_rapport.Rmd", package = "ltmv"),
         outputType = input$format_report,
-        params = list(        # Liste med parametere til rapporten, som velges i sidemeny
+        # Liste med parametere til rapporten, som velges i sidemeny
+        params = list(
           HF_navn = input$HF_valg,
           rapporteringsaar = input$aar_valg
         ),
