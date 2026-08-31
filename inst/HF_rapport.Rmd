@@ -1,7 +1,4 @@
 ---
-output:
-  pdf_document:
-    latex_engine: "lualatex"
 params:
   HF_navn:
   rapporteringsaar:
@@ -13,29 +10,6 @@ registryName: ltmv
 userFullName: '`r params$user_full_name`'
 lang: nb
 ---
-```{r render-rapport, include=FALSE, results='hide'}
-# # Kode som kan brukes for å kjøre `render` med parameter for å få ut
-# # raporten for alle HF.
-# HF = c("Oslo universitetssykehus", "Helse Bergen", "Sykehuset i Vestfold", "Sørlandet sykehus",
-#        "Sykehuset Østfold", "Nordlandssykehuset", "Helse Stavanger", "Sykehuset Innlandet",
-#        "Sykehuset Telemark", "St. Olavs Hospital", "Universitetssykehuset Nord-Norge", "Helse Møre og Romsdal",
-#        "Vestre Viken", "Helse Førde", "Akershus Universitetssykehus", "Helse Nord-Trøndelag",
-#        "Sunnaas sykehus", "Finnmarkssykehuset", "Helse Fonna", "Lovisenberg Diakonale Sykehus")
-# 
-# path_rapport = paste0(here::here(),"/nasjonale-register/ltmv/prosjekt/hf-rapport/")
-# path_input = paste0(path_rapport, "HF-rapport.Rmd")
-# path_output = paste0(path_rapport, "rapporter/")
-# 
-# for (hf in HF) {
-#     rmarkdown::render(input = path_input,
-#                       params = list(HF_navn = hf),
-#                       output_dir = path_output,
-#                       output_format = "pdf_document",
-#                       output_file = paste0("HF-rapport-", hf),
-#                       clean = TRUE,
-#                       envir = new.env())
-# }
-```
 
 ```{r nødvendige pakker, include=FALSE, results='hide'}
 library(tidyverse) # lisvnæring. ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr og forcats
