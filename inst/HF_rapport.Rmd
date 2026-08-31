@@ -12,18 +12,19 @@ lang: nb
 ---
 
 ```{r nødvendige pakker, include=FALSE, results='hide'}
-library(tidyverse) # lisvnæring. ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr og forcats
 library(lubridate) # For handtering av dato og tal
 library(scales) # Ymse skalafunksjonar (for ggplot2)
 library(testthat) # For unit testing
-library(readxl) # for å hente inn sykehusdata
-library(readr) # for å hente data
 library(rapwhale) # ymse funksjoner utarbeidet på fagsenteret
 library(ltmv) # LTMV-spesifikke funksjoner
-
-library(knitr) # For visning av tabell
 library(kableExtra) # For visning av tabell
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(forcats)
 library(gridExtra) # For å plotte figurer samlet
+library(stringr)
 ```
 
 ```{r globale-variabler, include=FALSE}
@@ -1076,7 +1077,6 @@ kable(tabell_andel_blodgass_start_siste_fem_aar,
                 full_width = FALSE,
                 position = "center")
 
-# gt::gt(d_dg_rappaar_avd_tabell) |> gt::tab_options(table.align = "left", table.width = gt::pct(50))
 ```
 
 Barnegruppen skiller seg fra voksengruppen ved at det her 
@@ -1200,7 +1200,6 @@ fig_elektiv_hf = ggplot(
   fjern_x() +
   ggplot2::theme(
     plot.title = element_text(size = 10),
-    #axis.title.y  = element_text(angle = 90),
     legend.position = "bottom", axis.text.x = element_text(angle = 45, vjust = 0.5),
     legend.title = element_blank()
   ) +
@@ -1304,7 +1303,6 @@ kable(tabell_andel_elektive_nevro,
                 full_width = FALSE,
                 position = "center")
 
-# gt::gt(d_dg_rappaar_avd_tabell) |> gt::tab_options(table.align = "left", table.width = gt::pct(50))
 ```
 
 
