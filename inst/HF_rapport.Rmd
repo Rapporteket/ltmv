@@ -104,30 +104,6 @@ lag_aars_intervall = function(d, intervall) {
 
 
 ```{r historiske-kommunenummer, include=FALSE}
-# # Laster inn datasett med historiske komunenummer for å koble til ventreg
-# # Adresse til filen med oppdaterte kommunenummer
-# kommunenr_oppdatert_adresse = here(
-#   "fellesting",
-#   "ressursar",
-#   "historiske-kommuneendringer",
-#   "oppdatert-kommune-masterliste.csv"
-# )
-# 
-# # Leser inn den oppdaterte kommunenummerlisten
-# ssb_kommuner_oppdatert = read_delim(kommunenr_oppdatert_adresse,
-#   delim = ",",
-#   col_types = "ccddccddccccc"
-# ) |>
-#   select(kilde_kode, kilde_tittel, dagens_kode)
-# 
-# # Får det på samme format som i registeret
-# ssb_fylker_oppdatert = ssb_kommuner_oppdatert |>
-#   mutate(
-#     fylker_historisk = str_extract(kilde_kode, "^\\d{2}"),
-#     fylker_historisk = str_remove(fylker_historisk, "^0"),
-#     fylker_oppdatert = str_extract(dagens_kode, "^\\d{2}"),
-#     fylker_oppdatert = str_remove(fylker_oppdatert, "^0")
-#   )
 
 d_fylke_til_rhf = tribble(
   ~fylker_oppdatert, ~fylker_tekst, ~fylker_ltmv, ~rhf_kode, ~rhf_tekst, ~rhf_resh,
@@ -154,14 +130,6 @@ d_rhf = d_fylke_til_rhf |>
 d_fylker = d_fylke_til_rhf |>
     select(starts_with("fylker"))
 
-
-# # Gjør om "fylker_oppdatert" til numerisk for at det skal samsvare med registeret
-# d_fylker$fylker_oppdatert = as.character(d_fylker$fylker_oppdatert)
-# 
-# fylker_rhf_og_resh = ssb_fylker_oppdatert |>
-#   left_join(d_fylker,
-#             by = join_by(fylker_oppdatert),
-#             relationship = "many-to-one")
 ```
 
 
@@ -365,34 +333,6 @@ d_full_prom = d_superbrei_hf_siste_dato |>
     f1_followup_date <= rapporteringsaar_siste_dato
   )
 
-```
-
-```{r SSB-data}
-# # Hent inn tall fra ssb på folkemengden i hele norge
-# ssb_folk_full = fromJSONstat(
-#   readLines(
-#     glue(
-#       "https://data.ssb.no/api/pxwebapi/v2/tables/06913/data?lang=no&",
-#       "valueCodes[Region]=*&valueCodes[ContentsCode]=*&valueCodes[Tid]=",
-#       "from(1951)&codelist[Region]=agg_KommFylkerHist&outputValues[Region]",
-#       "=aggregated&outputValues[Region]=single"
-#       ),
-#   encoding = "UTF-8",
-#   warn = FALSE
-#   ),
-#   naming = "id") |>
-#   as_tibble()
-# 
-# 
-# # vi bruker så langt bare tall på selve folkemengden, ikke innflyttinger osv.
-# # filtrerer derfor ut folkemengde
-# # endrer navn på kolonnen "value" til noe mer intuitivt
-# # FIXME Trengs når kommunenummer ikke er kryptert lengre i datadump og
-# # registeret ønsker å presentere insidens og prevalens i HF-rapport som tidligere.
-# ssb_folk = ssb_folk_full |>
-#   filter(ContentsCode == "Folkemengde") |>
-#   rename("folk" = "value") |>
-#   mutate(Region = str_replace(Region, "F_", ""))
 ```
 
 ```{r testhat}
