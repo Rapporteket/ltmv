@@ -31,7 +31,6 @@ library(stringr)
 # Endra desse variablane for å velja utgjevings- og rapporteringsaar
 rapporteringsaar = as.numeric(params$rapporteringsaar) # Året rapporten gjeld for (typisk året før han vert utgjeven)
 rapporteringsaar_siste_dato = as.Date(paste0(params$rapporteringsaar, "-12-31"))
-strukturdata_aar = 2025 # Året strukturdata senest ble samlet inn.
 regstart_aar = 2002 # Året registeret kom fullt i gang.
 
 hf_navn = paste0(params$HF_navn, " HF")
