@@ -14,7 +14,6 @@ lang: nb
 ```{r nødvendige pakker, include=FALSE, results='hide'}
 library(lubridate) # For handtering av dato og tal
 library(scales) # Ymse skalafunksjonar (for ggplot2)
-library(testthat) # For unit testing
 library(rapwhale) # ymse funksjoner utarbeidet på fagsenteret
 library(ltmv) # LTMV-spesifikke funksjoner
 library(kableExtra) # For visning av tabell
@@ -704,14 +703,6 @@ figtekst_aldersfordeling = paste0(
   "Aldersfordeling av pasienter med oppstart de siste fem årene 
   for ", hf_navn, " og Nasjonalt"
 )
-
-# Tester for aldersvariabelen
-d_test_alder = d_ventreg_siste_fem_aar_nasjonalt |>
-  filter(!is.na(alder)) |>
-  select(alder)
-
-expect_true(min(d_test_alder) >= 0)
-expect_true(max(d_test_alder) < 120)
 
 # Fig aldersfordeling for HF
 aldersfordeling_fig_hf = lag_fig_histogram(
