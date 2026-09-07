@@ -151,20 +151,8 @@ d_full_ventreg = d_full_ventreg |>
 # helseforetaknavn og helseregionnavn,
 # oppdaterte fylker og helseregionrekkefølge
 d_full_ventreg = d_full_ventreg |>
-  # FIXME Avkommenter når kommunernummer er avkryptert
-  # mutate(
-  #   kode_fylke = str_extract(municipality_number, "^\\d{2}"), 
-  #   kode_fylke = str_remove(kode_fylke, "^0")
-  # ) |>
   legg_til_overordnet_diag() |>
   legg_til_hf_rhf_navn()
-
-
-# FIXME Fjer utkommentering når OQReg6-datadump inneholder ukryptert kommunenummer
-# d_full_ventreg = d_full_ventreg |> 
-#   left_join(fylker_rhf_og_resh,
-#             by = join_by(municipality_number == kilde_kode),
-#             relationship = "many-to-one")
 
 d_full_ventreg = d_full_ventreg |>
     rename(rhf_kode = move_to_rhf) |>
@@ -238,7 +226,7 @@ d_superbrei = d_superbrei_hf_siste_dato |>
     r_dato_start, r_bstart_aar, r_bstart_aar_2siff, r_respcon,
     r_ventilation_method, r_po2_air, r_pco2_air, r_capillarypo2_air,
     r_capillarypco2_air, r_be, r_arterialpco2_air, r_situation_ventilation,
-    r_transcutaneous_co2_air, # FIXME fylker_oppdatert, fylker_ltmv, rhf_resh - legg til variablene når kommunenummer ikke er kryptert lengre
+    r_transcutaneous_co2_air,
     contains(c("mceid", "followup_date", "po2_air", "pco2_air", "capillarypo2_air",
     "capillarypco2_air", "be", "arterialpco2_air", "transcutaneous_co2_air", "year")),
     c_status, c_deceased_date, c_dato_stopp, contains("ql")
