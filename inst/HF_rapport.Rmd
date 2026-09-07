@@ -564,6 +564,7 @@ d_diagnose_nasjonal = d_ventreg_siste_fem_aar_nasjonalt |>
 
 # regner ut andel per barn og voksne for HF
 d_n_diag_akt_hf = d_diagnose_hf |>
+  filter_out(is.na(r_diag_gruppe_barn)) |>
   filter(r_bstart_aar == rapporteringsaar) |>
   count(alderkat, r_diag_gruppe_barn, r_diag_gruppe_barn_navn) |>
   group_by(alderkat) |>
@@ -581,8 +582,8 @@ d_n_diag_akt_hf = d_diagnose_hf |>
 
 # regner ut andel per barn og voksne Nasjonalt
 d_n_diag_akt_nasjonal = d_diagnose_nasjonal |>
-  filter(r_bstart_aar == rapporteringsaar,
-         !is.na(alderkat)) |>
+  filter_out(is.na(r_diag_gruppe_barn) | is.na(alderkat)) |>
+  filter(r_bstart_aar == rapporteringsaar) |>
   count(alderkat, r_diag_gruppe_barn, r_diag_gruppe_barn_navn) |>
   group_by(alderkat) |>
   mutate(
