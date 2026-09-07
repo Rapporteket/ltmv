@@ -171,7 +171,7 @@ app_ui = function() {
                 shiny::selectInput(
                   inputId = "aar_valg",
                   label = "Velg år:",
-                  choices = 2020:lubridate::year(Sys.time()) - 1,
+                  choices = lubridate::year(Sys.time()):2020,
                   selected = lubridate::year(Sys.time()) - 1
                 ),
                 shiny::selectInput(
