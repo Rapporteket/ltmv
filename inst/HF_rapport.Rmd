@@ -140,13 +140,6 @@ d_full_ventreg = hent_skjema("ventreg")
 d_full_ventfol = hent_skjema("ventfol")
 d_full_conclude = hent_skjema("conclude")
 
-# Duplikater som ikke skal være med
-dupl_mce = c(35639, 31291, 36283, 36286, 31354, 29425, 29422, 29423, 28042, 28200, 27799, 19700)
-
-# Filtrerer ut duplikater
-d_full_ventreg = d_full_ventreg |>
-  filter(!mceid %in% !!dupl_mce)
-
 # Legg til overordnede diagnosegrupper,
 # helseforetaknavn og helseregionnavn,
 # oppdaterte fylker og helseregionrekkefølge
