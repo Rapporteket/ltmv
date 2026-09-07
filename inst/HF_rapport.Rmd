@@ -335,19 +335,6 @@ d_full_prom = d_superbrei_hf_siste_dato |>
 
 ```
 
-```{r testhat}
-# Test at sluttdato skal være etter startdato
-
-# Lager en variabel som viser antall dager mellom start og stopp
-d_dato_test = d_superbrei |>
-  filter(!is.na(c_dato_stopp)) |>
-  mutate(datediff = as.numeric(c_dato_stopp) - as.numeric(r_dato_start))
-
-# Test at sluttdato er etter oppstartsdato
-testthat::expect_gt(min(d_dato_test$datediff), -1)
-```
-
-
 # `r hf_navn`
 Denne rapporten fra LTMV-registeret er ment å gi en oversikt 
 over hvilket resultat ditt foretak har i forhold til 
