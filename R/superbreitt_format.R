@@ -141,22 +141,43 @@ superbreitt_format = function(d_full_patientlist,
                               d_full_ventreg,
                               d_full_ventfol,
                               d_full_conclude) {
-  # Pasientdata
-  if (length(names(d_full_patientlist)) == 33) {
-    d_full_patientlist = d_full_patientlist |>
-      select(
-        "pasientid" = "id",
-        "RegistreringsDato" = "registered_date",
-        "Fodselsdato" = "birth_date",
-        "Kjonn" = "gender",
-        "Avdod" = "deceased",
-        "Dodsdato" = "deceased_date",
-        "Postnummer" = "zipcode",
-        "Poststed" = "town",
-        "Kommune" = "county",
-        "Fylke" = "municipality_name"
-      )
+  patientlist_kolonner = c(
+    "id",
+    "registered_date",
+    "birth_date",
+    "gender",
+    "deceased",
+    "deceased_date",
+    "zipcode",
+    "town",
+    "county",
+    "municipality_name"
+  )
+  # Gir feilmelding dersom d_full_patientlist ikke innehodler alle
+  # kolonnenavnene som skal endres under
+  manglende_kolonner = setdiff(patientlist_kolonner, names(d_full_patientlist))
+
+  if (length(manglende_kolonner) > 0) {
+    stop(
+      "d_full_patientlist mangler følgende kolonner: ",
+      paste(manglende_kolonner, collapse = ", ")
+    )
   }
+
+  # Pasientdata
+  d_full_patientlist = d_full_patientlist |>
+    select(
+      "pasientid" = "id",
+      "RegistreringsDato" = "registered_date",
+      "Fodselsdato" = "birth_date",
+      "Kjonn" = "gender",
+      "Avdod" = "deceased",
+      "Dodsdato" = "deceased_date",
+      "Postnummer" = "zipcode",
+      "Poststed" = "town",
+      "Kommune" = "county",
+      "Fylke" = "municipality_name"
+    )
 
   d_p = rename_with(d_full_patientlist, ~ paste0("p_", .x))
 
