@@ -642,7 +642,7 @@ ggplot(d_n_diag_akt_hf, aes(x = diagnose_fac, y = andel, fill = alderkat)) +
   ylab("Andel") +
   scale_y_continuous(
     limits = c(0, NA),
-    breaks = breaks_width(0.15),
+    breaks = breaks_width(0.20),
     labels = akse_prosent_format(0),
     expand = expand_soyle()
   ) +
@@ -662,7 +662,7 @@ ggplot(d_n_diag_akt_nasjonal, aes(x = diagnose_fac, y = andel, fill = alderkat))
   ylab("Andel") +
   scale_y_continuous(
     limits = c(0, NA),
-    breaks = breaks_width(0.15),
+    breaks = breaks_width(0.20),
     labels = akse_prosent_format(0),
     expand = expand_soyle()
   ) +
