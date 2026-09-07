@@ -43,7 +43,9 @@ Imports:
     janitor,
     stringr,
     forcats,
-    qicharts2
+    qicharts2,
+    scales,
+    gridExtra
 Remotes:
     Rapporteket/rapbase,
     Rapporteket/rapwhale@main
