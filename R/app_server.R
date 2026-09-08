@@ -378,7 +378,7 @@ app_server = function(input, output, session) {
         # Gir nytt navn til filen basert på "HF_valg"
         fil_dir = dirname(fn)
         nytt_navn_fil = paste0(
-          "HF-rapport-", input$HF_valg, ".", input$format_report
+          "HF-rapport-", input$HF_valg, "-", Sys.Date(), ".", input$format_report
         )
         ny_filsti = file.path(fil_dir, nytt_navn_fil)
 
@@ -409,7 +409,9 @@ app_server = function(input, output, session) {
   # Laster ned rapport
   output$download_report = shiny::downloadHandler(
     filename = function() {
-      paste0("HF-rapport-", input$HF_valg, ".", input$format_report)
+      paste0(
+        "HF-rapport-", input$HF_valg, "-", Sys.Date(), ".", input$format_report
+      )
     },
     content = function(file) {
       fn = rapbase::renderRmd(
