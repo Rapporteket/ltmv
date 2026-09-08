@@ -80,14 +80,14 @@ app_server = function(input, output, session) {
     lag_aktivitetsoversikt(d_dashboard())
   })
 
-  output$diagnosefordeling = renderPlot(
+  output$diagnosefordeling = shiny::renderPlot(
     {
       lag_fig_diagnosefordeling(d_dashboard())
     },
     res = 150
   )
 
-  output$aldersfordeling = renderPlot(
+  output$aldersfordeling = shiny::renderPlot(
     {
       lag_fig_aldersfordeling(d_dashboard())
     },
@@ -99,7 +99,7 @@ app_server = function(input, output, session) {
       filter(lubridate::year(start_date) >= lubridate::year(Sys.Date()) - 5)
   })
 
-  output$blodgass_for = renderPlot({
+  output$blodgass_for = shiny::renderPlot({
     lag_spcfigur_ki_blodgass(d_ki())
   })
 
@@ -120,14 +120,14 @@ app_server = function(input, output, session) {
       filter(lubridate::year(r_start_date) >= lubridate::year(Sys.Date()) - 5)
   })
 
-  output$blodgass_forste_aar = renderPlot({
+  output$blodgass_forste_aar = shiny::renderPlot({
     lag_spcfigur_ki_blodgass_forste_aar(d_ki_superbreitt())
   })
 
   dagens_dato = lubridate::today()
 
-  observeEvent(input$vise_alt, {
-    updateDateRangeInput(
+  shiny::observeEvent(input$vise_alt, {
+    shiny::updateDateRangeInput(
       session = session,
       inputId = "dato_dashboard",
       start = "1961-01-01",
@@ -135,8 +135,8 @@ app_server = function(input, output, session) {
     )
   })
 
-  observeEvent(input$to_aar_knapp, {
-    updateDateRangeInput(
+  shiny::observeEvent(input$to_aar_knapp, {
+    shiny::updateDateRangeInput(
       session = session,
       inputId = "dato_dashboard",
       start = dagens_dato - lubridate::years(2),
@@ -144,8 +144,8 @@ app_server = function(input, output, session) {
     )
   })
 
-  observeEvent(input$fem_aar_knapp, {
-    updateDateRangeInput(
+  shiny::observeEvent(input$fem_aar_knapp, {
+    shiny::updateDateRangeInput(
       session = session,
       inputId = "dato_dashboard",
       start = dagens_dato - lubridate::years(5),
@@ -153,7 +153,7 @@ app_server = function(input, output, session) {
     )
   })
 
-  output$enhet_dashboard = renderUI(
+  output$enhet_dashboard = shiny::renderUI(
     if (user$role() == "SC") {
       shiny::radioButtons("enhet_type",
         label = "Enhetstype:",
@@ -166,7 +166,7 @@ app_server = function(input, output, session) {
     }
   )
 
-  output$rhf_dashboard = renderUI(
+  output$rhf_dashboard = shiny::renderUI(
     if (user$role() == "SC" && input$enhet_type == "RHF") {
       shiny::checkboxGroupInput("rhf_utvalg_dashboard",
         label = NULL,
@@ -178,7 +178,7 @@ app_server = function(input, output, session) {
     }
   )
 
-  output$hf_dashboard = renderUI(
+  output$hf_dashboard = shiny::renderUI(
     if (user$role() == "SC" && input$enhet_type == "HF") {
       shiny::selectizeInput("hf_utvalg_dashboard",
         label = NULL,
@@ -193,7 +193,7 @@ app_server = function(input, output, session) {
     }
   )
 
-  output$sykehus_dashboard = renderUI(
+  output$sykehus_dashboard = shiny::renderUI(
     if (user$role() == "SC" && input$enhet_type == "Sykehus") {
       shiny::selectizeInput("sykehus_utvalg_dashboard",
         label = NULL,
@@ -213,8 +213,8 @@ app_server = function(input, output, session) {
     }
   )
 
-  observeEvent(input$alle_datoer_knapp, {
-    updateDateRangeInput(
+  shiny::observeEvent(input$alle_datoer_knapp, {
+    shiny::updateDateRangeInput(
       session = session,
       inputId = "dato_antall_skjema",
       start = "2014-01-01",
@@ -222,8 +222,8 @@ app_server = function(input, output, session) {
     )
   })
 
-  observeEvent(input$eldre_enn_ett_aar, {
-    updateDateRangeInput(
+  shiny::observeEvent(input$eldre_enn_ett_aar, {
+    shiny::updateDateRangeInput(
       session = session,
       inputId = "dato_antall_skjema",
       start = "2014-01-01",
@@ -231,8 +231,8 @@ app_server = function(input, output, session) {
     )
   })
 
-  observeEvent(input$innevarende_aar_knapp, {
-    updateDateRangeInput(
+  shiny::observeEvent(input$innevarende_aar_knapp, {
+    shiny::updateDateRangeInput(
       session = session,
       inputId = "dato_antall_skjema",
       start = paste0(lubridate::year(dagens_dato), "-01-01"),
@@ -240,8 +240,8 @@ app_server = function(input, output, session) {
     )
   })
 
-  observeEvent(input$tretti_dager_knapp, {
-    updateDateRangeInput(
+  shiny::observeEvent(input$tretti_dager_knapp, {
+    shiny::updateDateRangeInput(
       session = session,
       inputId = "dato_antall_skjema",
       start = dagens_dato - 29,
@@ -249,8 +249,8 @@ app_server = function(input, output, session) {
     )
   })
 
-  observeEvent(input$syv_dager_knapp, {
-    updateDateRangeInput(
+  shiny::observeEvent(input$syv_dager_knapp, {
+    shiny::updateDateRangeInput(
       session = session,
       inputId = "dato_antall_skjema",
       start = dagens_dato - 6,
@@ -258,7 +258,7 @@ app_server = function(input, output, session) {
     )
   })
 
-  output$antall_skjema = reactive({
+  output$antall_skjema = shiny::reactive({
     lag_antall_skjema_tabell(
       fra = input$dato_antall_skjema[1],
       til = input$dato_antall_skjema[2],
@@ -272,7 +272,7 @@ app_server = function(input, output, session) {
     )
   })
 
-  output$utvalgte_rhf = renderUI({
+  output$utvalgte_rhf = shiny::renderUI({
     if (user$role() == "SC") {
       shiny::checkboxGroupInput("rhf_utvalgt",
         label = "Utvalgte RHF:",
@@ -284,7 +284,7 @@ app_server = function(input, output, session) {
     }
   })
 
-  output$rhf = renderUI({
+  output$rhf = shiny::renderUI({
     if (user$role() == "SC") {
       shiny::checkboxInput("kun_rhf",
         label = tags$strong("Vis kun RHF"),
@@ -295,7 +295,7 @@ app_server = function(input, output, session) {
     }
   })
 
-  output$hf = renderUI({
+  output$hf = shiny::renderUI({
     if (user$role() == "SC") {
       shiny::checkboxInput("kun_hf",
         label = tags$strong("Vis per HF"),
@@ -306,15 +306,15 @@ app_server = function(input, output, session) {
     }
   })
 
-  observeEvent(input$kun_rhf, {
+  shiny::observeEvent(input$kun_rhf, {
     if (isTRUE(input$kun_rhf)) {
-      updateCheckboxInput(session, "kun_hf", value = FALSE)
+      shiny::updateCheckboxInput(session, "kun_hf", value = FALSE)
     }
   })
 
-  observeEvent(input$kun_hf, {
+  shiny::observeEvent(input$kun_hf, {
     if (isTRUE(input$kun_hf)) {
-      updateCheckboxInput(session, "kun_rhf", value = FALSE)
+      shiny::updateCheckboxInput(session, "kun_rhf", value = FALSE)
     }
   })
 
@@ -334,10 +334,10 @@ app_server = function(input, output, session) {
     distinct(hf_tekst) |>
     pull(hf_tekst)
 
-  observe({
+  shiny::observe({
     # Viser bare fanen "Rapporter" dersom rolle er "SC"
     if (user$role() == "SC") {
-      showTab(inputId = "tabs", target = "tab_rapport")
+      shiny::showTab(inputId = "tabs", target = "tab_rapport")
 
       shiny::updateSelectInput(
         session,
@@ -346,12 +346,12 @@ app_server = function(input, output, session) {
         selected = "Helse Bergen"
       )
     } else {
-      hideTab(inputId = "tabs", target = "tab_rapport")
+      shiny::hideTab(inputId = "tabs", target = "tab_rapport")
     }
   })
 
   # Når man trykker på "Generer Rapport":
-  observeEvent(input$generer, {
+  shiny::observeEvent(input$generer, {
     id = shiny::showNotification(
       "Genererer ny rapport...",
       duration = 10,
