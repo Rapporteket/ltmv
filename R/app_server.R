@@ -349,6 +349,7 @@ app_server = function(input, output, session) {
       shiny::hideTab(inputId = "tabs", target = "tab_rapport")
     }
   })
+  filsti_generert_rapport = reactiveVal(NULL)
 
   # Når man trykker på "Generer Rapport":
   shiny::observeEvent(input$generer, {
@@ -373,6 +374,7 @@ app_server = function(input, output, session) {
           template = NULL,
           quiet = FALSE
         )
+        filsti_generert_rapport(fn)
 
         # renderRmd gir filen et tilfeldig navn.
         # Gir nytt navn til filen basert på "HF_valg"
@@ -414,18 +416,8 @@ app_server = function(input, output, session) {
       )
     },
     content = function(file) {
-      fn = rapbase::renderRmd(
-        system.file("HF_rapport.Rmd", package = "ltmv"),
-        outputType = input$format_report,
-        # Liste med parametere til rapporten, som velges i sidemeny
-        params = list(
-          HF_navn = input$HF_valg,
-          rapporteringsaar = input$aar_valg
-        ),
-        template = NULL,
-        quiet = FALSE
-      )
-      file.rename(fn, file)
+      generert_rapport = filsti_generert_rapport()
+      file.rename(generert_rapport, file)
     }
   )
 
