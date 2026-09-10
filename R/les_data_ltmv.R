@@ -78,12 +78,12 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
   kb = bind_rows(kb, ekstra_var)
 
   # Heimesnikra kodebøker for registerspesifikke filer
-  # Fixme: Bør oppdaterast når me får ny datadumpinnlesar for OQR
   #        (og kanskje endrast til å bruka les_csv_oqr()?)
-  # Fixme: Må dokumenterast kor me har fått informasjon om kva
   #        variablar og variabeltypar kvar fil har (til no har
   #        me berre gjetta på bakgrunn av filene?).
   #        Må meldast JIRA-saker der det manglar dokumentasjon.
+  # FIXME: Bør oppdaterast når me får ny datadumpinnlesar for OQR
+  # FIXME: Må dokumenterast kor me har fått informasjon om kva
   kb_mce = tibble(
     skjema_id = "mce",
     variabel_id = tolower(c(
@@ -101,13 +101,13 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
       "dato", "numerisk",
       "dato", "numerisk",
       "numerisk", "tekst", "tekst",
-      "dato_kl", "dato_kl", # fixme: må sjekke variabeltypene
+      "dato_kl", "dato_kl", # FIXME: må sjekke variabeltypene
       "dato_kl", "dato_kl"
     ),
     verdi = NA_character_, verditekst = NA_character_,
     desimalar = NA_integer_, min = NA_real_, maks = NA_real_,
     obligatorisk = c(
-      TRUE, TRUE, TRUE, TRUE, # fixme: må sjekke hvilke variabler som er obligatoriske
+      TRUE, TRUE, TRUE, TRUE, # FIXME: må sjekke hvilke variabler som er obligatoriske
       TRUE, FALSE, FALSE,
       FALSE, FALSE,
       FALSE, FALSE,
@@ -136,7 +136,7 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
       TRUE, TRUE, TRUE, TRUE, TRUE,
       FALSE, FALSE, FALSE, FALSE, FALSE
     )
-  ) # fixme: må sjekke om disse er obligatoriske
+  ) # FIXME: må sjekke om disse er obligatoriske
   les_og_lagra = function(skjema, status, kb) {
     d = rapwhale::les_dd_oqr(mappe_dd,
       reg_id = register_id, skjema_id = skjema,
