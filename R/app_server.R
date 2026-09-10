@@ -350,6 +350,7 @@ app_server = function(input, output, session) {
     }
   })
   filsti_generert_rapport = reactiveVal(NULL)
+  rapport_ferdig = reactiveVal(FALSE)
 
   # Når man trykker på "Generer Rapport":
   shiny::observeEvent(input$generer, {
@@ -391,6 +392,7 @@ app_server = function(input, output, session) {
         filsti_rapport = "filer"
         shiny::addResourcePath(prefix = filsti_rapport, directoryPath = fil_dir)
         web_src = file.path(filsti_rapport, nytt_navn_fil)
+        rapport_ferdig(TRUE)
 
         output$rapport_visning = shiny::renderUI({
           shiny::tags$iframe(
@@ -408,7 +410,12 @@ app_server = function(input, output, session) {
     )
   })
 
-  # Laster ned rapport
+  output$last_ned_knapp = shiny::renderUI({
+    if (rapport_ferdig()) {
+      shiny::downloadButton("download_report", "Last ned rapport")
+    }
+  })
+
   output$download_report = shiny::downloadHandler(
     filename = function() {
       paste0(
