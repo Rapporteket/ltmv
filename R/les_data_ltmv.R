@@ -78,12 +78,12 @@ les_data_ltmv = function(mappe_dd, dato = NULL, maksdato = NULL,
   kb = bind_rows(kb, ekstra_var)
 
   # Heimesnikra kodebøker for registerspesifikke filer
-  #        (og kanskje endrast til å bruka les_csv_oqr()?)
-  #        variablar og variabeltypar kvar fil har (til no har
-  #        me berre gjetta på bakgrunn av filene?).
-  #        Må meldast JIRA-saker der det manglar dokumentasjon.
   # FIXME: Bør oppdaterast når me får ny datadumpinnlesar for OQR
+  # (og kanskje endrast til å bruka les_csv_oqr()?)
   # FIXME: Må dokumenterast kor me har fått informasjon om kva
+  # variablar og variabeltypar kvar fil har (til no har
+  # me berre gjetta på bakgrunn av filene?).
+  # Må meldast JIRA-saker der det manglar dokumentasjon.
   kb_mce = tibble(
     skjema_id = "mce",
     variabel_id = tolower(c(
