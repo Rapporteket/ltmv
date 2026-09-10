@@ -161,8 +161,8 @@ app_ui = function() {
           "HF-rapport",
           shiny::fluidPage(
             shiny::titlePanel("Rapport for LTMV-registrering"),
-            tags$head(
-              tags$style(shiny::HTML("
+            shiny::tags$head(
+              shiny::tags$style(shiny::HTML("
                 #download_report{
                   width: 100%;
                   background-color: #337ab7;
