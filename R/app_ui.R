@@ -161,6 +161,24 @@ app_ui = function() {
           "HF-rapport",
           shiny::fluidPage(
             shiny::titlePanel("Rapport for LTMV-registrering"),
+            tags$head(
+              tags$style(shiny::HTML("
+                #download_report{
+                  width: 100%;
+                  background-color: #337ab7;
+                  color: white;
+                  border-color: #2e6da4;
+                }
+                #download_report:hover{
+                  background-color: #286090;
+                  color: white;
+                }
+                #generer:hover{
+                background-color: #1f3a60;
+                color: white;
+                }
+              "))
+            ),
             shiny::sidebarLayout(
               shiny::sidebarPanel(
                 shiny::selectInput(
@@ -184,10 +202,10 @@ app_ui = function() {
                 shiny::actionButton(
                   inputId = "generer",
                   label = "Generer Rapport",
-                  class = "btn-primary w-100"
+                  class = "btn-primary w-100",
+                  width = "100%"
                 ),
-                shiny::downloadButton("download_report", "Last ned rapport"),
-                width = 3
+                shiny::uiOutput("last_ned_knapp")
               ),
               shiny::mainPanel(
                 shiny::htmlOutput("rapport_visning", inline = TRUE)
