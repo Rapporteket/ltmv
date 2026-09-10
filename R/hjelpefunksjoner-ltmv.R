@@ -26,7 +26,7 @@ legg_til_overordnet_diag = function(d_ventreg) {
   # DIAGNOSIS2 inneholder bidiagnosen, og har samme diagnosekoder,
   # kobler man til disse vil man få diagnosegruppene til disse også
   # (diagnoser burde vært i en tabell på langt format)
-  # fixme! I rapporten benytter vi oss bare av pasientens hoveddiagnose (DIAGNOSIS1),
+  # FIXME I rapporten benytter vi oss bare av pasientens hoveddiagnose (DIAGNOSIS1),
   # men det hadde vært mer riktig i opptelling av antall, insidens etc. å se på
   # bidiagnosen (DIAGNOSIS2) også.
   d_ventreg = d_ventreg |>
