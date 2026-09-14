@@ -349,8 +349,6 @@ app_server = function(input, output, session) {
       shiny::hideTab(inputId = "tabs", target = "tab_rapport")
     }
   })
-  filsti_generert_rapport = reactiveVal(NULL)
-  rapport_ferdig = reactiveVal(FALSE)
 
   # Egen mappe per session som bare inneholder den ferdige rapporten.
   # session$token sikrer at samtidige brukere ikke overskriver
@@ -366,6 +364,21 @@ app_server = function(input, output, session) {
     shiny::removeResourcePath(rapport_prefiks)
     unlink(rapport_mappe, recursive = TRUE)
   })
+
+  filsti_generert_rapport = shiny::reactiveVal(NULL)
+  web_src = shiny::reactiveVal(NULL)
+
+  # Nullstiller rapporten når valgene i sidemenyen endres,
+  # slik at nedlastingsknappen aldri kan levere en rapport for et annet HF,
+  # år eller filformat enn det som står i menyen (og filnavnet).
+  shiny::observeEvent(
+    list(input$HF_valg, input$aar_valg, input$format_report),
+    {
+      filsti_generert_rapport(NULL)
+      web_src(NULL)
+    },
+    ignoreInit = TRUE
+  )
 
   # Når man trykker på "Generer Rapport":
   shiny::observeEvent(input$generer, {
