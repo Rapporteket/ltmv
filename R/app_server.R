@@ -352,6 +352,21 @@ app_server = function(input, output, session) {
   filsti_generert_rapport = reactiveVal(NULL)
   rapport_ferdig = reactiveVal(FALSE)
 
+  # Egen mappe per session som bare inneholder den ferdige rapporten.
+  # session$token sikrer at samtidige brukere ikke overskriver
+  # hverandre sin ressurssti, og at ingen midlertidige filer fra
+  # knitr/LaTeX blir eksponerte over HTTP.
+  rapport_mappe = file.path(tempdir(), paste0("hf-rapport-", session$token))
+  dir.create(rapport_mappe, showWarnings = FALSE, recursive = TRUE)
+
+  rapport_prefiks = paste0("rapport-", session$token)
+  shiny::addResourcePath(prefix = rapport_prefiks, directoryPath = rapport_mappe)
+
+  session$onSessionEnded(function() {
+    shiny::removeResourcePath(rapport_prefiks)
+    unlink(rapport_mappe, recursive = TRUE)
+  })
+
   # Når man trykker på "Generer Rapport":
   shiny::observeEvent(input$generer, {
     id = shiny::showNotification(
