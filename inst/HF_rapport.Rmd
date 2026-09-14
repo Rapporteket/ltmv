@@ -7,7 +7,6 @@ subtitle: Nasjonalt register for langtids mekanisk ventilasjon
 author: Solfrid Indrekvam, registerleder
 date: '`r format(Sys.time(), "%d. %B, %Y")`'
 registryName: ltmv
-userFullName: '`r params$user_full_name`'
 lang: nb
 ---
 
@@ -41,9 +40,7 @@ theme_tekststorrelse = theme(axis.title = element_text(size = 11),
 
 ```{r knitrOptions, include=FALSE}
 # nolint start: undesirable_function_linter.
-options(knitr.table.format = params$tableFormat)
 knitr::opts_chunk$set(warnings = FALSE, echo = FALSE, out.width = "100%")
-# options(stringsAsFactors = FALSE)
 # nolint end
 ```
 
