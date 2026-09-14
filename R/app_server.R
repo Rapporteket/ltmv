@@ -403,31 +403,25 @@ app_server = function(input, output, session) {
           template = NULL,
           quiet = FALSE
         )
-        filsti_generert_rapport(fn)
-
-        # renderRmd gir filen et tilfeldig navn.
-        # Gir nytt navn til filen basert på "HF_valg"
-        fil_dir = dirname(fn)
-        nytt_navn_fil = paste0(
-          "HF-rapport-", input$HF_valg, "-", Sys.Date(), ".", input$format_report
-        )
-        ny_filsti = file.path(fil_dir, nytt_navn_fil)
-
-        # Kopierer/omdøper filen
-        file.copy(from = fn, to = ny_filsti, overwrite = TRUE)
-
-        # Lager filsti til rapporten
-        filsti_rapport = "filer"
-        shiny::addResourcePath(prefix = filsti_rapport, directoryPath = fil_dir)
-        web_src = file.path(filsti_rapport, nytt_navn_fil)
-        rapport_ferdig(TRUE)
-
         output$rapport_visning = shiny::renderUI({
           shiny::tags$iframe(
             src = web_src,
             style = "width:100%; height: calc(100vh - 155px); border: none;"
           )
         })
+        # renderRmd gir filen eit tilfeldig namn.
+        # Kopien som blir servert får et fast, enkelt navn,
+        # slik at URL-en slipper mellomrom og æøå fra HF-navnet.
+        # Det pene filnamnet blir satt i downloadHandler under.
+        servert_namn = paste0("rapport.", input$format_report)
+
+        # Bare den nyeste rapporten skal ligge i den eksponerte mappen
+        unlink(list.files(rapport_mappe, full.names = TRUE), recursive = TRUE)
+        file.copy(from = fn, to = file.path(rapport_mappe, servert_namn))
+        unlink(fn)
+
+        filsti_generert_rapport(file.path(rapport_mappe, servert_namn))
+        web_src(file.path(rapport_prefiks, servert_namn))
       },
       error = function(e) {
         shiny::showNotification(
