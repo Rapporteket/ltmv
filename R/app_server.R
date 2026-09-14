@@ -403,12 +403,6 @@ app_server = function(input, output, session) {
           template = NULL,
           quiet = FALSE
         )
-        output$rapport_visning = shiny::renderUI({
-          shiny::tags$iframe(
-            src = web_src,
-            style = "width:100%; height: calc(100vh - 155px); border: none;"
-          )
-        })
         # renderRmd gir filen eit tilfeldig namn.
         # Kopien som blir servert får et fast, enkelt navn,
         # slik at URL-en slipper mellomrom og æøå fra HF-navnet.
@@ -429,6 +423,14 @@ app_server = function(input, output, session) {
           type = "error"
         )
       }
+    )
+  })
+
+  output$rapport_visning = shiny::renderUI({
+    shiny::req(web_src())
+    shiny::tags$iframe(
+      src = web_src(),
+      style = "width:100%; height: calc(100vh - 155px); border: none;"
     )
   })
 
