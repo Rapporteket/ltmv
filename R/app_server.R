@@ -435,7 +435,7 @@ app_server = function(input, output, session) {
   })
 
   output$last_ned_knapp = shiny::renderUI({
-    if (rapport_ferdig()) {
+    if (!is.null(filsti_generert_rapport())) {
       shiny::downloadButton("download_report", "Last ned rapport")
     }
   })
