@@ -447,8 +447,10 @@ app_server = function(input, output, session) {
       )
     },
     content = function(file) {
-      generert_rapport = filsti_generert_rapport()
-      file.rename(generert_rapport, file)
+      # kopierer rapporten slik at den ligger igjen dersom
+      # den skal lastes ned flere ganger og fremdeles vises i iframe
+      shiny::req(filsti_generert_rapport())
+      file.copy(from = filsti_generert_rapport(), to = file, overwrite = TRUE)
     }
   )
 
