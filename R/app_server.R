@@ -332,7 +332,8 @@ app_server = function(input, output, session) {
       pull(hf_resh)
 
     d_full_ventreg |>
-      filter_out(hf_resh == 106635) |> # Fjerner Lovisenberg
+      # Fjerner Lovisenberg, og skjema som ligger inne uten resh
+      filter_out(is.na(hf_resh) | hf_resh == 106635) |>
       filter(hf_resh %in% !!d_rapport_hf_resh) |>
       distinct(hf_tekst) |>
       pull(hf_tekst)
