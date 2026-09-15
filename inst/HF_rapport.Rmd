@@ -176,11 +176,6 @@ d_full_superbrei = d_full_superbrei |>
     r_bstart_aar_2siff = format(r_dato_start, format = "%y")
   )
 
-d_full_superbrei = d_full_superbrei |>
-  mutate(r_hf_tekst = if_else(r_hf_resh == 106635,
-                              "Lovisenberg Diakonale Sykehus",
-                              r_hf_tekst))
-
 # Lager en variabel for alder, samt en variabel viser om
 # pasienten er barn eller voksen ved behandlingsstart
 
