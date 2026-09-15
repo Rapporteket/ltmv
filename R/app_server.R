@@ -402,7 +402,7 @@ app_server = function(input, output, session) {
   shiny::observeEvent(input$generer, {
     id = shiny::showNotification(
       "Genererer ny rapport...",
-      duration = 10,
+      duration = NULL,
       type = "message"
     )
     on.exit(shiny::removeNotification(id), add = TRUE)
