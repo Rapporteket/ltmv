@@ -318,21 +318,25 @@ app_server = function(input, output, session) {
     }
   })
 
-  # Lager oversikt over HF til HF-rapport
-  d_full_ventreg = hent_skjema("ventreg") |>
-    legg_til_hf_rhf_navn()
+  # Lager oversikt over HF til HF-rapport.
+  # Ligger i en reactive slik at spørringen mot databasen først blir kjørt
+  # dersom fanen faktisk blir vist, og ikke ved oppstart av hver session.
+  hf_valg_rapport = shiny::reactive({
+    d_full_ventreg = hent_skjema("ventreg") |>
+      legg_til_hf_rhf_navn()
 
-  d_rapport_hf_resh = d_full_ventreg |>
-    group_by(hf_resh) |>
-    count() |>
-    filter_out(n < 5) |> # Fjerner sykehus som ligger inne med færre enn 5 pasienter
-    pull(hf_resh)
+    d_rapport_hf_resh = d_full_ventreg |>
+      group_by(hf_resh) |>
+      count() |>
+      filter_out(n < 5) |> # Fjerner sykehus som ligger inne med færre enn 5 pasienter
+      pull(hf_resh)
 
-  hf_valg_rapport = d_full_ventreg |>
-    filter_out(hf_resh == 106635) |> # Fjerner Lovisenberg
-    filter(hf_resh %in% !!d_rapport_hf_resh) |>
-    distinct(hf_tekst) |>
-    pull(hf_tekst)
+    d_full_ventreg |>
+      filter_out(hf_resh == 106635) |> # Fjerner Lovisenberg
+      filter(hf_resh %in% !!d_rapport_hf_resh) |>
+      distinct(hf_tekst) |>
+      pull(hf_tekst)
+  })
 
   shiny::observe({
     # Viser bare fanen "Rapporter" dersom rolle er "SC"
@@ -342,7 +346,7 @@ app_server = function(input, output, session) {
       shiny::updateSelectInput(
         session,
         "HF_valg",
-        choices = hf_valg_rapport,
+        choices = hf_valg_rapport(),
         selected = "Helse Bergen"
       )
     } else {
@@ -355,14 +359,27 @@ app_server = function(input, output, session) {
   # hverandre sin ressurssti, og at ingen midlertidige filer fra
   # knitr/LaTeX blir eksponerte over HTTP.
   rapport_mappe = file.path(tempdir(), paste0("hf-rapport-", session$token))
-  dir.create(rapport_mappe, showWarnings = FALSE, recursive = TRUE)
-
   rapport_prefiks = paste0("rapport-", session$token)
-  shiny::addResourcePath(prefix = rapport_prefiks, directoryPath = rapport_mappe)
+
+  # Mappen blir først opprettet og registrert når en rapport faktisk blir
+  # generert, slik at brukere uten tilgang til fanen ikke får opprettet
+  # mapper og ressursstier de aldri kommer til å bruke.
+  klargjor_rapport_mappe = function() {
+    if (!dir.exists(rapport_mappe)) {
+      dir.create(rapport_mappe, recursive = TRUE)
+      shiny::addResourcePath(
+        prefix = rapport_prefiks,
+        directoryPath = rapport_mappe
+      )
+    }
+    invisible(NULL)
+  }
 
   session$onSessionEnded(function() {
-    shiny::removeResourcePath(rapport_prefiks)
-    unlink(rapport_mappe, recursive = TRUE)
+    if (dir.exists(rapport_mappe)) {
+      shiny::removeResourcePath(rapport_prefiks)
+      unlink(rapport_mappe, recursive = TRUE)
+    }
   })
 
   filsti_generert_rapport = shiny::reactiveVal(NULL)
@@ -408,6 +425,8 @@ app_server = function(input, output, session) {
         # slik at URL-en slipper mellomrom og æøå fra HF-navnet.
         # Det pene filnamnet blir satt i downloadHandler under.
         servert_namn = paste0("rapport.", input$format_report)
+
+        klargjor_rapport_mappe()
 
         # Bare den nyeste rapporten skal ligge i den eksponerte mappen
         unlink(list.files(rapport_mappe, full.names = TRUE), recursive = TRUE)
