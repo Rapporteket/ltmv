@@ -143,6 +143,57 @@ test_that("grupper_skjemaoversikt() gjev ut forventa resultat", {
   )
 })
 
+d_skjemastatus_eksempel = d_skjemaoversikt_eksempel |>
+  select(skjemastatus, skjemarekkeflg) |>
+  head(5) |>
+  mutate(skjemastatus = rep(c(NA_integer_, -2:1)))
+
+test_that(
+  "grupper_skjemaoversikt() gjev ut riktig resultat for `skjema_gruppe_nr`
+  og `skjema_gruppe` for ulike verdiar av `skjemastatus`", {
+    d_skjemagruppe = d_skjemastatus_eksempel |>
+      mutate(
+        skjema_gruppe_nr = c(0.5, 0.5, 999.5, 999.5, 1),
+        skjema_gruppe = factor(
+          x = c(
+            "Registrering år 0 (uferdig)",
+            "Registrering år 0 (uferdig)",
+            "Avslutning (uferdig)",
+            "Avslutning (uferdig)",
+            "Oppfølging år 1"
+          ),
+          levels = c(
+            "Registrering år 0", "Registrering år 0 (uferdig)",
+            "Oppfølging år 1", "Oppfølging år 1 (uferdig)",
+            "Oppfølging år 3", "Oppfølging år 3 (uferdig)",
+            "Videre oppfølging (år 5+ og AdHoc)",
+            "Videre oppfølging (år 5+ og AdHoc) (uferdig)",
+            "Avslutning", "Avslutning (uferdig)"
+          )
+        )
+      )
+    expect_identical(grupper_skjemaoversikt(d_skjemastatus_eksempel),
+                     expected = d_skjemagruppe
+    )
+  }
+)
+
+d_skjemarekkeflg_eksempel = d_skjemaoversikt_eksempel |>
+  select(skjemastatus, skjemarekkeflg) |>
+  head(5) |>
+  mutate(skjemarekkeflg = rep(c(NA_integer_, 0, 1, 3, 99)))
+
+test_that(
+  "grupper_skjemaoversikt() gjev ut error for missing i `skjemarekkeflg`", {
+    expect_error(
+      grupper_skjemaoversikt(d_skjemarekkeflg_eksempel),
+      "Contains missing values",
+      class = "error",
+      fixed = TRUE
+    )
+  }
+)
+
 # Testar for lag_antall_skjema_tabell()
 # test_that("lag_antall_skjema_tabell() gir ut en 'kable' tabell", {
 #
