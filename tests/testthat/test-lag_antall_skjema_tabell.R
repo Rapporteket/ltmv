@@ -150,7 +150,8 @@ d_skjemastatus_eksempel = d_skjemaoversikt_eksempel |>
 
 test_that(
   "grupper_skjemaoversikt() gjev ut riktig resultat for `skjema_gruppe_nr`
-  og `skjema_gruppe` for ulike verdiar av `skjemastatus`", {
+  og `skjema_gruppe` for ulike verdiar av `skjemastatus`",
+  {
     d_skjemagruppe = d_skjemastatus_eksempel |>
       mutate(
         skjema_gruppe_nr = c(0.5, 0.5, 999.5, 999.5, 1),
@@ -173,7 +174,7 @@ test_that(
         )
       )
     expect_identical(grupper_skjemaoversikt(d_skjemastatus_eksempel),
-                     expected = d_skjemagruppe
+      expected = d_skjemagruppe
     )
   }
 )
@@ -184,7 +185,8 @@ d_skjemarekkeflg_eksempel = d_skjemaoversikt_eksempel |>
   mutate(skjemarekkeflg = rep(c(NA_integer_, 0, 1, 3, 99)))
 
 test_that(
-  "grupper_skjemaoversikt() gjev ut error for missing i `skjemarekkeflg`", {
+  "grupper_skjemaoversikt() gjev ut error for missing i `skjemarekkeflg`",
+  {
     expect_error(
       grupper_skjemaoversikt(d_skjemarekkeflg_eksempel),
       "Contains missing values",
