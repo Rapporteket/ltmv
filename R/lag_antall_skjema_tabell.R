@@ -436,7 +436,7 @@ grupper_skjemaoversikt = function(d_skjemaoversikt) {
         false = 99
       ),
       # Legg til 0.5 til skjema_gruppe_nr for uferdige skjema
-      skjema_gruppe_nr = if_else(skjemastatus != 1,
+      skjema_gruppe_nr = if_else(skjemastatus != 1 | is.na(skjemastatus),
         true = skjema_gruppe_nr + 0.5,
         false = skjema_gruppe_nr
       )
