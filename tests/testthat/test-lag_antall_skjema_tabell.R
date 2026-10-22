@@ -9,7 +9,7 @@ skjemadato = seq(as.POSIXct("2020-01-01 00:00:00"), as.POSIXct("2020-01-14 00:00
 
 d_skjemaoversikt_eksempel = tibble(
   skjemanavn = rep(!!skjemanavn, each = 2),
-  skjemastatus = rep(1:0, length(!!skjemanavn)),
+  skjemastatus = as.character(rep(1:0, length(!!skjemanavn))),
   forlopsid = 1:(2 * length(!!skjemanavn)),
   opprettetav = "test",
   opprettetdato = !!skjemadato,
@@ -143,52 +143,57 @@ test_that("grupper_skjemaoversikt() gjev ut forventa resultat", {
   )
 })
 
-d_skjemastatus_eksempel = d_skjemaoversikt_eksempel |>
-  select(skjemastatus, skjemarekkeflg) |>
-  head(5) |>
-  mutate(skjemastatus = rep(c(NA_integer_, -2:1)))
-
 test_that(
   "grupper_skjemaoversikt() gjev ut riktig resultat for `skjema_gruppe_nr`
   og `skjema_gruppe` for ulike verdiar av `skjemastatus`",
   {
-    d_skjemagruppe = d_skjemastatus_eksempel |>
-      mutate(
-        skjema_gruppe_nr = c(0.5, 0.5, 999.5, 999.5, 1),
-        skjema_gruppe = factor(
-          x = c(
-            "Registrering år 0 (uferdig)",
-            "Registrering år 0 (uferdig)",
-            "Avslutning (uferdig)",
-            "Avslutning (uferdig)",
-            "Oppfølging år 1"
-          ),
-          levels = c(
-            "Registrering år 0", "Registrering år 0 (uferdig)",
-            "Oppfølging år 1", "Oppfølging år 1 (uferdig)",
-            "Oppfølging år 3", "Oppfølging år 3 (uferdig)",
-            "Videre oppfølging (år 5+ og AdHoc)",
-            "Videre oppfølging (år 5+ og AdHoc) (uferdig)",
-            "Avslutning", "Avslutning (uferdig)"
-          )
-        )
-      )
-    expect_identical(grupper_skjemaoversikt(d_skjemastatus_eksempel),
-      expected = d_skjemagruppe
+    d_gruppert_skjema = tibble(
+      skjemastatus = as.character(c(NA, -2:1)),
+      skjemarekkeflg = 0
+    ) |>
+      grupper_skjemaoversikt()
+
+    expect_identical(d_gruppert_skjema$skjema_gruppe_nr, c(rep(0.5, 4), 0))
+    expect_identical(
+      as.character(d_gruppert_skjema$skjema_gruppe),
+      c(rep("Registrering år 0 (uferdig)", 4), "Registrering år 0")
     )
   }
 )
 
-d_skjemarekkeflg_eksempel = d_skjemaoversikt_eksempel |>
-  select(skjemastatus, skjemarekkeflg) |>
-  head(5) |>
-  mutate(skjemarekkeflg = rep(c(NA_integer_, 0, 1, 3, 99)))
+test_that(
+  "grupper_skjemaoversikt() gjev ut error om `skjemastatus` inneheld anna
+  enn streng eller NA",
+  {
+    d_skjemastatus_int = d_skjemaoversikt_eksempel |>
+      mutate(skjemastatus = as.integer(skjemastatus))
+
+    d_skjemastatus_double = d_skjemaoversikt_eksempel |>
+      mutate(skjemastatus = as.double(skjemastatus))
+
+    expect_error(
+      grupper_skjemaoversikt(d_skjemastatus_int),
+      "Must be of type 'character', not",
+      class = "error",
+      fixed = TRUE
+    )
+    expect_error(
+      grupper_skjemaoversikt(d_skjemastatus_double),
+      "Must be of type 'character', not",
+      class = "error",
+      fixed = TRUE
+    )
+  }
+)
 
 test_that(
   "grupper_skjemaoversikt() gjev ut error for missing i `skjemarekkeflg`",
   {
+    d_skjemarekkeflg_na = d_skjemaoversikt_eksempel |>
+      mutate(skjemarekkeflg = replace(skjemarekkeflg, 1, NA))
+
     expect_error(
-      grupper_skjemaoversikt(d_skjemarekkeflg_eksempel),
+      grupper_skjemaoversikt(d_skjemarekkeflg_na),
       "Contains missing values",
       class = "error",
       fixed = TRUE
