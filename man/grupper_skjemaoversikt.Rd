@@ -34,6 +34,7 @@ av verdiane i \code{skjema_gruppe} for uferdige skjema.
 \code{skjema_gruppe_nr} tek utgangspunkt i kolonnen \code{skjemarekkeflg},
 som er eit unikt tal for kvar skjematype,
 der verdien svarar til oppfylgjingsår.
+Dersom \code{skjemarekkeflg} inneheld NA, gjev funksjonen feilmelding.
 Ad hoc oppfylgjing har i \code{skjemarekkeflg} verdiar på 500 og noko,
 og avslutningsskjema verdien 999.
 \code{skjema_gruppe_nr} nyttar same verdiane som \code{skjemarekkeflg},
@@ -42,6 +43,11 @@ som no får verdien 99.
 I tillegg skiljer \code{skjema_gruppe_nr} på ferdige og uferdige skjema,
 i motsetnad til \code{skjemarekkeflg},
 ved å leggja til 0.5 til verdien.
+\code{skjemastatus} inneheld en streng-verdi for kvart skjema,
+der "1" tilsvarar ferdige skjema,
+og "0", "-1", "-2" og NA blir rekna som uferdig skjema.
+Dersom \code{skjemastatus} inneheld anna enn streng eller NA,
+gjev funksjonen feilmelding.
 I \code{skjema_gruppe_nr} tek altså ferdige skjema heiltalsverdiar,
 medan uferdige skjema har tilsvarande verdiar,
 men med .5 lagt til.
