@@ -447,9 +447,10 @@ grupper_skjemaoversikt = function(d_skjemaoversikt) {
         false = 99
       ),
       # Legg til 0.5 til skjema_gruppe_nr for uferdige skjema
-      skjema_gruppe_nr = if_else(skjemastatus != 1 | is.na(skjemastatus),
+      skjema_gruppe_nr = if_else(skjemastatus != "1",
         true = skjema_gruppe_nr + 0.5,
-        false = skjema_gruppe_nr
+        false = skjema_gruppe_nr,
+        missing = skjema_gruppe_nr + 0.5
       )
     ) |>
     left_join(d_skjema_grupper, by = join_by(skjema_gruppe_nr))
