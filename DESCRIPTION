@@ -45,7 +45,8 @@ Imports:
     forcats,
     qicharts2,
     scales,
-    gridExtra
+    gridExtra,
+    checkmate
 Remotes:
     Rapporteket/rapbase,
     Rapporteket/rapwhale@main
