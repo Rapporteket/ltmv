@@ -37,7 +37,7 @@ jobs:
 
       - name: Set up MySQL, ubuntu only
         run: |
-          sudo /etc/init.d/mysql start
+          sudo systemctl start mysql.service
           mysql -e 'CREATE DATABASE IF NOT EXISTS testdb;' -uroot -proot
 
       - uses: r-lib/actions/setup-r-dependencies@v2
