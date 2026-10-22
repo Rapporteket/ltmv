@@ -381,6 +381,7 @@ formater_antall_skjema_tabell = function(d_antall_skjema, v_rhf) {
 #' `skjema_gruppe_nr` tek utgangspunkt i kolonnen `skjemarekkeflg`,
 #' som er eit unikt tal for kvar skjematype,
 #' der verdien svarar til oppfylgjingsår.
+#' Dersom `skjemarekkeflg` inneheld NA, gjev funksjonen feilmelding.
 #' Ad hoc oppfylgjing har i `skjemarekkeflg` verdiar på 500 og noko,
 #' og avslutningsskjema verdien 999.
 #' `skjema_gruppe_nr` nyttar same verdiane som `skjemarekkeflg`,
@@ -389,6 +390,11 @@ formater_antall_skjema_tabell = function(d_antall_skjema, v_rhf) {
 #' I tillegg skiljer `skjema_gruppe_nr` på ferdige og uferdige skjema,
 #' i motsetnad til `skjemarekkeflg`,
 #' ved å leggja til 0.5 til verdien.
+#' `skjemastatus` inneheld en streng-verdi for kvart skjema,
+#' der "1" tilsvarar ferdige skjema,
+#' og "0", "-1", "-2" og NA blir rekna som uferdig skjema.
+#' Dersom `skjemastatus` inneheld anna enn streng eller NA,
+#' gjev funksjonen feilmelding.
 #' I `skjema_gruppe_nr` tek altså ferdige skjema heiltalsverdiar,
 #' medan uferdige skjema har tilsvarande verdiar,
 #' men med .5 lagt til.
