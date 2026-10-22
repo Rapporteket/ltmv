@@ -420,8 +420,10 @@ formater_antall_skjema_tabell = function(d_antall_skjema, v_rhf) {
 #'   select(skjemanavn, skjemastatus, skjema_gruppe_nr, skjema_gruppe)
 #' }
 grupper_skjemaoversikt = function(d_skjemaoversikt) {
-  checkmate::assert_double(d_skjemaoversikt$skjemarekkeflg, any.missing = FALSE)
-
+  checkmate::assert_double(d_skjemaoversikt$skjemarekkeflg,
+    any.missing = FALSE,
+    .var.name = "skjemarekkeflg"
+  )
   d_skjema_grupper = tibble(
     skjema_gruppe_nr = c(0, 0.5, 1, 1.5, 3, 3.5, 99, 99.5, 999, 999.5),
     skjema_gruppe = fct_inorder(c(
