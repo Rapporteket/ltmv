@@ -46,7 +46,8 @@ Imports:
     qicharts2,
     scales,
     gridExtra,
-    checkmate
+    checkmate,
+    htmltools
 Remotes:
     Rapporteket/rapbase,
     Rapporteket/rapwhale@main
