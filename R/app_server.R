@@ -448,7 +448,7 @@ app_server = function(input, output, session) {
 
   output$rapport_visning = shiny::renderUI({
     shiny::req(web_src())
-    shiny::tags$iframe(
+    htmltools::tags$iframe(
       src = web_src(),
       style = "width:100%; height: calc(100vh - 155px); border: none;"
     )

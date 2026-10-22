@@ -6,7 +6,7 @@
 app_ui = function() {
   app_title = "LTMV"
 
-  shiny::tagList(
+  htmltools::tagList(
     shiny::navbarPage(
       title = rapbase::regTitle(app_title),
       windowTitle = app_title,
@@ -161,8 +161,8 @@ app_ui = function() {
           "HF-rapport",
           shiny::fluidPage(
             shiny::titlePanel("Rapport for LTMV-registrering"),
-            shiny::tags$head(
-              shiny::tags$style(shiny::HTML("
+            htmltools::tags$head(
+              htmltools::tags$style(htmltools::HTML("
                 #download_report{
                   width: 100%;
                   background-color: #337ab7;
@@ -198,7 +198,7 @@ app_ui = function() {
                   choices = c("pdf", "html"),
                   selected = "pdf"
                 ),
-                shiny::hr(),
+                htmltools::hr(),
                 shiny::actionButton(
                   inputId = "generer",
                   label = "Generer Rapport",
