@@ -19,10 +19,10 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Installer pakkar
-        run: |
-          install.packages(c("gh", "lintr", "purrr"))
-        shell: Rscript {0}
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::gh, any::lintr, any::purrr, local::.
+          needs: lint
 
       - name: Extract and lint files changed by this PR
         run: |
