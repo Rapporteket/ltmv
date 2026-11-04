@@ -7,9 +7,13 @@ on:
 
 name: lint-changed-files
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   lint-changed-files:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
