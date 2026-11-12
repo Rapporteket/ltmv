@@ -70,5 +70,3 @@ test_that("kontrollere_patientlist_kolnavn gir ut riktig kolonnenavn", {
     d_fasit_patientlist_ut
   )
 })
-
-
