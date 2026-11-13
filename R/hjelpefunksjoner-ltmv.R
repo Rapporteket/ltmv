@@ -156,3 +156,111 @@ finn_storrelse_diag = function(d_n_diaggruppe_akt, alderkat, type, str_orden) {
 
   resultat
 }
+
+#' Sjekker at kolonnenavn i patientlist er de forventede kolonnene.
+#' Patientlist har ulike kolonnenavn avhengig om skjemaet er hentet
+#' som en datadump, eller som SQL-uttrekk til Rapporteket.
+#' Tillater kolonnenavnene fra begge versjonene.
+#' @param d_full_patientlist
+#' Skjemaet patientlist
+#'
+#' @return
+#' Skjemaet patientlist med riktige navn til bruk av funksjonen
+#' `superbrett_format`, eller en feilmeldig med kolonnenavnene
+#' som mangler.
+#'
+#' @details
+#' Når patientlist er fra en datadump blir kolonnenavnet "registreringsdato"
+#' endret til "dato_reg" etter innlesing, til bruk i årsrapport og
+#' data til Behandlingskvalitet. Funksjonen baserer seg derfor på det
+#' mer tydelige navnet "dato_reg".
+#'
+#' @examples
+#' \dontrun{
+#' les_data_ltmv()
+#'
+#' d_full_patientlist = d_full_patientlist |>
+#'   rename(dato_reg = registreringsdato)
+#'
+#' d_full_patientlist = kontrollere_patientlist_kolnavn(d_full_patientlist)
+#' }
+kontrollere_patientlist_kolnavn = function(d_full_patientlist) {
+  # Kolonnenavnene i patientlist vil variere fra om den blir hentet med
+  # "hent_skjema" til bruk i Rapporteket, eller om den leses inn som datadump
+  # Tillater begge sett av navn, da de blir endret under.
+  patientlist_kolonner_rapporteket = c(
+    "id",
+    "registered_date",
+    "birth_date",
+    "gender",
+    "deceased",
+    "deceased_date",
+    "zipcode",
+    "town",
+    "county",
+    "municipality_name"
+  )
+  patientlist_kolonner_datadump = c(
+    "pasientid",
+    "dato_reg",
+    "fodselsdato",
+    "kjonn",
+    "avdod",
+    "dodsdato",
+    "postnummer",
+    "poststed",
+    "kommune",
+    "fylke"
+  )
+  # Sjekker om kolonnenavnene er like en av de tillatte versjonene over
+  manglende_kol_rapp = setdiff(
+    patientlist_kolonner_rapporteket,
+    names(d_full_patientlist)
+  )
+  manglende_kol_dd = setdiff(
+    patientlist_kolonner_datadump,
+    names(d_full_patientlist)
+  )
+  # Gir feilmelding dersom d_full_patientlist ikke inneholder alle
+  # kolonnenavnene fra de to tillatte versjonene over.
+  if (length(manglende_kol_rapp) > 0 && length(manglende_kol_dd) > 0) {
+    stop(
+      "d_full_patientlist mangler følgende kolonner: \nFor Rapporteket:\n ",
+      paste(manglende_kol_rapp, collapse = ", "),
+      ". \nEller, for datadump:\n ",
+      paste0(manglende_kol_dd, collapse = ", ")
+    )
+  }
+
+  # Gir patientlist nye navn
+  if (length(manglende_kol_rapp) == 0) {
+    d_full_patientlist = d_full_patientlist |>
+      select(
+        "pasientid" = "id",
+        "RegistreringsDato" = "registered_date",
+        "Fodselsdato" = "birth_date",
+        "Kjonn" = "gender",
+        "Avdod" = "deceased",
+        "Dodsdato" = "deceased_date",
+        "Postnummer" = "zipcode",
+        "Poststed" = "town",
+        "Kommune" = "county",
+        "Fylke" = "municipality_name"
+      )
+  } else {
+    d_full_patientlist = d_full_patientlist |>
+      select(
+        "pasientid" = "pasientid",
+        "RegistreringsDato" = "dato_reg",
+        "Fodselsdato" = "fodselsdato",
+        "Kjonn" = "kjonn",
+        "Avdod" = "avdod",
+        "Dodsdato" = "dodsdato",
+        "Postnummer" = "postnummer",
+        "Poststed" = "poststed",
+        "Kommune" = "kommune",
+        "Fylke" = "fylke"
+      )
+  }
+  d_full_patientlist
+}
