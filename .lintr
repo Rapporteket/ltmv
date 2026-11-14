@@ -1,19 +1,4 @@
-linters: linters_with_tags(
-    tags = NULL,
-    assignment_linter = NULL,
-    object_usage_linter = NULL,
-    indentation_linter = NULL,
-    cyclocomp_linter = NULL,
-    line_length_linter(120),
-    pipe_consistency_linter("|>"),
-    object_length_linter(40),
-    implicit_integer_linter = NULL,
-    nonportable_path_linter = NULL,
-    todo_comment_linter = NULL,
-    undesirable_operator_linter(
-        op = list("<-" = "Use =, not <-, for assignment.")
-    )
-  )
+linters: rapwhale::rapwhale_linters()
 exclusions: list(
     "tests/testthat.R" = list(
         undesirable_function_linter = Inf,
